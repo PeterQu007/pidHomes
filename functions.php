@@ -62,32 +62,32 @@ function pidHomes_child_features()
 
 add_action('after_setup_theme', 'pidHomes_child_features');
 
+require_once("googleMapKey.php");
+// function pidHomesMapKey($api)
+// {
+//     $api['key'] = '';
+//     return $api;
+// }
+// add_filter('acf/fields/google_map/api', 'pidHomesMapKey');
 
-function pidHomesMapKey($api)
-{
-    $api['key'] = 'AIzaSyAczOjPVWMravPAIpPPegKgPtTFiipbgMM';
-    return $api;
-}
-add_filter('acf/fields/google_map/api', 'pidHomesMapKey');
 
+// function pidhomes_child_files()
+// {
+//     //49. Map on Front-End | 49.. Add google map js and key
+//     wp_enqueue_script('googleMap', '//maps.googleapis.com/maps/api/js?key=', null, '1.0', true);
+//     wp_enqueue_script('main-university-js', get_theme_file_uri('/js/scripts-bundled.js'), null, '1.0', true);
+//     wp_enqueue_script('CentrisMainFramework', get_theme_file_uri('/js/centris.js'), null, '1.0', true);
+//     wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
+//     wp_enqueue_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+//     wp_enqueue_style('university_main_styles', get_stylesheet_uri());
+//     //59.
+//     wp_localize_script('main-university-js', 'universityData', array(
+//         'root_url' => get_site_url(),
+//         'nonce' => wp_create_nonce('wp_rest'), //80. | Prepare to authorize to delete a note post
+//     ));
+// }
 
-function pidhomes_child_files()
-{
-    //49. Map on Front-End | 49.. Add google map js and key
-    wp_enqueue_script('googleMap', '//maps.googleapis.com/maps/api/js?key=AIzaSyAczOjPVWMravPAIpPPegKgPtTFiipbgMM', null, '1.0', true);
-    wp_enqueue_script('main-university-js', get_theme_file_uri('/js/scripts-bundled.js'), null, '1.0', true);
-    wp_enqueue_script('CentrisMainFramework', get_theme_file_uri('/js/centris.js'), null, '1.0', true);
-    wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
-    wp_enqueue_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-    wp_enqueue_style('university_main_styles', get_stylesheet_uri());
-    //59.
-    wp_localize_script('main-university-js', 'universityData', array(
-        'root_url' => get_site_url(),
-        'nonce' => wp_create_nonce('wp_rest'), //80. | Prepare to authorize to delete a note post
-    ));
-}
-
-add_action('wp_enqueue_scripts', 'pidhomes_child_files');
+// add_action('wp_enqueue_scripts', 'pidhomes_child_files');
 
 function pageBanner($args = null)
 {
