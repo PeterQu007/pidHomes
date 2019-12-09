@@ -58,7 +58,7 @@ switch ($theme_listing_module) {
       </div>
       		<?php get_template_part('assets/modern/partials/taxonomy/taxonomy', 'title');?>
 
-          <div class="rh_page__listing>
+          <div class="rh_page__listing">
 
         <?php
         wp_reset_query();
@@ -78,17 +78,12 @@ switch ($theme_listing_module) {
 
                 // Display property in list layout.
                 get_template_part('assets/modern/partials/properties/list-card');
-                ?>
-
-                
-
-                <?php
 
             endwhile;
         else:
         ?>
                 <div class="rh_alert-wrapper">
-                  <h4 class="no-results"><?php esc_html_e('No Results Found!', 'framework')?></h4>
+                  <h4 class="no-results"><?php esc_html_e('No Results Found!', 'framework');?></h4>
                 </div>
                 <?php
         endif;

@@ -8,7 +8,6 @@
 
 get_header();
 
-
 // Page Head.
 $header_variation = get_option('inspiry_listing_header_variation');
 //echo $header_variation;
@@ -37,26 +36,25 @@ if (isset($_GET['view'])) {
 <div class="rh_page rh_page__listing_page rh_page__main" style="width: 70%">
 <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
   <div style="font-size: 20px; text-align: left; display: block">
-    <a class="metabox__blog-home-link" href="<?php echo get_page_link( get_page_by_title( 'communities' )->ID ); ?>">
-    <i class="fas fa-home" aria-hidden="true">
-    </i> All Communities
+    <a class="metabox__blog-home-link" href="<?php echo get_page_link(get_page_by_title('schools')->ID); ?>">
+    <i class="fas fa-school" aria-hidden="true">
+    </i> All Schools
     </a>
-    
-    <?php 
-      wp_reset_query();
 
-      $terms = get_the_terms(get_the_ID(),'property-city'); 
-      //print_r($terms);
-      foreach ($terms as $term){
-        if(!$term->parent){
-          $termID = $term->term_id;
-          $termName = $term->name;
-          //echo $termID;
-        };
-      }
-      
-      //echo get_term_link(54);
-    ?>
+    <?php
+$terms = get_the_terms(get_the_ID(), 'property-city');
+//print_r($terms);
+foreach ($terms as $term) {
+    if (!$term->parent) {
+        $termID = $term->term_id;
+        $termName = $term->name;
+        //echo $termID;
+    }
+    ;
+}
+
+//echo get_term_link(54);
+?>
     <a class="metabox__blog-home-link" href="<?php echo get_term_link($termID); ?>"> <?php echo $termName; ?> </a>
     <span class="metabox__main"><?php the_title();?></span></div>
 </div>
@@ -66,11 +64,11 @@ while (have_posts()) {
     the_post();?>
       <div style="text-align: left">
       <h2><?php the_title();?></h2>
-      <?php get_field('banner_image') ?>
+      <?php get_field('banner_image')?>
       <div><?php the_content();?> </div>
       <div class="acf-map">
               <?php
-                  $mapLocation = get_field('map_location');?>
+                $mapLocation = get_field('map_location');?>
                   <div class="marker" data-lat="<?php echo $mapLocation['lat'] ?>" data-lng="<?php echo $mapLocation['lng'] ?>">
                   <h3><a href="<?php the_permalink();?>"><?php the_title();?></a> </h3>
                   <?php echo $mapLocation['address']; ?>
@@ -81,7 +79,7 @@ while (have_posts()) {
       <div><span>Private Dwellings: &nbsp<?php echo get_field('occupied_private_dwellings'); ?></span></div>
       <div><span>Population: &nbsp<?php echo get_field('population'); ?> </span></div>
       <div><span>Average Household Income: &nbsp<?php echo get_field('average_household_income'); ?></span></div>
-      
+
 
   <?php }?>
   <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
@@ -94,66 +92,14 @@ while (have_posts()) {
   </div>
   <iframe style="border: 0;" width="400" height="300" src="https://statscentre.rebgv.org/infoserv/s-v1/8pCb-9cV?w=400&h=300"></iframe>
 
-  
-
-  <?php
-  $terms = get_the_terms(get_the_ID(), 'property-neighborhood');
-  //print_r($terms);
-  foreach ($terms as $term) {
-      
-          //$termID = $term->term_id;
-          //$termName = $term->name;
-          //echo $termID;
-          //echo $termName;
-          $termChildren= get_term_children($term->term_id, 'property-neighborhood');
-          if(!$termChildren){
-            $termID = $term->term_id;
-            $termName = $term->name;
-            echo $termID;
-            echo $termName;
-          }
-  }
-
-  
-  echo $termName;
-
-  $Schools = new WP_Query(array(
-    'post_type' => 'school',
-    'tax_query' => array(
-        array(
-            'taxonomy' => 'property-neighborhood',
-            'field' => 'slug',
-            'terms' => $termName,
-        ),
-    ),
-    'post_per_page' => -1,
-));
-if ($Schools->have_posts()) {
-    ?>
   <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
-  <div style="font-size: 20px; text-align: left; display: block">
-    <a class="metabox__blog-home-link" href="<?php echo get_page_link(get_page_by_title('schools')->ID); ?>">
-    <i class="fa fa-school" aria-hidden="true">
-    </i> All Schools
-    </a>
-    <a class="metabox__blog-home-link" href="<?php echo get_term_link($termID); ?>"> <?php echo $termName; ?> </a>
-
+      <div style="font-size: 20px; text-align: left; display: block">
+        <a class="metabox__blog-home-link" href="#">
+        <i class="fas fa-home" aria-hidden="true">
+        </i> Communities
+        </a>
+    </div>
   </div>
-  </div>
-
-  <?php
-}
-
-while ($Schools->have_posts()) {
-    $Schools->the_post();?>
-        <div style="text-align: left">
-        <h2><a href="<?php the_permalink();?>"><?php the_title();?></a></h2>
-        <div><?php the_excerpt();?> </div>
-        </div>
-
-    <?php }
-wp_reset_query(); ?>
-
 
   <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
       <div style="font-size: 20px; text-align: left; display: block">
