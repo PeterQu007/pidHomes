@@ -50,8 +50,8 @@ $terms = get_terms(array(
 ));
 
 foreach($terms as $term){
-  echo $term->term_id;
-  echo $term->name;
+  // echo $term->term_id; //d//
+  // echo $term->name; //d//
   
   //Define the query to get community posts
   $Communities = new WP_Query(array(
@@ -83,12 +83,29 @@ foreach($terms as $term){
             echo $qvar ? get_post_type_archive_link('community') 
                   : get_post_type_archive_link('community') . '/' . $term->name
           ?>">
-          <i class="fa fa-home" aria-hidden="true"></i> 
+          <i class="
+            <?php 
+              echo $qvar ? "fas fa-map-marked" : "fas fa-city" 
+            ?>
+          " aria-hidden="true"></i> 
           <?php 
             echo $qvar ? 'All Communities' : $term->name;
           ?>
         </a>
-        <a class="metabox__blog-home-link" href="<?php echo get_term_link($term->term_id); ?>"> <?php echo $term->name; ?> </a>
+        <!-- Secondary Meta Box: show city name -->
+        <?php 
+          if($qvar) {
+        ?>
+        <a class="metabox__blog-home-link" href="<?php 
+          echo get_post_type_archive_link('community') . '/' . $term->name; ?>"> 
+          <i class="fas fa-city" aria-hidden="true"></i>
+          <?php echo $term->name; ?> </a>
+        <?php } ?>
+        <!-- 
+          toDo: Tertiary Meta Box:
+          Best show the Districts for further filtering in the All Communities Archive Page
+          <a class="metabox__blog-home-link" href="<?php echo get_term_link($term->term_id); ?>"> <?php echo $term->name; ?> </a>
+        -->
       </div>
     </div><?php
     //echo $Communities->found_posts;
@@ -99,7 +116,9 @@ foreach($terms as $term){
         $Communities->the_post();?>
 
           <div style="text-align: left">
-            <h2><a href="<?php the_permalink();?>"><?php the_title();?></a></h2>
+            <h2><a href="<?php echo str_replace("/communities/", "/community/", get_the_permalink());?>">
+              <?php the_title();?></a>
+            </h2>
             <div><?php the_excerpt();?> </div>
           </div>
 

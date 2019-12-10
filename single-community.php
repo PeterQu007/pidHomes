@@ -1,6 +1,6 @@
 <?php
 /**
- * All Communities Page
+ * Single Community Post Page
  *
  * @package realhomes-child
  * @subpackage modern
@@ -33,32 +33,47 @@ if (isset($_GET['view'])) {
 }
 
 ?>
+
 <section class="rh_section rh_section--flex rh_wrap--padding rh_wrap--topPadding">
 <div class="rh_page rh_page__listing_page rh_page__main" style="width: 70%">
+
+<?php 
+  // wp_reset_query(); //x//
+  // echo get_the_ID(); //d//
+  // echo the_title(); //d//
+
+  $terms = get_the_terms(get_the_ID(),'property-neighborhood'); 
+  // print_r($terms); //d//
+  foreach ($terms as $term){
+    //echo $term->name; //d//
+    //echo $term->term_id; //d//
+    if(!$term->parent /* get the top city name*/){
+      $termID = $term->term_id;
+      $termName = $term->name;
+      //echo $term->name; //d//
+      //echo $termID; //d//
+    };
+  }
+  // echo get_term_link(54); //d//
+?>
+
 <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
   <div style="font-size: 20px; text-align: left; display: block">
-    <a class="metabox__blog-home-link" href="<?php echo get_page_link( get_page_by_title( 'communities' )->ID ); ?>">
-    <i class="fas fa-home" aria-hidden="true">
+    <a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('community'); ?>">
+    <i class="fas fa-map-marked" aria-hidden="true">
     </i> All Communities
     </a>
     
-    <?php 
-      wp_reset_query();
-
-      $terms = get_the_terms(get_the_ID(),'property-city'); 
-      //print_r($terms);
-      foreach ($terms as $term){
-        if(!$term->parent){
-          $termID = $term->term_id;
-          $termName = $term->name;
-          //echo $termID;
-        };
-      }
-      
-      //echo get_term_link(54);
-    ?>
-    <a class="metabox__blog-home-link" href="<?php echo get_term_link($termID); ?>"> <?php echo $termName; ?> </a>
+    <!-- Secondary Meta Box for City -->
+    <a class="metabox__blog-home-link" href="<?php 
+      echo get_post_type_archive_link('community') . '/' . $termName; ?>">
+      <i class="fas fa-city" aria-hidden="true"></i>
+      <?php echo $termName; ?> </a>
     <span class="metabox__main"><?php the_title();?></span></div>
+
+    <!-- 
+      toDo: Add District Meta Box 
+    -->
 </div>
 
 <?php
