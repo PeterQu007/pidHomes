@@ -126,6 +126,19 @@ function pageBanner($args = null)
   <?php
 }
 
+//Add public Query Variable
+add_filter('query_vars', 'add_property_neighborhood_var', 0, 1);
 
+function add_property_neighborhood_var($vars){
+  $vars[]= 'property-neighborhood'; //, 'property-city', 'school');
+  return $vars;
+}
+
+//Add Rewrite Rules
+add_rewrite_rule('^schools/([^/]*)/?','index.php?post_type=school&property-neighborhood=$matches[1]','top');
+add_rewrite_rule('^school/([^/]*)/?','index.php?post_type=school&name=$matches[1]','top');
+
+add_rewrite_rule('^communities/([^/]*)/?','index.php?post_type=community&property-neighborhood=$matches[1]','top');
+add_rewrite_rule('^community/([^/]*)/?','index.php?post_type=community&name=$matches[1]','top');
 //End of PHP
 ?>

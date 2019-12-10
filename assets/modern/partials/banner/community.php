@@ -32,10 +32,11 @@ if (function_exists('putRevSlider') && (!empty($rev_slider_alias))) {
     // Banner Title.
     $banner_title = get_post_meta(get_the_ID(), 'REAL_HOMES_banner_title', true);
     if (empty($banner_title)) {
-        $banner_title = get_the_title(get_the_ID());
+        //$banner_title = get_the_title(get_the_ID());
         //$Communities = get_post_type_labels(get_post_type_object(get_post_type(get_the_ID())));
         //$banner_title = $Communities->name;
-
+        //echo '<p> get_query_var(): '. get_query_var('property-neighborhood') . '</p>';
+        $banner_title="Great Vancouver Communities";
     }
 
     // website level banner title show/hide setting

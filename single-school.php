@@ -42,7 +42,7 @@ if (isset($_GET['view'])) {
     </a>
 
     <?php
-$terms = get_the_terms(get_the_ID(), 'property-city');
+$terms = get_the_terms(get_the_ID(), 'property-neighborhood');
 //print_r($terms);
 foreach ($terms as $term) {
     if (!$term->parent) {
@@ -55,7 +55,8 @@ foreach ($terms as $term) {
 
 //echo get_term_link(54);
 ?>
-    <a class="metabox__blog-home-link" href="<?php echo get_term_link($termID); ?>"> <?php echo $termName; ?> </a>
+    <!-- <a class="metabox__blog-home-link" href="<?php echo get_term_link($termID); ?>"> <?php echo $termName; ?> </a> -->
+    <a class="metabox__blog-home-link" href="<?php echo get_site_url() . '/schools/?fraser-heights'; ?>"> <?php echo $termName; ?> </a>
     <span class="metabox__main"><?php the_title();?></span></div>
 </div>
 
@@ -75,10 +76,19 @@ while (have_posts()) {
                   </div>
               </div>
             </div>
-      <div><span>Community Area: &nbsp<?php echo get_field('community_area'); ?></span></div>
-      <div><span>Private Dwellings: &nbsp<?php echo get_field('occupied_private_dwellings'); ?></span></div>
-      <div><span>Population: &nbsp<?php echo get_field('population'); ?> </span></div>
-      <div><span>Average Household Income: &nbsp<?php echo get_field('average_household_income'); ?></span></div>
+      <?php 
+        global $wpdb;
+        //$school = $wpdb->get_var("SELECT COUNT(*) FROM pid_schools WHERE school_name='Fraser Heights'");
+        //echo "<p>User Count is {$user_count}</p>";
+        $results = $wpdb->get_results("SELECT school_year, school_type, `rank`, rank5, rating FROM pid_schools WHERE school_name='" . get_field('school_name') . "'");
+        // foreach($results as $school){
+        //    echo "<p>{$school->rank}</p>";
+        // }
+      ?>
+      <div><span>School Year: &nbsp<?php echo $results[0]->school_year; ?></span></div>
+      <div><span>School Type: &nbsp<?php echo $results[0]->school_type; ?></span></div>
+      <div><span>FI Rank: &nbsp<?php echo $results[0]->rank; ?> </span></div>
+      <div><span>FI Rating: &nbsp<?php echo $results[0]->rating . '/10'; ?></span></div>
 
 
   <?php }?>

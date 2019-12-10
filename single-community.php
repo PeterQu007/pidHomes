@@ -109,11 +109,11 @@ while (have_posts()) {
           if(!$termChildren){
             $termID = $term->term_id;
             $termName = $term->name;
+            $termSlug = $term->slug;
             echo $termID;
             echo $termName;
           }
   }
-
   
   echo $termName;
 
@@ -136,7 +136,8 @@ if ($Schools->have_posts()) {
     <i class="fa fa-school" aria-hidden="true">
     </i> All Schools
     </a>
-    <a class="metabox__blog-home-link" href="<?php echo get_term_link($termID); ?>"> <?php echo $termName; ?> </a>
+    <!-- <a class="metabox__blog-home-link" href="<?php echo get_term_link($termID); ?>"> <?php echo $termName; ?> </a> -->
+    <a class="metabox__blog-home-link" href="<?php echo get_site_url($termID) . '/schools/' . $termSlug; ?>"> <?php echo $termName; ?> </a>
 
   </div>
   </div>
@@ -147,7 +148,8 @@ if ($Schools->have_posts()) {
 while ($Schools->have_posts()) {
     $Schools->the_post();?>
         <div style="text-align: left">
-        <h2><a href="<?php the_permalink();?>"><?php the_title();?></a></h2>
+        <?php //rewrite schools permalink to singular school ?>
+        <h2><a href="<?php echo str_replace('/schools/', '/school/', get_the_permalink());?>"><?php the_title();?></a></h2>
         <div><?php the_excerpt();?> </div>
         </div>
 
