@@ -140,5 +140,7 @@ add_rewrite_rule('^school/([^/]*)/?','index.php?post_type=school&name=$matches[1
 
 add_rewrite_rule('^communities/([^/]*)/?','index.php?post_type=community&property-neighborhood=$matches[1]','top');
 add_rewrite_rule('^community/([^/]*)/?','index.php?post_type=community&name=$matches[1]','top');
+
+require_once (get_stylesheet_directory() . '/inc/neighborhood-3level-metabox.php');
 //End of PHP
 ?>

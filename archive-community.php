@@ -40,22 +40,57 @@ if (isset($_GET['view'])) {
 
 //Get query var in order to filter the neighborhoods
 $qvar = get_query_var('property-neighborhood');
-//echo '<p>qvar' . $qvar . '</p>';
+echo '<p>qvar: ' . $qvar . '</p>'; //d//
 
-$terms = get_terms(array(
+require_once get_stylesheet_directory() . '/inc/generate-neighborhood-2-Level-metabox.php';
+?>
+
+
+
+
+
+<?php
+If($qvar){
+  // Debug:: surrey id is 87
+  $terms = get_terms(array(
     'taxonomy' => 'property-neighborhood',
-    'parent' => 0,
+    //'parent' => 0,
+    //'child_of' => 87,
     'hide_empty' => true,
-    'name' => $qvar
-));
+    'slug' => $qvar
+  ));
+  echo "terms: 1: "; //d//
+  print_r($terms); //d//
+}else{
+  $terms = get_terms(array(
+      'taxonomy' => 'property-neighborhood',
+      'parent' => 0,
+      //'child_of' => 0,
+      'hide_empty' => true,
+      'slug' => $qvar
+  ));
+  echo "terms: 2: "; //d//
+  // // print_r($terms); //d//
+}
 
 foreach($terms as $term){
-  // echo $term->term_id; //d//
-  // echo $term->name; //d//
+  echo $term->term_id; //d//
+  echo $term->name; //d//
   
-  
+  //Define the query to get community posts
+  $Communities = new WP_Query(array(
+      'post_type' => 'community',
+      'tax_query' => array(
+          array(
+              'taxonomy' => 'property-neighborhood',
+              'field' => 'slug',
+              'terms' => $term->slug //'fraser-heights' //d//
+          ),
+      ),
+      'posts_per_page' => -1,
+  ));
 
-  //echo $Communities->found_posts;
+  echo $Communities->found_posts; //d//
 
   if($Communities->have_posts()){ ?>
 
@@ -67,36 +102,62 @@ foreach($terms as $term){
     -->
     <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
       <div style="font-size: 20px; text-align: left; display: block">
-        <a class="metabox__blog-home-link" href="
-          <?php 
-            echo $qvar ? get_post_type_archive_link('community') 
-                  : get_post_type_archive_link('community') . '/' . $term->name
-          ?>">
-          <i class="
+        <!-- First MetaBox Could invisible if in All Communities Mode-->
+        <?php if($qvar){ ?>
+          <a class="metabox__blog-home-link" href="
             <?php 
-              echo $qvar ? "fas fa-map-marked" : "fas fa-city" 
+              echo ($qvar ? get_post_type_archive_link('community') 
+                          : get_post_type_archive_link('community') . '/' . $term->slug ) 
+            ?>">
+            <i class="
+              <?php 
+                echo $qvar ? "fas fa-map-marked" : "fas fa-city" 
+              ?>
+            " aria-hidden="true"></i> 
+            <?php 
+              echo $qvar ? 'All Communities' : $term->name;
             ?>
-          " aria-hidden="true"></i> 
-          <?php 
-            echo $qvar ? 'All Communities' : $term->name;
-          ?>
-        </a>
-        <!-- Secondary Meta Box: show city name -->
-        <?php 
-          if($qvar) {
-        ?>
-        <a class="metabox__blog-home-link" href="<?php 
-          echo get_post_type_archive_link('community') . '/' . $term->name; ?>"> 
-          <i class="fas fa-city" aria-hidden="true"></i>
-          <?php echo $term->name; ?> </a>
-        <?php } ?>
-        <!-- 
-          toDo: Tertiary Meta Box:
-          Best show the Districts for further filtering in the All Communities Archive Page
-          <a class="metabox__blog-home-link" href="<?php echo get_term_link($term->term_id); ?>"> <?php echo $term->name; ?> </a>
-        -->
+          </a>        
+        <?php }else{ ?>
+          <a class="metabox__blog-home-link" href="
+            <?php 
+              echo  get_post_type_archive_link('community');
+            ?>">
+            <i class="
+              <?php 
+                echo $qvar ? "fas fa-map-marked" : "fas fa-city" 
+              ?>
+            " aria-hidden="true"></i> 
+            <?php 
+              echo 'All Communities';
+            ?>
+          </a>       
+        <?php }?>
+
+      <!-- Secondary Meta Box: show city name -->
+        
+      <a class="metabox__blog-home-link" href="<?php 
+        echo get_post_type_archive_link('community') . '/' . $level2Term1->slug; ?>"> 
+        <i class="fas fa-city" aria-hidden="true"></i>
+        <?php echo $level2Term1->name; ?>
+      </a>
+        
+      <a class="metabox__blog-home-link" href="<?php 
+        echo get_post_type_archive_link('community') . '/' . $level2Term2->slug; ?>"> 
+        <i class="fas fa-city" aria-hidden="true"></i>
+        <?php echo $level2Term2->name; ?>
+      </a>
+
+      <a class="metabox__blog-home-link" href="<?php 
+        echo get_post_type_archive_link('community') . '/' . $level2Term3->slug; ?>"> 
+        <i class="fas fa-city" aria-hidden="true"></i>
+        <?php echo $level2Term3->name; ?>
+      </a>
+
       </div>
-    </div><?php
+    </div>
+
+    <?php
     //echo $Communities->found_posts;
     //$i=0;
     //echo print_r($Communities);

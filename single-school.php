@@ -34,58 +34,27 @@ if (isset($_GET['view'])) {
 ?>
 
 <?php
-    $terms = get_the_terms(get_the_ID(), 'property-neighborhood');
-    // print_r($terms); //d//
-    foreach ($terms as $term) {
-      //Get Top Level Term
-      if (!$term->parent) {
-          $topTermID = $term->term_id;
-          $topTermName = $term->name;
-          // echo $topTermID; //d//
-          // echo $topTermName; //d//
-      }
-
-      //Get Level 3 Term
-      if(!get_term_children($term->term_id, 'property-neighborhood')){
-
-        $level3TermID = $term->term_id;
-        $level3TermName = $term->name;
-        $level3TermSlug = $term->slug;
-        // echo $Level3TermID; //d//
-        // echo $Level3TermName; //d//
-      }
-    }
-    foreach($terms as $term){
-      //Get Level 2 Term
-      if($topTermID & $term->parent == $topTermID){
-          $level2TermID = $term->term_id;
-          $level2TermName = $term->name;
-          $level2TermSlug = $term->slug;
-          // echo $Level2TermID; //d//
-          // echo $Level2TermName; //d//
-      }
-    }
-    //echo get_term_link(54);
-  ?>
+  $communityID = get_query_var('communityID');
+  // echo 'get_the_ID()' . get_the_ID(); //d//
+  // echo 'communityID: ' . $communityID; //d//
+  //require get_stylesheet_directory() . '/inc/generate-neighborhood-metabox.php';
+  //get_template_part ('/template-parts/content-3level-metabox');
+  $metabox = nbh_3level_metabox(get_the_ID());
+  print_r($metabox); //d//
+?>
 
 <section class="rh_section rh_section--flex rh_wrap--padding rh_wrap--topPadding">
   <div class="rh_page rh_page__listing_page rh_page__main" style="width: 70%">
 
-   <?php
-    get_template_part('template-parts/content-single-school');
-
-    get_template_part('template-parts/content-market-stats');
-   ?>
-
-    
-    <!--
-      toDo: List Community Post by Excerpt
-    -->
-
-    <?php 
-      
+    <?php
+      //School Section
+      get_template_part('template-parts/content-single-school');
+      //Market Stats Section
+      get_template_part('template-parts/content-market-stats');
+      //Community Section
       set_query_var('communityID', $level3TermID);
       get_template_part('template-parts/content-single-community'); 
+      //Active Listing Section
       get_template_part('template-parts/content-active-listings');
     ?>
 

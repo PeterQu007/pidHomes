@@ -4,40 +4,13 @@
 -->
 
 <?php
-    $terms = get_the_terms(get_the_ID(), 'property-neighborhood');
-    // print_r($terms); //d//
-    foreach ($terms as $term) {
-      //Get Top Level Term
-      if (!$term->parent) {
-          $topTermID = $term->term_id;
-          $topTermName = $term->name;
-          // echo $topTermID; //d//
-          // echo $topTermName; //d//
-      }
-
-      //Get Level 3 Term
-      if(!get_term_children($term->term_id, 'property-neighborhood')){
-
-        $level3TermID = $term->term_id;
-        $level3TermName = $term->name;
-        $level3TermSlug = $term->slug;
-        // echo $Level3TermID; //d//
-        // echo $Level3TermName; //d//
-      }
-    }
-    foreach($terms as $term){
-      //Get Level 2 Term
-      if($topTermID & $term->parent == $topTermID){
-          $level2TermID = $term->term_id;
-          $level2TermName = $term->name;
-          $level2TermSlug = $term->slug;
-          // echo $Level2TermID; //d//
-          // echo $Level2TermName; //d//
-      }
-    }
-    //echo get_term_link(54);
-  ?>
-
+  $communityID = get_query_var('communityID');
+  // echo 'get_the_ID()' . get_the_ID(); //d//
+  // echo 'communityID: ' . $communityID; //d//
+  //require get_stylesheet_directory() . '/inc/generate-neighborhood-metabox.php';
+  $metabox = nbh_3level_metabox(get_the_ID());
+  // print_r($metabox); //d//
+?>
 
 <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
   <div style="font-size: 20px; text-align: left; display: block">
@@ -48,19 +21,19 @@
      </a>
     <!-- Top Level City -->
     <a class="metabox__blog-home-link" href="<?php 
-      echo get_site_url() . '/schools/' . $topTermName; ?>">
+      echo get_site_url() . '/schools/' . $metabox[0]["level1TermSlug"]; ?>">
       <i class="fas fa-city" aria-hidden="true"></i>
-      <?php echo $topTermName; ?> </a>
+      <?php echo $metabox[0]["level1TermName"]; ?> </a>
     <!-- Level 2 City District -->
     <a class="metabox__blog-home-link" href="<?php 
-      echo get_site_url() . '/schools/' . $level2TermSlug; ?>">
+      echo get_site_url() . '/schools/' . $metabox[1]["level2TermSlug"]; ?>">
       <i class="fas fa-building" aria-hidden="true"></i>
-      <?php echo $level2TermName; ?> </a>
+      <?php echo $metabox[1]["level2TermName"]; ?> </a>
     <!-- Level 3 City Neighborhoods -->
     <a class="metabox__blog-home-link" href="<?php 
-      echo get_site_url() . '/schools/' . $level3TermSlug; ?>">
+      echo get_site_url() . '/schools/' . $metabox[2]["level3TermSlug"]; ?>">
       <i class="fas fa-university" aria-hidden="true"></i>
-      <?php echo $level3TermName; ?> </a>
+      <?php echo $metabox[2]["level3TermName"]; ?> </a>
 
     <span class="metabox__main"><?php //the_title();//x//?></span>
 

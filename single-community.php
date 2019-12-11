@@ -8,7 +8,6 @@
 
 get_header();
 
-
 // Page Head.
 $header_variation = get_option('inspiry_listing_header_variation');
 //echo $header_variation;
@@ -34,6 +33,12 @@ if (isset($_GET['view'])) {
 
 ?>
 
+<?php
+  $communityID = get_query_var('communityID');
+  // echo 'get_the_ID()' . get_the_ID(); //d//
+  // echo 'communityID: ' . $communityID; //d//
+  require get_stylesheet_directory() . '/inc/generate-neighborhood-metabox.php';
+?>
 
 <section class="rh_section rh_section--flex rh_wrap--padding rh_wrap--topPadding">
 <div class="rh_page rh_page__listing_page rh_page__main" style="width: 70%">
