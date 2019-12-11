@@ -53,18 +53,7 @@ foreach($terms as $term){
   // echo $term->term_id; //d//
   // echo $term->name; //d//
   
-  //Define the query to get community posts
-  $Communities = new WP_Query(array(
-      'post_type' => 'community',
-      'tax_query' => array(
-          array(
-              'taxonomy' => 'property-neighborhood',
-              'field' => 'slug',
-              'terms' => $term->name,
-          ),
-      ),
-      'posts_per_page' => -1,
-  ));
+  
 
   //echo $Communities->found_posts;
 
