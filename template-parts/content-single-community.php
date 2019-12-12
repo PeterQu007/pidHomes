@@ -9,32 +9,45 @@
   // echo 'get_the_ID()' . get_the_ID(); //d//
   // echo 'communityID: ' . $communityID; //d//
   //require get_stylesheet_directory() . '/inc/generate-neighborhood-metabox.php';
-  $metabox = nbh_3level_metabox(get_the_ID());
-  print_r($metabox); //d//
+  // $metabox = nbh_3level_metabox(get_the_ID());
+  // print_r($metabox); //d//
+  $metabox = nbh_2level_metabox(get_the_ID());
+  // print_r($metabox); //d//
 ?>
 
 <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
   <div style="font-size: 20px; text-align: left; display: block">
-    <a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('community'); ?>">
-    <i class="fas fa-map-marked" aria-hidden="true">
-    </i> All Communities
-    </a>
+    <?php
+    if(!$communityID){?>
+      <a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('community'); ?>">
+      <i class="fas fa-map-marked" aria-hidden="true">
+      </i> All
+      </a>
+    <?php }?>
     
+    <?php //echo '<P> metabox in single: ' . $metabox[1]['level1TermSlug'] . '</p>'; ?> 
+
     <!-- Top Level City -->
     <a class="metabox__blog-home-link" href="<?php 
-      echo get_site_url() . '/communities/' . $metabox[0]['level1TermSlug']; ?>">
+      echo get_site_url() . '/communities/' . $metabox[0]['level0_Term1_Slug']; ?>">
       <i class="fas fa-city" aria-hidden="true"></i>
-      <?php echo $metabox[0]['level1TermName']; ?> </a>
+      <?php echo $metabox[0]['level0_Term1_Name']; ?> </a>  
+
+    <!-- Top Level City -->
+    <a class="metabox__blog-home-link" href="<?php 
+      echo get_site_url() . '/communities/' . $metabox[1]['level1_Term1_Slug']; ?>">
+      <i class="fas fa-city" aria-hidden="true"></i>
+      <?php echo $metabox[1]['level1_Term1_Name']; ?> </a>
     <!-- Level 2 City District -->
     <a class="metabox__blog-home-link" href="<?php 
-      echo get_site_url() . '/communities/' . $metabox[1]['level2TermSlug']; ?>">
+      echo get_site_url() . '/communities/' . $metabox[2]['level1_Term2_Slug']; ?>">
       <i class="fas fa-building" aria-hidden="true"></i>
-      <?php echo $metabox[1]['level2TermName']; ?> </a>
+      <?php echo $metabox[2]['level1_Term2_Name']; ?> </a>
     <!-- Level 3 City Neighborhoods -->
     <a class="metabox__blog-home-link" href="<?php 
-      echo get_site_url() . '/community/' . $metabox[2]['level3TermSlug']; ?>">
+      echo get_site_url() . '/community/' . $metabox[3]['level1_Term3_Slug']; ?>">
       <i class="fas fa-university" aria-hidden="true"></i>
-      <?php echo $metabox[2]['level3TermName']; ?> </a>
+      <?php echo $metabox[3]['level1_Term3_Name']; ?> </a>
 
     <span class="metabox__main"><?php //the_title();//x//?></span>
   </div>

@@ -11,7 +11,7 @@
       if (!$term->parent) {
           $topTermID = $term->term_id;
           $topTermName = $term->name;
-          echo $topTermID; //d//
+          echo '<p> 2 level metabox: ' . $topTermID . '</p>'; //d//
           echo $topTermName; //d//
       }
     }
