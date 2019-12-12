@@ -6,13 +6,8 @@
 
 <?php
   $communityID = get_query_var('communityID');
-  // echo 'get_the_ID()' . get_the_ID(); //d//
-  // echo 'communityID: ' . $communityID; //d//
-  //require get_stylesheet_directory() . '/inc/generate-neighborhood-metabox.php';
-  // $metabox = nbh_3level_metabox(get_the_ID());
-  // print_r($metabox); //d//
+  print_X('Blue', 'test', $communityID);
   $metabox = nbh_2level_metabox(get_the_ID());
-  // print_r($metabox); //d//
 ?>
 
 <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">

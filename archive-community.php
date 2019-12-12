@@ -37,14 +37,12 @@ if (isset($_GET['view'])) {
 <div class="rh_page rh_page__listing_page rh_page__main" style="width: 70%">
 
 <?php 
-//Get query var in order to filter the neighborhoods
-//entrance variable value for archive module
-//if it is null, means show all categories/taxonomies
-//if it is not null, means show specific categories/taxonomy
-$qvar = get_query_var('property-neighborhood');
-echo '<p>qvar: ' . $qvar . '</p>'; //d//
-//require_once get_stylesheet_directory() . '/inc/generate-neighborhood-2-Level-metabox.php';
-
+  //Get query var in order to filter the neighborhoods
+  //entrance variable value for archive module
+  //if it is null, means show all categories/taxonomies
+  //if it is not null, means show specific categories/taxonomy
+  $qvar = get_query_var('property-neighborhood');
+  // print_X('blue', __LINE__, $qvar); //d//
 ?>
 
 <?php
@@ -52,36 +50,21 @@ If($qvar){
   // Debug:: surrey id is 87
   $terms = get_terms(array(
     'taxonomy' => 'property-neighborhood',
-    //'object_ids' => 87, //metrotown //d//
-    //'exclude_tree' => 93, 
-    //'parent' => 0,
-    //'hierarchical' => true,
-    //'child_of' => 92,
     'fields' => 'all', //'names',
-    //name__like' => 'burnaby', 
     'hide_empty' => false,
     'slug' => $qvar
   ));
-  echo "<p style='color: green'> get_terms function experiment: </p> "; //d//
-  //$post=$post[0];
-  echo is_category(); //d//
-  print_r($terms); //d//
 }else{
   $terms = get_terms(array(
       'taxonomy' => 'property-neighborhood',
       'parent' => 0,
-      //'child_of' => 0,
       'hide_empty' => false,
-      'slug' => $qvar
   ));
-  echo "<p>Archive-community Show term id & name: </p>"; //d//
-  // print_r($terms); //d//
 }
+// print_X('green', __FILE__, __LINE__, $terms); //d//
 
 foreach($terms as $term){
-  echo $term->term_id; //d//
-  echo $term->name; //d//
-  echo $term->slug; //d//
+  // print_X('Orange', "Archive-community Show term id & name", $term->term_id, $term->name, $term->slug); //d//
   $termID = $term->term_id; 
   //Define the query to get community posts
   $Communities = new WP_Query(array(
@@ -95,93 +78,31 @@ foreach($terms as $term){
       ),
       'posts_per_page' => -1,
   ));
+  // print_X('orange', 'Archive-community Found posts: ', $Communities->found_posts); //d//
+  set_query_var('qvar', $qvar);
+  set_query_var('term', $term );
+  set_query_var('metabox_tax', 'community');
+  get_template_part('/template-parts/content-metabox');
 
-  echo '<p> Archive-community Found posts: ' . $Communities->found_posts . '</p>'; //d//
-
-  if($Communities->have_posts()){ 
-
-    // $Communities->the_post();
-
-    // $metabox = nbh_2level_metabox($termID); //d//
-    $metabox = nbh_top2level_terms($term->slug); //d//
-    echo '<p style = "color:blue"> Archive-community get the ID: '. $term->slug . '</p>'; //d//
-    print_r($metabox); //d//
-    ?>
-    <!-- 
-      SET UP Sub Area title meta box 
-      Swtich between All Communities and City Catogary names
-      All Communities Meta Box
-      City Catogory Meta Box
-    -->
-    <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
-      <div style="font-size: 20px; text-align: left; display: block">
-        <!-- First MetaBox Could invisible if in All Communities Mode-->
-        <?php if($qvar){ ?>
-          <a class="metabox__blog-home-link" href="
-            <?php 
-              echo  get_post_type_archive_link('community');
-            ?>">
-            <i class="
-              <?php 
-                echo "fas fa-map-marked"; 
-              ?>
-            " aria-hidden="true"></i> 
-            <?php 
-              echo 'All';
-            ?>
-          </a>  
-          
-        <?php
-
-        } ?>
-          
-
-      <!-- Secondary Meta Box: show city name -->
-        
-      <a class="metabox__blog-home-link" href="<?php 
-        echo get_post_type_archive_link('community') . $metabox[0]['level0_Term1_Slug']; ?>"> 
-        <i class="fas fa-city" aria-hidden="true"></i>
-        <?php echo $metabox[0]['level0_Term1_Name']; ?>
-      </a>
-
-      <a class="metabox__blog-home-link" href="<?php 
-        echo get_post_type_archive_link('community') . $metabox[1]['level1_Term1_Slug']; ?>"> 
-        <i class="fas fa-city" aria-hidden="true"></i>
-        <?php echo $metabox[1]['level1_Term1_Name']; ?>
-      </a>
-        
-      <a class="metabox__blog-home-link" href="<?php 
-        echo get_post_type_archive_link('community') . $metabox[2]['level1_Term2_Slug']; ?>"> 
-        <i class="fas fa-city" aria-hidden="true"></i>
-        <?php echo $metabox[2]['level1_Term2_Name']; ?>
-      </a>
-
-      <a class="metabox__blog-home-link" href="<?php 
-        echo get_post_type_archive_link('community') . $metabox[3]['level1_Term3_Slug']; ?>"> 
-        <i class="fas fa-city" aria-hidden="true"></i>
-        <?php echo $metabox[3]['level1_Term3_Name']; ?>
-      </a>
-
-      </div>
-    </div>
+  if($Communities->have_posts()){ ?>
 
     <?php
-    echo '<p style="color: blue"> archive-community found posts: ' . $Communities->found_posts . '</p>'; //d//
+    // print_X('Olive', 'Archive-community found posts: ', $Communities->found_posts); //d//
     $i=0; //d//
-    //echo print_r($Communities);
     while ($Communities->have_posts()) {
-        echo '<p style="color: blue"> archive-community inside the LOOP: ' . $i++ . '</p>'; //d//
+        // print_X('Olive', 'Archive-community inside the LOOP: ', $i++); //d//
         $Communities->the_post();?>
-
           <div style="text-align: left">
             <h2><a href="<?php echo str_replace("/communities/", "/community/", get_the_permalink());?>">
               <?php the_title();?></a>
             </h2>
             <div><?php the_excerpt();?> </div>
           </div>
-
     <?php }
 
+  }else{
+    //No POSTS
+    echo "<p> NO COMMUNITY ADDED, COMING SOON... </p>";
   }
  
   wp_reset_postdata();

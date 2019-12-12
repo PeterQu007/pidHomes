@@ -21,7 +21,7 @@ if (empty($header_variation) || ('none' === $header_variation)) {
 }
 
 if (inspiry_show_header_search_form()) {
-    // get_template_part('assets/modern/partials/properties/search/advance'); //d//
+    get_template_part('assets/modern/partials/properties/search/advance'); //d//
 }
 
 if (isset($_GET['view'])) {
@@ -34,13 +34,9 @@ if (isset($_GET['view'])) {
 ?>
 
 <?php
-  $communityID = get_query_var('communityID');
-  // echo 'get_the_ID()' . get_the_ID(); //d//
-  // echo 'communityID: ' . $communityID; //d//
-  //require get_stylesheet_directory() . '/inc/generate-neighborhood-metabox.php';
-  //get_template_part ('/template-parts/content-3level-metabox');
   $metabox = nbh_3level_metabox(get_the_ID());
-  print_r($metabox); //d//
+  // print_x('green',$metabox); //d//
+  $communityID = $metabox[2]['level3TermID'];
 ?>
 
 <section class="rh_section rh_section--flex rh_wrap--padding rh_wrap--topPadding">
@@ -52,7 +48,7 @@ if (isset($_GET['view'])) {
       //Market Stats Section
       get_template_part('template-parts/content-market-stats');
       //Community Section
-      set_query_var('communityID', $level3TermID);
+      set_query_var('communityID', $communityID);
       get_template_part('template-parts/content-single-community'); 
       //Active Listing Section
       get_template_part('template-parts/content-active-listings');

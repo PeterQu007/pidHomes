@@ -5,30 +5,29 @@
 
 <?php
 
+/*
+  @neighborhoodID
+  return metabox for section banner menu
+*/
 function nbh_3level_metabox($neighborhoodID){
 
 	$metabox = [];
 
 	$terms = get_the_terms($neighborhoodID, 'property-neighborhood');
-    // print_r($terms); //d//
+    // print_X('', __LINE__, __FUNCTION__ , $terms); //d//
     foreach ($terms as $term) {
       //Get Top Level Term
       if (!$term->parent) {
           $topTermID = $term->term_id;
           $topTermName = $term->name;
           $topTermSlug = $term->slug;
-          // echo $topTermID; //d//
-          // echo $topTermName; //d//
       }
 
       //Get Level 3 Term
       if(!get_term_children($term->term_id, 'property-neighborhood')){
-
         $level3TermID = $term->term_id;
         $level3TermName = $term->name;
         $level3TermSlug = $term->slug;
-        // echo $level3TermID; //d//
-        // echo $level3TermName; //d//
       }
     }
     foreach($terms as $term){
@@ -37,9 +36,6 @@ function nbh_3level_metabox($neighborhoodID){
           $level2TermID = $term->term_id;
           $level2TermName = $term->name;
           $level2TermSlug = $term->slug;
-          // echo $level2TermID; //d//
-          // echo $level2TermName; //d//
-          
       }
     }
 
@@ -63,55 +59,38 @@ function nbh_3level_metabox($neighborhoodID){
     return $metabox;
 }
 
+/*
+  @community post ID: $nbhID
+  return: first two level terms of community taxonomy tree
+*/
 function nbh_2level_metabox($nbhID){
-
-  echo '<p style="color: red"> nbh 2level metabox args: ' . $nbhID. '</p>'; //d//
 
   $metabox = [];
 
   $terms = get_the_terms($nbhID, 'property-neighborhood');
 
-  // $terms = get_terms(array(
-  //   'taxonomy' => 'property-neighborhood',
-  //   //'object_ids' => 87, //metrotown //d//
-  //   //'exclude_tree' => 92,
-  //   'parent' => 0,
-  //   //'child_of' => 92,
-  //   //'fields' => 'names',
-  //   //name__like' => 'burnaby',
-  //   'hide_empty' => false,
-  //   'slug' => $terms,
-  //   'order' => 'DESC'
-  // ));
+  // print_x('blue', 'nbh_2level_metabox ' . $nbhID, $terms); //d//
 
-
-  print_r($terms); //d//
   foreach ($terms as $term) {
-      //Get Top Level Term
-      if (!$term->parent) {
-          $topLevelTerm = $term;
-          $topTermID = $term->term_id;
-          $topTermName = $term->name;
-          echo '<p style="color: red"> nbh 2level metabox top Term ID: ' . $topTermID . '</p>'; //d//
-          echo $topTermName; //d//
-      }
+    //Get Top Level Term
+    if (!$term->parent) {
+        $topLevelTerm = $term;
+        $topTermID = $term->term_id;
+        $topTermName = $term->name;
+        // print_x( '', __LINE__, __FUNCTION__ , $topTermID, $topLevelTerm); //d//
+    }
   }
+
   $level2Terms = get_terms(array(
-      'taxonomy' => 'property-neighborhood',
-      'parent' => $topTermID, //get direct children
-      'orderby' => 'slug',
-      'order' => 'ASC', //'DESC',
-      //'child_of' => $topTermID, //get all children
-      'hide_empty' => false,
+    'taxonomy' => 'property-neighborhood',
+    'parent' => $topTermID, //get direct children
+    'orderby' => 'slug',
+    'order' => 'ASC', //'DESC',
+    //'child_of' => $topTermID, //get all children
+    'hide_empty' => false,
   ));
-  echo "<p> level2Terms: </p>"; //d//
-  print_r($level2Terms); //d//
+  // print_X('green', $level2Terms); //d//
 
-  foreach ($level2Terms as $term) {
-      //Get Level 2 Term
-      echo '<p>' . $term->name . '</p>'; //d//
-
-  }
   $level2Term1 = $level2Terms[0];
   $level2Term2 = $level2Terms[1];
   $level2Term3 = $level2Terms[2];
@@ -137,41 +116,37 @@ function nbh_2level_metabox($nbhID){
       'level1_Term3_Name' => $level2Term3->name,
       'level1_Term3_Slug' => $level2Term3->slug
     ));
-
   return $metabox;
-
 }
 
-function nbh_top2level_terms($termSlug){
+/* @communityTermSlug
+   return city & city district terms (first 2 level terms in the community taxonomy tree)
+*/
+function nbh_top2level_terms($communityTermSlug){
 
   $metabox = [];
 
-  $term = get_term_by('slug', $termSlug, 'property-neighborhood');
+  $term = get_term_by('slug', $communityTermSlug, 'property-neighborhood');
 
-  echo "<p> inside function </p>";
-  print_r($term);
+  // print_x('', __FUNCTION__, $term); //d//
 
+  // Loop for top community term
   while($term->parent){
     $term = get_term_by('id', $term->parent, 'property-neighborhood');
   }
   $topLevelTerm = $term;
 
-$level2Terms = get_terms(array(
-    'taxonomy' => 'property-neighborhood',
-    'parent' => $term->term_id, //get direct children
-    'orderby' => 'slug',
-    'order' => 'ASC', //'DESC',
-    //'child_of' => $topTermID, //get all children
-    'hide_empty' => false,
-));
-echo "<p> level2Terms: </p>"; //d//
-print_r($level2Terms); //d//
+  // Fetch second level (City District) terms
+  $level2Terms = get_terms(array(
+      'taxonomy' => 'property-neighborhood',
+      'parent' => $term->term_id, //get direct children
+      'orderby' => 'slug', //district slug is named by [city]-#
+      'order' => 'ASC', //'DESC',
+      //'child_of' => $topTermID, //get all children
+      'hide_empty' => false,
+  ));
 
-foreach ($level2Terms as $term) {
-    //Get Level 2 Term
-    echo '<p>' . $term->name . '</p>'; //d//
-
-}
+  // print_x('', 'level2Terms', $level2Terms); //d//
 
   $level2Term1 = $level2Terms[0];
   $level2Term2 = $level2Terms[1];
@@ -199,9 +174,7 @@ foreach ($level2Terms as $term) {
       'level1_Term3_Slug' => $level2Term3->slug,
   ));
 
-return $metabox;
-
-
+  return $metabox;
 }
     
 ?>
