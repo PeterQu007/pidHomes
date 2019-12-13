@@ -9,7 +9,7 @@ if (empty($header_variation) || ('none' === $header_variation)) {
     get_template_part('assets/modern/partials/banner/header');
 } elseif (!empty($header_variation) && ('banner' === $header_variation)) {
     //echo 'property-archive';
-    get_template_part('assets/modern/partials/banner/community');
+    get_template_part('assets/modern/partials/banner/about');
 }
 
 if (inspiry_show_header_search_form()) {
@@ -22,94 +22,61 @@ if (isset($_GET['view'])) {
     /* Theme Options Listing Layout */
     $view_type = get_option('theme_listing_layout');
 }
-
   ?>
 
-  <div class="large-hero" style="top: -130px!important; z-index: -10!important">
-    <!-- responsive image element, not work with ie-->
-  	<picture>
-      <source srcset="<?php echo get_theme_file_uri("assets/images/banner1-cityNightScene-large.jpg") ?> 1920w, 
-                        <?php echo get_theme_file_uri("assets/images/banner1-cityNightScene-large-hi-dpi.jpg") ?> 3840w" media="(min-width:1380px)">
-      <source srcset="<?php echo get_theme_file_uri("assets/images/banner1-cityNightScene-medium.jpg") ?> 1380w, 
-                        <?php echo get_theme_file_uri("assets/images/hero--medium-hi-dpi.jpg") ?> 2760w" media="(min-width:990px)">
-      <source srcset="<?php echo get_theme_file_uri("assets/images/banner1-cityNightScene-small.jpg") ?> 990w, 
-                        <?php echo get_theme_file_uri("assets/images/hero--small-hi-dpi.jpg") ?> 1980w" media="(min-width:640px)">	
-      <img srcset="<?php echo get_theme_file_uri("assets/images/banner1-cityNightScene-smaller.jpg") ?> 640w, 
-                        <?php echo get_theme_file_uri("assets/images/hero--smaller-hi-dpi.jpg") ?> 1280w" 
-                        alt="Coastal view of ocean and mountains" class="large-hero__image">	
-  	</picture>
-    
-    <div class="large-hero__text-content">
-  		<div class="wrapper"> 
-  			<h1 class="large-hero__title">Peter Qu <i class="fa fa-star site-header__fa-padding"></i> GREAT VANCOUVER REALTOR</h1>
-  			<h2 class="large-hero__subtitle">GREAT VANCOUVER REALTOR</h2>
-        <div class="large-hero__title" style="margin: 10px!important; text-align: center; width:100%!important; border-bottom: none ">
-                <span style="font-size: 3rem"><i class="fa fa-star site-header__fa-padding"></i>Professionalism </span>
-                
-                <span style="font-size: 3rem"><i class="fa fa-star site-header__fa-padding"></i> Integrity </span>
-                
-                <span style="font-size: 3rem"><i class="fa fa-star site-header__fa-padding"></i> Diligence</span></div>
-        <!--
-        <p><a href="#" class="btn btn--blue btn--large"><i class="fa fa-search site-header__fa-padding"></i>Home Search Now!</a></p>
-        -->
-  		</div>
-  	</div>
-  </div>
-
-  <div id="BuyAndSell" class="page-section"  >
+  <div id="BuyAndSell" class="rh_section__properties" style="padding-top: 30px" >
     <div class="wrapper">
       <div id="BuyerAndSeller" class="row row__gutters">
 
         <div class="row__medium-4 row__medium-4--larger row__b-margin-until-medium">
           <picture>
-            <source sizes="404px" srcset="<?php echo get_theme_file_uri("assets/images/PeterQuFlyer-404X647.jpg") ?> 404w, 
-                                          <?php echo get_theme_file_uri("assets/images/PeterQuFlyer-808X1293.jpg") ?> 808w" 
+            <source sizes="404px" srcset="<?php echo get_theme_file_uri("assets/images/Folder-Cover.jpg") ?> 404w, 
+                                          <?php echo get_theme_file_uri("assets/images/Folder-Cover.jpg") ?> 808w" 
                                           media="(min-width:1020px)">
-            <source sizes="320px" srcset="<?php echo get_theme_file_uri("assets/images/Peter-Qu-portrait-382X1073.jpg") ?> 382w, 
-                                          <?php echo get_theme_file_uri("assets/images/Peter-Qu-portrait-hi-764X2146.jpg") ?> 764w" 
+            <source sizes="320px" srcset="<?php echo get_theme_file_uri("assets/images/Folder-Cover.jpg") ?> 382w, 
+                                          <?php echo get_theme_file_uri("assets/images/Folder-Cover.jpg") ?> 764w" 
                                           media="(min-width:800px)">
-            <img sizes="800px" srcset="<?php echo get_theme_file_uri("assets/images/PeterQuflyer-Landscape-800X651.jpg") ?> 800w, 
-                                          <?php echo get_theme_file_uri("assets/images/Peter-Qu-Landscape-1600X1118.jpg") ?> 1600w" 
+            <img sizes="800px" srcset="<?php echo get_theme_file_uri("assets/images/Folder-Cover.jpg") ?> 800w, 
+                                          <?php echo get_theme_file_uri("assets/images/Folder-Cover.jpg") ?> 1600w" 
                                           alt="Surrey REALTOR, Peter Qu">
           </picture>
         </div>
 
 
       <div id="ForProfessionism" class="row__medium-8 row__medium-8--smaller ">
-      <div>
-
-        <div class="hero-slider">
-          <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri('/images/bus.jpg') ?>);">
-            <div class="hero-slider__interior container">
-              <div class="hero-slider__overlay">
-                <h2 class="headline headline--medium t-center" style="font-size: 5rem">Professionalism</h2>
-                <p class="t-center">All students have free unlimited bus fare.</p>
-                <p class="t-center no-margin"><a href="#" class="btn btn--blue">Learn more</a></p>
+        <div>
+          <div class="hero-slider">
+            <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri('/images/bus.jpg') ?>);">
+              <div class="hero-slider__interior container">
+                <div class="hero-slider__overlay">
+                  <h2 class="headline headline--medium t-center" style="font-size: 5rem; color: white"><strong>P</strong>rofessionalism</h2>
+                  <p class="t-center" style="color:white; padding:0px">Academic Basis | Private Practice | Code of Conduct</p>
+                  <p class="t-center no-margin"><a href="#" class="btn btn--blue">Learn more</a></p>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri('/images/apples.jpg') ?>);">
-            <div class="hero-slider__interior container">
-              <div class="hero-slider__overlay">
-                <h2 class="headline headline--medium t-center" style="font-size: 5rem">Integrity</h2>
-                <p class="t-center">Our dentistry program recommends eating apples.</p>
-                <p class="t-center no-margin"><a href="#" class="btn btn--blue">Learn more</a></p>
+            <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri('/images/apples.jpg') ?>);">
+              <div class="hero-slider__interior container">
+                <div class="hero-slider__overlay">
+                  <h2 class="headline headline--medium t-center" style="font-size: 5rem; color: white"><strong>I</strong>ntegrity</h2>
+                  <p class="t-center" style="color:white;">Advise Fully Honestly | Fiduciary Duty | Follow Instructions</p>
+                  <p class="t-center no-margin"><a href="#" class="btn btn--blue">Learn more</a></p>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri('/images/bread.jpg') ?>);">
-            <div class="hero-slider__interior container">
-              <div class="hero-slider__overlay">
-                <h2 class="headline headline--medium t-center" style="font-size: 5rem">Diligence</h2>
-                <p class="t-center">Fictional University offers lunch plans for those in need.</p>
-                <p class="t-center no-margin"><a href="#" class="btn btn--blue">Learn more</a></p>
+            <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri('/images/bread.jpg') ?>);">
+              <div class="hero-slider__interior container">
+                <div class="hero-slider__overlay">
+                  <h2 class="headline headline--medium t-center" style="font-size: 5rem; color: white"><strong>D</strong>iligence</h2>
+                  <p class="t-center" style="color: white">Ascertain All | Detail Orientation | Research All Options</p>
+                  <p class="t-center no-margin"><a href="#" class="btn btn--blue">Learn more</a></p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
       </div>
-
     </div>
   </div>
 
@@ -159,12 +126,10 @@ if (isset($_GET['view'])) {
    	</div>
   </div>
 
-  
-
   <div id="testimonials" class="page-section page-section__no-b-padding-until-large page-section__testimonials lazyload">
     <div class="wrapper wrapper__no-padding-until-large">
       <h2 class="section-title section-title__blue"><span class="icon icon--comment section-title__icon"></span>
-      <span style="font-size: 5rem !important;"> Real<strong>Testimonials</strong></span></h2>
+      <span style="font-size: 5rem !important; color: white"> Real<strong>Testimonials</strong></span></h2>
 
       <div class="row row__gutters row__equal-height-at-large row__gutters-small row__t-padding generic-content-container">
         <div class="row__large-4">

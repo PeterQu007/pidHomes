@@ -1,8 +1,3 @@
-<!--
-
-  Generate Neighborhood 2 Level Metabox Data
--->
-
 <?php
 
 /*

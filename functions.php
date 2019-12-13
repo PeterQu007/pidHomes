@@ -72,7 +72,9 @@ function pidHomes_child_features()
     add_image_size('professorLandscape', 400, 260, true);
     add_image_size('professorPortrait', 480, 650, true);
     //43.. Add page banner pic size
-    add_image_size('pageBanner', 1500, 350, true);
+    add_image_size('pageBanner', 1900, 300, true);
+    add_image_size('pageBanner-about', 1900, 800, true);
+
 }
 
 add_action('after_setup_theme', 'pidHomes_child_features');
@@ -212,6 +214,4 @@ function print_var_name($var){
   }
   return false;
 }
-
-
 ?>

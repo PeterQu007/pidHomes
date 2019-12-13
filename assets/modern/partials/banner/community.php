@@ -20,6 +20,7 @@ if (function_exists('putRevSlider') && (!empty($rev_slider_alias))) {
     //::Child theme:: Bypass Original image
     //:: $banner_image_id = get_post_meta(get_the_ID(), 'REAL_HOMES_page_banner_image', true);
     $banner_image_id = get_field('page_banner_background_image')['sizes']['pageBanner'];
+    // print_X('orange', 'banner image', $banner_image_id); //d//
 
     if ($banner_image_id) {
         //:: $banner_image_path = wp_get_attachment_url($banner_image_id);
