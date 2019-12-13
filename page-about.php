@@ -46,7 +46,7 @@ if (isset($_GET['view'])) {
       <div id="ForProfessionism" class="row__medium-8 row__medium-8--smaller ">
         <div>
           <div class="hero-slider">
-            <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri('/images/bus.jpg') ?>);">
+            <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri('assets/images/professionalism.jpg') ?>);">
               <div class="hero-slider__interior container">
                 <div class="hero-slider__overlay">
                   <h2 class="headline headline--medium t-center" style="font-size: 5rem; color: white"><strong>P</strong>rofessionalism</h2>
@@ -55,7 +55,7 @@ if (isset($_GET['view'])) {
                 </div>
               </div>
             </div>
-            <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri('/images/apples.jpg') ?>);">
+            <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri('assets/images/integrity.jpg') ?>);">
               <div class="hero-slider__interior container">
                 <div class="hero-slider__overlay">
                   <h2 class="headline headline--medium t-center" style="font-size: 5rem; color: white"><strong>I</strong>ntegrity</h2>
@@ -64,7 +64,7 @@ if (isset($_GET['view'])) {
                 </div>
               </div>
             </div>
-            <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri('/images/bread.jpg') ?>);">
+            <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri('assets/images/diligence.jpg') ?>);">
               <div class="hero-slider__interior container">
                 <div class="hero-slider__overlay">
                   <h2 class="headline headline--medium t-center" style="font-size: 5rem; color: white"><strong>D</strong>iligence</h2>
@@ -168,10 +168,9 @@ if (isset($_GET['view'])) {
     </div>
   </div>
 
-  <footer class="site-footer">
+  <!-- <footer class="site-footer">
     <div class="wrapper">
        <p>
-         <span class="site-footer__text">Copyright &copy; 2017 pidrealty.ca - Peter Qu Surrey Realtor. All rights reserved.</span>
          <a href="#" class="btn btn--orange open-modal">Get in Touch</a>
          <a href="#" class="btn btn--image"><img src="<?php echo get_theme_file_uri("assets/images/magsen-logo-130X45.jpg") ?>" 
                             alt="Magsen Realty"></a>
@@ -181,9 +180,9 @@ if (isset($_GET['view'])) {
        </p>
     </div>
    
-  </footer>
+  </footer> -->
 
-  <div class="modal">
+  <!-- <div class="modal">
       <div class="modal__inner">
           <h2 class="section-title section-title__blue section-title--less-margin"><span class="icon icon--mail section-title__icon"></span>Get in <strong>Touch</strong></h2>
           <div class="wrapper wrapper--narrow">
@@ -197,7 +196,7 @@ if (isset($_GET['view'])) {
           </div>
       <div class="modal__close">X</div>
     </div>
-  </div>
+  </div> -->
 
  
   
