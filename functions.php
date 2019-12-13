@@ -43,7 +43,22 @@ if ( ! function_exists( 'inspiry_load_translation_from_child' ) ) {
 	add_action( 'after_setup_theme', 'inspiry_load_translation_from_child' );
 }
 
-//Add Child Functions
+/*Add Child Functions
+*/
+
+function pidRealty_Files()
+{
+    //load js scripts
+    wp_enqueue_script('main-pidrealty-js', get_stylesheet_directory_uri().('/js/scripts-bundled.js'), null, microtime(), true);
+    wp_enqueue_script('vendor-js', get_stylesheet_directory_uri().("/temp/scripts/Vendor.js"));
+    //load css files
+    wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
+    wp_enqueue_style('font-awesome', get_stylesheet_directory_uri().("/assets/lib/fontawesome/css/font-awesome.min.css"));
+    wp_enqueue_style('pidRealty_secondary_style', get_stylesheet_directory_uri().("/temp/styles.css"));
+    //wp_enqueue_style('pidRealty_main_style', get_stylesheet_directory_uri());
+}
+add_action('wp_enqueue_scripts', 'pidRealty_Files');
+
 
 function pidHomes_child_features()
 {
@@ -54,8 +69,8 @@ function pidHomes_child_features()
     //42.. Crop image precisely, use parameter array('left', 'top') to replace true
     //42.. example: add_image_size('professorLandscape', 400, 260, array('left','top'));
     //42.. use 'manual image crop' plugin to do the precisely cropping;
-    //add_image_size('professorLandscape', 400, 260, true);
-    //add_image_size('professorPortrait', 480, 650, true);
+    add_image_size('professorLandscape', 400, 260, true);
+    add_image_size('professorPortrait', 480, 650, true);
     //43.. Add page banner pic size
     add_image_size('pageBanner', 1500, 350, true);
 }
