@@ -158,6 +158,9 @@ add_rewrite_rule('^school/([^/]*)/?','index.php?post_type=school&name=$matches[1
 add_rewrite_rule('^communities/([^/]*)/?','index.php?post_type=community&property-neighborhood=$matches[1]','top');
 add_rewrite_rule('^community/([^/]*)/?','index.php?post_type=community&name=$matches[1]','top');
 
+add_rewrite_rule('^markets/([^/]*)/?', 'index.php?post_type=market&property-neighborhood=$matches[1]', 'top');
+add_rewrite_rule('^market/([^/]*)/?', 'index.php?post_type=market&name=$matches[1]', 'top');
+
 require_once (get_stylesheet_directory() . '/inc/neighborhood-metabox.php');
 //End of PHP
 
@@ -187,16 +190,16 @@ function print_x($color = 'red', ...$msgs)
           $msgString .=  print_var_name($msg) . "=" . $msg . " :: " ;
       } elseif (is_array($msg)) {
           $msgString .= "^ARRAY " . print_var_name($msg) . "[ " . count($msg) . " ]";
-          echo '<p style ="text-align: left; color:' . $color . '">';
+          echo '<div style ="text-align: left!important; color:' . $color . '">';
           //print_r($msg);
           var_dump($msg);
-          echo ' </p>';
+          echo ' </div>';
       }elseif (is_object($msg)){
         $msgString .= "^OBJECT " . $msg->name. "{ " . count(array($msg)) . " }";
-          echo '<p style ="text-align: left; color:' . $color . '">';
+          echo '<div style ="text-align: left!important; color:' . $color . '">';
           var_dump($msg);
           //print_r($msg);
-          echo ' </p>';
+          echo ' </div>';
       }
     }
     $msgString .= '</p>';

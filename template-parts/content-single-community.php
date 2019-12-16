@@ -6,7 +6,7 @@
 
 <?php
   $communityID = get_query_var('communityID');
-  print_X('Blue', 'test', $communityID);
+  // print_X('Blue', __FILE__ , $communityID);
   $metabox = nbh_2level_metabox(get_the_ID());
 ?>
 
@@ -78,17 +78,18 @@
         <div style="text-align: left">
           <h2><?php the_title();?></h2>
           <?php get_field('banner_image') ?>
-          <div><?php $communityID ? the_excerpt() : the_content();?> </div>
-          <?php if(!$communityID){?>
+          <?php if (!$communityID) {?>
             <div class="acf-map">
               <?php
-                $mapLocation = get_field('map_location');?>
+$mapLocation = get_field('map_location');?>
                 <div class="marker" data-lat="<?php echo $mapLocation['lat'] ?>" data-lng="<?php echo $mapLocation['lng'] ?>">
                 <h3><a href="<?php the_permalink();?>"><?php the_title();?></a> </h3>
                 <?php echo $mapLocation['address']; ?>
                 </div>
             </div>
           <?php }?>
+          <div><?php $communityID ? the_excerpt() : the_content();?> </div>
+          
         </div>
         <!--
           toDo: Format Community Profile data

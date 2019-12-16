@@ -6,10 +6,13 @@
 */
 function nbh_3level_metabox($neighborhoodID){
 
+  // print_X('red', __FILE__, 'neighborhoodID', $neighborhoodID);
+
 	$metabox = [];
 
 	$terms = get_the_terms($neighborhoodID, 'property-neighborhood');
-    // print_X('', __LINE__, __FUNCTION__ , $terms); //d//
+    // print_X('', __LINE__, __FILE__, __FUNCTION__ , $terms); //d//
+
     foreach ($terms as $term) {
       //Get Top Level Term
       if (!$term->parent) {
@@ -50,6 +53,8 @@ function nbh_3level_metabox($neighborhoodID){
               'level3TermName' => $level3TermName,
               'level3TermSlug' => $level3TermSlug
              ));   
+    
+    // print_X('red', __FILE__, $metabox);
 
     return $metabox;
 }

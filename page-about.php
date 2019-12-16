@@ -135,7 +135,7 @@ if (isset($_GET['view'])) {
         <div class="row__large-4">
           <div class="testimonial">
             <div class="testimonial__photo">
-              <img class="lazyload" data-src="<?php echo get_theme_file_uri("assets/images/testimonial-jane.jpg") ?>">
+              <img class="lazyload" data-src="<?php echo get_theme_file_uri("assets/images/testimonial-lisa.jpg") ?>">
             </div>
             <h3 class="testimonial__title" style="font-size: 2rem !important;">Lisa Yin</h3>
             <h4 class="testimonial__subtitle" style="font-size: 1.5rem !important; padding-bottom: 10px !important">City Hall Official</h4>
@@ -145,7 +145,7 @@ if (isset($_GET['view'])) {
         <div class="row__large-4">
           <div class="testimonial">
             <div class="testimonial__photo">
-              <img class="lazyload" data-src="<?php echo get_theme_file_uri("assets/images/testimonial-john.jpg") ?>">
+              <img class="lazyload" data-src="<?php echo get_theme_file_uri("assets/images/testimonial-cooper.jpg") ?>">
             </div>
             <h3 class="testimonial__title" style="font-size: 2rem !important;">Cooper Williams</h3>
             <h4 class="testimonial__subtitle" style="font-size: 1.5rem !important; padding-bottom: 10px !important">Engineer</h4>
@@ -155,7 +155,7 @@ if (isset($_GET['view'])) {
         <div class="row__large-4">
           <div class="testimonial testimonial__last">
             <div class="testimonial__photo">
-              <img class="lazyload" data-src="<?php echo get_theme_file_uri("assets/images/testimonial-cat.jpg") ?>">
+              <img class="lazyload" data-src="<?php echo get_theme_file_uri("assets/images/testimonial-brandon.jpg") ?>">
             </div>
             <h3 class="testimonial__title" style="font-size: 2rem !important;">Brandon Chen</h3>
             <h4 class="testimonial__subtitle" style="font-size: 1.5rem !important; padding-bottom: 10px !important">Lawyer</h4>

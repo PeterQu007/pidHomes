@@ -21,7 +21,7 @@ if (empty($header_variation) || ('none' === $header_variation)) {
 }
 
 if (inspiry_show_header_search_form()) {
-    // get_template_part('assets/modern/partials/properties/search/advance'); //d//
+    get_template_part('assets/modern/partials/properties/search/advance'); //d//
 }
 
 if (isset($_GET['view'])) {
@@ -107,6 +107,9 @@ if (isset($_GET['view'])) {
       <?php 
     }
   }
+  print_X('blue', __FUNCTION__, 'shortCode');
+  echo do_shortcode("[wpdatatable id=1 var2='Burnaby' ]");
+  echo do_shortcode("[wpdatachart id=2]");
 
   wp_reset_query(); //School[]?> 
 
