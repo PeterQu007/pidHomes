@@ -45,7 +45,9 @@ while (have_posts()) {
     <div style="text-align: left">
       <h2><?php the_title();?></h2>
       <?php get_field('banner_image')?>
-      <div><?php the_content();?> </div>
+      <div><?php the_content();?> </div> 
+      <div><iframe style="border: 2px; color: blue;" width="400" height="300" src="https://statscentre.rebgv.org/infoserv/s-v1/8ezk-7wW?w=400&h=300"></iframe>
+      </div>
       
       <?php 
       global $wpdb;

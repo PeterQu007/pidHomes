@@ -50,6 +50,7 @@ function pidRealty_Files()
 {
     //load js scripts
     wp_enqueue_script('main-pidrealty-js', get_stylesheet_directory_uri().('/js/scripts-bundled.js'), null, microtime(), true);
+    //wp_enqueue_script('secondary-pidrealty-js', get_stylesheet_directory_uri() . ('/js/appjs-bundled.js'), null, microtime(), true);
     wp_enqueue_script('vendor-js', get_stylesheet_directory_uri().("/temp/scripts/Vendor.js"));
     //load css files
     wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');

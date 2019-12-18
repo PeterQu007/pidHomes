@@ -107,7 +107,7 @@ if (isset($_GET['view'])) {
       <?php 
     }
   }
-  print_X('blue', __FUNCTION__, 'shortCode');
+  // print_X('blue', __FILE__, __LINE__, __FUNCTION__, 'shortCode');
   echo do_shortcode("[wpdatatable id=1 var2='Burnaby' ]");
   echo do_shortcode("[wpdatachart id=2]");
 

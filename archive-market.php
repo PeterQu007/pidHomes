@@ -43,7 +43,7 @@ if (isset($_GET['view'])) {
 //if it is not null, means show specific categories/taxonomy
 $qvar = get_query_var('property-neighborhood');
 $debug_color = 'brown';
-print_X($debug_color, __LINE__, __FILE__, $qvar); //d//
+// print_X($debug_color, __FILE__, __LINE__, $qvar); //d//
 ?>
 
 <?php
@@ -65,7 +65,7 @@ if ($qvar) {
 // print_X('green', __FILE__, __LINE__, $terms); //d//
 
 foreach ($terms as $term) {
-    print_X($debug_color, __FILE__, "Archive-community Show term id & name", $term->term_id, $term->name, $term->slug); //d//
+    // print_X($debug_color, __FILE__, "Archive-community Show term id & name", $term->term_id, $term->name, $term->slug); //d//
     $termID = $term->term_id;
     //Define the query to get community posts
     $Communities = new WP_Query(array(
@@ -79,7 +79,7 @@ foreach ($terms as $term) {
         ),
         'posts_per_page' => -1,
     ));
-    print_X($debug_color, __FILE__, 'Archive-community Found posts: ', $Communities->found_posts); //d//
+    // print_X($debug_color, __FILE__, 'Archive-community Found posts: ', $Communities->found_posts); //d//
     set_query_var('qvar', $qvar);
     set_query_var('term', $term);
     set_query_var('metabox_tax', 'market');
@@ -88,7 +88,7 @@ foreach ($terms as $term) {
     if ($Communities->have_posts()) {?>
 
     <?php
-        print_X($debug_color, 'Archive-community found posts: ', $Communities->found_posts); //d//
+        // print_X($debug_color, 'Archive-community found posts: ', $Communities->found_posts); //d//
         $i = 0; //d//
         while ($Communities->have_posts()) {
             // print_X('Olive', 'Archive-community inside the LOOP: ', $i++); //d//

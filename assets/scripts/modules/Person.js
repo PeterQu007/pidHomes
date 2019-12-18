@@ -1,4 +1,3 @@
-
 /*
 function Person(fullName, favColor){
 	this.name = fullName;
@@ -10,19 +9,15 @@ function Person(fullName, favColor){
 }
 */
 
+class Person {
+  constructor(fullName, favColor) {
+    this.name = fullName;
+    this.favoriteColor = favColor;
+  }
 
-
-class Person{
-
-	constructor(fullName, favColor){
-		this.name = fullName;
-		this.favoriteColor = favColor;
-	}
-
-	greet(){
-		console.log("hell babel !!!!!PPP");
-	}
+  greet() {
+    console.log("hell babel !!!!!PPP");
+  }
 }
 
-
-module.exports=Person;
+module.exports = Person;
