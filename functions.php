@@ -50,8 +50,9 @@ function pidRealty_Files()
 {
     //load js scripts
     wp_enqueue_script('main-pidrealty-js', get_stylesheet_directory_uri().('/js/scripts-bundled.js'), null, microtime(), true);
-    //wp_enqueue_script('secondary-pidrealty-js', get_stylesheet_directory_uri() . ('/js/appjs-bundled.js'), null, microtime(), true);
+    wp_enqueue_script('secondary-pidrealty-js', get_stylesheet_directory_uri() . ('/js/appjs-bundled.js'), null, microtime(), true);
     wp_enqueue_script('vendor-js', get_stylesheet_directory_uri().("/temp/scripts/Vendor.js"));
+    // wp_enqueue_script('chartjs', 'https://www.jsdelivr.com/package/npm/chart.js');
     //load css files
     wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
     wp_enqueue_style('font-awesome', get_stylesheet_directory_uri().("/assets/lib/fontawesome/css/font-awesome.min.css"));
@@ -161,6 +162,8 @@ add_rewrite_rule('^community/([^/]*)/?','index.php?post_type=community&name=$mat
 
 add_rewrite_rule('^markets/([^/]*)/?', 'index.php?post_type=market&property-neighborhood=$matches[1]', 'top');
 add_rewrite_rule('^market/([^/]*)/?', 'index.php?post_type=market&name=$matches[1]', 'top');
+
+add_rewrite_rule('^db/([^/]*)/?', get_theme_file_uri('/db/data.php'), 'top');
 
 require_once (get_stylesheet_directory() . '/inc/neighborhood-metabox.php');
 //End of PHP

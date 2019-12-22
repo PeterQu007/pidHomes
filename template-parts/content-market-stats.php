@@ -4,14 +4,21 @@
 -->
 
 <?php
-  // print_X('green', __FILE__, 'get_the_ID()', get_the_ID()); //d//
+  print_X('green', __FILE__, 'get_the_ID()', get_the_ID()); //d//
 
+  global $wpdb;
+  $results = $wpdb->get_results("SELECT Neighborhood_Code FROM pid_neighborhoods WHERE neighborhood_name='" . get_the_title() . "'");
+  foreach($results as $nbh){
+     print_X('green', "$nbh->Neighborhood_Code");
+     $nbh_code = $nbh->Neighborhood_Code;
+  }
+      
   $metabox = nbh_3level_metabox(get_the_ID());
   // print_X('green', __FILE__, $metabox); //d//
 ?>
 
 <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
-  <div style="font-size: 20px; text-align: left; display: block">
+  <div style="font-size: 20px; text-align: left; display: block" id="marketSection" nbhCode="<?php echo $nbh_code; ?>">
    
     <a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('market'); ?>">
       <i class="fas fa-school" aria-hidden="true"></i>
@@ -43,11 +50,12 @@
 while (have_posts()) {
   the_post();?>
     <div style="text-align: left">
-      <h2><?php the_title();?></h2>
-      <?php get_field('banner_image')?>
-      <div><?php the_content();?> </div> 
-      <div><iframe style="border: 2px; color: blue;" width="400" height="300" src="https://statscentre.rebgv.org/infoserv/s-v1/8ezk-7wW?w=400&h=300"></iframe>
-      </div>
+      <h2><?php //the_title();?></h2>
+      <?php //get_field('banner_image')?>
+      <div><?php //the_content();?> </div> 
+      <!-- <div><iframe style="border: 2px; color: blue;" width="400" height="300" 
+        src="https://statscentre.rebgv.org/infoserv/s-v1/8ezk-7wW?w=400&h=300"></iframe>
+      </div> -->
       
       <?php 
       global $wpdb;
@@ -58,6 +66,9 @@ while (have_posts()) {
       //    echo "<p>{$school->rank}</p>";
       // }
       ?>
+
+      
+      <canvas id="lineChart" height="400px !important", width="400"></canvas>
       <!--
         toDo: Format School Rank & Rating Style
       -->

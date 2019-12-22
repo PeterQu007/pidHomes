@@ -37,6 +37,7 @@ if (isset($_GET['view'])) {
   $metabox = nbh_3level_metabox(get_the_ID());
   // print_x('green',$metabox); //d//
   $communityID = $metabox[2]['level3TermID'];
+  print_X('green', get_theme_file_uri('/db/data.php'));
 ?>
 
 <section class="rh_section rh_section--flex rh_wrap--padding rh_wrap--topPadding">
