@@ -4,9 +4,9 @@ import Chart from "chart.js";
 class pidChart {
   constructor() {
     let ctx = $("#lineChart");
-    this.chartData1 = [];
-    this.chartData2 = [];
-    this.chartData3 = [];
+    this.chartDataSets = [];
+    // this.chartData2 = [];
+    // this.chartData3 = [];
     this.getChartData();
   }
 
@@ -20,39 +20,49 @@ class pidChart {
       url:
         "http://pidrealty.local/wp-content/themes/realhomes-child/db/chartData.php",
       method: "get",
-      data: { Neighborhood_ID: nbhCode },
+      data: { Neighborhood_ID: "F20,F23" },
       dataType: "JSON",
       success: function(res) {
-        self.chartData1 = res;
-        console.log(self.chartData1);
-        $.ajax({
-          url:
-            "http://pidrealty.local/wp-content/themes/realhomes-child/db/chartData.php",
-          method: "get",
-          data: { Neighborhood_ID: "F20" },
-          dataType: "JSON",
-          success: function(res) {
-            self.chartData2 = res;
-            console.log(self.chartData2);
-            $.ajax({
-              url:
-                "http://pidrealty.local/wp-content/themes/realhomes-child/db/chartData.php",
-              method: "get",
-              data: { Neighborhood_ID: "F30A" },
-              dataType: "JSON",
-              success: function(res) {
-                self.chartData3 = res;
-                console.log(self.chartData3);
-                self.drawChart();
-              }
-            });
-          }
+        res.forEach(dataSet => {
+          console.log(dataSet);
+          var xData = {
+            label: dataSet["nbr_ID"],
+            data: dataSet["nbr_Data"]
+          };
+          self.chartDataSets.push(xData);
         });
+        // self.chartDataSets = res;
+        // console.log("ajax");
+        console.log(self.chartDataSets);
+        self.drawChart(self.chartDataSets);
+        // $.ajax({
+        //   url:
+        //     "http://pidrealty.local/wp-content/themes/realhomes-child/db/chartData.php",
+        //   method: "get",
+        //   data: { Neighborhood_ID: "F20" },
+        //   dataType: "JSON",
+        //   success: function(res) {
+        //     self.chartData2 = res;
+        //     console.log(self.chartData2);
+        //     $.ajax({
+        //       url:
+        //         "http://pidrealty.local/wp-content/themes/realhomes-child/db/chartData.php",
+        //       method: "get",
+        //       data: { Neighborhood_ID: "F30A" },
+        //       dataType: "JSON",
+        //       success: function(res) {
+        //         self.chartData3 = res;
+        //         console.log(self.chartData3);
+        //         self.drawChart();
+        //       }
+        //     });
+        //   }
+        // });
       }
     });
   }
 
-  drawChart() {
+  drawChart(dataSets) {
     var nbhSection = $("#marketSection");
     var nbhCode = nbhSection.attr("nbhCode");
     console.log(nbhCode);
@@ -63,29 +73,30 @@ class pidChart {
       type: "line",
       data: {
         //labels: data[0],
-        datasets: [
-          {
-            label: nbhCode + " Market Chart",
-            fill: false,
-            backgroundColor: "rgba(75, 192, 192, 0.4)",
-            borderColor: "rgba(75, 192, 192, 1)",
-            data: this.chartData1 //data[1]
-          },
-          {
-            label: "F20" + " Market Chart",
-            fill: false,
-            backgroundColor: "rgba(75, 75, 192, 0.4)",
-            borderColor: "rgba(75, 75, 192, 1)",
-            data: this.chartData2 //data[1]
-          },
-          {
-            label: "F30A" + " Market Chart",
-            fill: false,
-            backgroundColor: "rgba(75, 125, 192, 0.4)",
-            borderColor: "rgba(75, 125, 192, 1)",
-            data: this.chartData3 //data[1]
-          }
-        ]
+        datasets: dataSets
+        // datasets: [
+        //   {
+        //     label: nbhCode + " Market Chart",
+        //     fill: false,
+        //     backgroundColor: "rgba(75, 192, 192, 0.4)",
+        //     borderColor: "rgba(75, 192, 192, 1)",
+        //     data: this.chartData1 //data[1]
+        //   },
+        //   {
+        //     label: "F20" + " Market Chart",
+        //     fill: false,
+        //     backgroundColor: "rgba(75, 75, 192, 0.4)",
+        //     borderColor: "rgba(75, 75, 192, 1)",
+        //     data: this.chartData2 //data[1]
+        //   },
+        //   {
+        //     label: "F30A" + " Market Chart",
+        //     fill: false,
+        //     backgroundColor: "rgba(75, 125, 192, 0.4)",
+        //     borderColor: "rgba(75, 125, 192, 1)",
+        //     data: this.chartData3 //data[1]
+        //   }
+        // ]
       },
       options: {
         title: {
@@ -99,7 +110,7 @@ class pidChart {
             {
               type: "time",
               time: {
-                unit: "month"
+                unit: "quarter"
               }
             }
           ]
