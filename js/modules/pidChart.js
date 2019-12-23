@@ -3,108 +3,93 @@ import Chart from "chart.js";
 
 class pidChart {
   constructor() {
-    let ctx = $("#lineChart");
-    this.chartDataSets = [];
-    // this.chartData2 = [];
-    // this.chartData3 = [];
+    this.ctx = $("#lineChart");
+    this.neighborhoodCodes = $("#marketSection").attr("nbhCodes");
+    //console.log($("#marketSection").attr("nbhNames"));
+    this.neighborhoodNames = JSON.parse($("#marketSection").attr("nbhNames"));
+    this.chartColors = {
+      red: "rgb(255, 99, 132)",
+      orange: "rgb(255, 159, 64)",
+      yellow: "rgb(255, 205, 86)",
+      green: "rgb(75, 192, 192)",
+      blue: "rgb(54, 162, 235)",
+      purple: "rgb(153, 102, 255)",
+      grey: "rgb(231,233,237)"
+    };
+    this.PropertyTypeSelect = $("#Property_Type");
+    this.chartDataSets_All = [];
+    this.chartDataSets_Detached = [];
+    this.chartDataSets_Townhouse = [];
+    this.chartDataSets_Apartment = [];
+    this.pidChart = {};
+    this.chartConfig = {};
+    this.configChart([
+      { label: "", data: {} },
+      { label: "", data: {} },
+      { label: "", data: {} }
+    ]);
     this.getChartData();
+    // this.init(this.chartDataSets_All);
+    this.events();
   }
 
-  getChartData() {
-    var nbhSection = $("#marketSection");
-    var nbhCode = nbhSection.attr("nbhCode");
-    console.log(nbhCode);
-    var self = this;
+  // init(dataSets) {
+  //   // var nbhSection = $("#marketSection");
+  //   // var nbhCode = nbhSection.attr("nbhCode");
 
-    $.ajax({
-      url:
-        "http://pidrealty.local/wp-content/themes/realhomes-child/db/chartData.php",
-      method: "get",
-      data: { Neighborhood_ID: "F20,F23" },
-      dataType: "JSON",
-      success: function(res) {
-        res.forEach(dataSet => {
-          console.log(dataSet);
-          var xData = {
-            label: dataSet["nbr_ID"],
-            data: dataSet["nbr_Data"]
-          };
-          self.chartDataSets.push(xData);
-        });
-        // self.chartDataSets = res;
-        // console.log("ajax");
-        console.log(self.chartDataSets);
-        self.drawChart(self.chartDataSets);
-        // $.ajax({
-        //   url:
-        //     "http://pidrealty.local/wp-content/themes/realhomes-child/db/chartData.php",
-        //   method: "get",
-        //   data: { Neighborhood_ID: "F20" },
-        //   dataType: "JSON",
-        //   success: function(res) {
-        //     self.chartData2 = res;
-        //     console.log(self.chartData2);
-        //     $.ajax({
-        //       url:
-        //         "http://pidrealty.local/wp-content/themes/realhomes-child/db/chartData.php",
-        //       method: "get",
-        //       data: { Neighborhood_ID: "F30A" },
-        //       dataType: "JSON",
-        //       success: function(res) {
-        //         self.chartData3 = res;
-        //         console.log(self.chartData3);
-        //         self.drawChart();
-        //       }
-        //     });
-        //   }
-        // });
-      }
-    });
+  //   console.log(nbhCode);
+  //   this.drawChart(this.chartConfig);
+  // }
+
+  events() {
+    this.PropertyTypeSelect.on("change", this.updateChart.bind(this));
   }
 
-  drawChart(dataSets) {
-    var nbhSection = $("#marketSection");
-    var nbhCode = nbhSection.attr("nbhCode");
-    console.log(nbhCode);
-
-    console.log(this.chartData1);
-    let ctx = $("#lineChart");
-    let myChart = new Chart(ctx, {
+  configChart(dataSets) {
+    let config = {
       type: "line",
       data: {
         //labels: data[0],
-        datasets: dataSets
-        // datasets: [
-        //   {
-        //     label: nbhCode + " Market Chart",
-        //     fill: false,
-        //     backgroundColor: "rgba(75, 192, 192, 0.4)",
-        //     borderColor: "rgba(75, 192, 192, 1)",
-        //     data: this.chartData1 //data[1]
-        //   },
-        //   {
-        //     label: "F20" + " Market Chart",
-        //     fill: false,
-        //     backgroundColor: "rgba(75, 75, 192, 0.4)",
-        //     borderColor: "rgba(75, 75, 192, 1)",
-        //     data: this.chartData2 //data[1]
-        //   },
-        //   {
-        //     label: "F30A" + " Market Chart",
-        //     fill: false,
-        //     backgroundColor: "rgba(75, 125, 192, 0.4)",
-        //     borderColor: "rgba(75, 125, 192, 1)",
-        //     data: this.chartData3 //data[1]
-        //   }
-        // ]
+        // datasets: dataSets
+        datasets: [
+          {
+            label: dataSets[0].label,
+            fill: false,
+            backgroundColor: this.chartColors.red, //"rgba(75, 192, 192, 0.4)",
+            borderColor: this.chartColors.red, //"rgba(75, 192, 192, 1)",
+            data: dataSets[0].data
+          },
+          {
+            label: dataSets[1].label,
+            fill: false,
+            backgroundColor: this.chartColors.blue, //"rgba(75, 75, 192, 0.4)",
+            borderColor: this.chartColors.blue, //"rgba(75, 75, 192, 1)",
+            data: dataSets[1].data
+          },
+          {
+            label: dataSets[2].label,
+            fill: false,
+            backgroundColor: this.chartColors.orange, //"rgba(75, 125, 192, 0.4)",
+            borderColor: this.chartColors.orange, //"rgba(75, 125, 192, 1)",
+            data: dataSets[2].data
+          }
+        ]
       },
       options: {
         title: {
           display: false,
-          text: nbhCode
+          text: ""
         },
         responsive: true,
         maintainAspectRatio: false,
+        tooltips: {
+          mode: "index",
+          intersect: false
+        },
+        hover: {
+          mode: "nearest",
+          intersect: true
+        },
         scales: {
           xAxes: [
             {
@@ -113,14 +98,118 @@ class pidChart {
                 unit: "quarter"
               }
             }
+          ],
+          yAxes: [
+            {
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: "house value"
+              }
+            }
           ]
         }
+      }
+    };
+    this.chartConfig = {};
+    this.chartConfig = config;
+  }
+
+  updateChart(e) {
+    console.log(e.target.value); //property type value
+    console.log(this.pidChart);
+
+    switch (e.target.value.trim()) {
+      case "All":
+        console.log("All");
+        this.configChart(this.chartDataSets_All);
+        break;
+      case "Detached":
+        console.log("Detached");
+        this.configChart(this.chartDataSets_Detached);
+        break;
+      case "Townhouse":
+        console.log("Townhouse");
+        // this.chartConfig.data.datasets = this.chartDataSets_Townhouse;
+        this.configChart(this.chartDataSets_Townhouse);
+        break;
+      case "Apartment":
+        console.log("Apartment");
+        // this.chartConfig.data.datasets = this.chartDataSets_Apartment;
+        this.configChart(this.chartDataSets_Apartment);
+        break;
+    }
+    this.pidChart.config = this.chartConfig;
+    this.pidChart.update();
+  }
+
+  removeData(chart) {
+    chart.data.labels.pop();
+    chart.data.datasets.forEach(dataset => {
+      dataset.data.pop();
+    });
+    chart.update();
+  }
+
+  addData(chart, label, data) {
+    chart.data.labels.push(label);
+    // chart.data.datasets.forEach(dataset => {
+    //   dataset.data.push(data);
+    // });
+    data.forEach(dataSet => chart.data.datasets.push(dataSet));
+    chart.update();
+    console.log(chart.data.datasets);
+  }
+
+  getChartData() {
+    var nbhSection = $("#marketSection");
+    var nbhCodes = nbhSection.attr("nbhCodes");
+    console.log(nbhCodes);
+    var self = this;
+
+    $.ajax({
+      url:
+        "http://pidrealty.local/wp-content/themes/realhomes-child/db/chartData.php",
+      method: "get",
+      data: { Neighborhood_IDs: nbhCodes },
+      dataType: "JSON",
+      success: function(res) {
+        res.forEach(dataSet => {
+          let xPropertyType = dataSet["property_Type"].trim();
+          let xData = {
+            label: self.neighborhoodNames[dataSet["nbr_ID"].trim()],
+            data: dataSet["nbr_Data"]
+          };
+          switch (xPropertyType) {
+            case "All":
+              self.chartDataSets_All.push(xData);
+              break;
+            case "Detached":
+              self.chartDataSets_Detached.push(xData);
+              break;
+            case "Townhouse":
+              self.chartDataSets_Townhouse.push(xData);
+              break;
+            case "Apartment":
+              self.chartDataSets_Apartment.push(xData);
+              break;
+          }
+        });
+        // self.chartDataSets = res;
+        // console.log("ajax");
+        console.log(self.chartDataSets_All);
+        //self.init(self.chartDataSets_All);
+        self.configChart(self.chartDataSets_All);
+        self.drawChart(self.chartConfig);
       }
     });
   }
 
-  test() {
-    alert("hi chart");
+  drawChart(config) {
+    // console.log(ctx);
+    console.log(config);
+    //var ctx = $("#lineChart");
+    this.pidChart = new Chart(this.ctx, config);
   }
 }
 

@@ -7,10 +7,23 @@
   print_X('green', __FILE__, 'get_the_ID()', get_the_ID()); //d//
 
   global $wpdb;
-  $results = $wpdb->get_results("SELECT Neighborhood_Code FROM pid_neighborhoods WHERE neighborhood_name='" . get_the_title() . "'");
+  $results = $wpdb->get_results("SELECT Neighborhood_Code, nbh.RE_Area_Code, nbh.City_Code, city.City_Name, area.RE_Area_Name 
+                                  FROM pid_neighborhoods nbh
+                                  RIGHT JOIN pid_cities city ON city.City_ID = nbh.City_ID
+                                  RIGHT JOIN pid_re_areas area ON area.RE_Area_Code = nbh.RE_Area_Code
+                                  WHERE neighborhood_name='" . get_the_title() . "'");
   foreach($results as $nbh){
-     print_X('green', "$nbh->Neighborhood_Code");
-     $nbh_code = $nbh->Neighborhood_Code;
+    $nbh_codes = trim($nbh->Neighborhood_Code) . ',' . trim($nbh->RE_Area_Code) . ',' . trim($nbh->City_Code);
+    print_X('green', $nbh_codes);
+    $nbh->City_Code = trim($nbh->City_Code);
+    $nbh->RE_Area_Code = trim($nbh->RE_Area_Code);
+    $nbh->Neighborhood_Code = trim($nbh->Neighborhood_Code);
+    $nbh_names=array(
+      @$nbh->City_Code => trim($nbh->City_Name),
+      @$nbh->RE_Area_Code => trim($nbh->RE_Area_Name),
+      @$nbh->Neighborhood_Code => trim(get_the_title())
+    );
+    print_X('red', json_encode($nbh_names));
   }
       
   $metabox = nbh_3level_metabox(get_the_ID());
@@ -18,7 +31,8 @@
 ?>
 
 <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
-  <div style="font-size: 20px; text-align: left; display: block" id="marketSection" nbhCode="<?php echo $nbh_code; ?>">
+  <div style="font-size: 20px; text-align: left; display: block" 
+        id="marketSection" nbhCodes="<?php echo $nbh_codes; ?>" nbhNames='<?php echo json_encode($nbh_names); ?>'>
    
     <a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('market'); ?>">
       <i class="fas fa-school" aria-hidden="true"></i>
@@ -44,34 +58,47 @@
 
   </div>
 </div>
+<div style="text-align: left">
+  <form style="display:block">
+    <span style="display:inline-block!important;">Select Property Type: &nbsp&nbsp&nbsp&nbsp </span>
+    <select id="Property_Type" name="Property_Type" style="width: 150px!important; border: 1px">
+      <option value="All">All Property</option>
+      <option value="Detached">Detached Property</option>
+      <option value="Townhouse">Townhouse</option>
+      <option value="Apartment">Apartment</option>
+    </select> 
+  </form>
+  <div style="clear:both"></div>
+</div>
+<div style="text-align: left">
+  <canvas id="lineChart" height="400px !important", width="400"></canvas>
+</div>
 
 <?php
+if(have_posts()){
+    while (have_posts()) {
+      the_post();?>
+        <div style="text-align: left">
+          <h2><?php //the_title();?></h2>
+          <?php //get_field('banner_image')?>
+          <div><?php //the_content();?> </div> 
+          <!-- <div><iframe style="border: 2px; color: blue;" width="400" height="300" 
+            src="https://statscentre.rebgv.org/infoserv/s-v1/8ezk-7wW?w=400&h=300"></iframe>
+          </div> -->
+          
+          <?php 
+          global $wpdb;
+          //$school = $wpdb->get_var("SELECT COUNT(*) FROM pid_schools WHERE school_name='Fraser Heights'");
+          //echo "<p>User Count is {$user_count}</p>";
+          $results = $wpdb->get_results("SELECT school_year, school_type, `rank`, rank5, rating FROM pid_schools WHERE school_name='" . get_field('school_name') . "'");
+          // foreach($results as $school){
+          //    echo "<p>{$school->rank}</p>";
+          // }
+          ?>
+          <!--
+            toDo: Format School Rank & Rating Style
+          -->
+        </div>
+    <?php /*while[]*/}
+} /*if */ ?>
 
-while (have_posts()) {
-  the_post();?>
-    <div style="text-align: left">
-      <h2><?php //the_title();?></h2>
-      <?php //get_field('banner_image')?>
-      <div><?php //the_content();?> </div> 
-      <!-- <div><iframe style="border: 2px; color: blue;" width="400" height="300" 
-        src="https://statscentre.rebgv.org/infoserv/s-v1/8ezk-7wW?w=400&h=300"></iframe>
-      </div> -->
-      
-      <?php 
-      global $wpdb;
-      //$school = $wpdb->get_var("SELECT COUNT(*) FROM pid_schools WHERE school_name='Fraser Heights'");
-      //echo "<p>User Count is {$user_count}</p>";
-      $results = $wpdb->get_results("SELECT school_year, school_type, `rank`, rank5, rating FROM pid_schools WHERE school_name='" . get_field('school_name') . "'");
-      // foreach($results as $school){
-      //    echo "<p>{$school->rank}</p>";
-      // }
-      ?>
-
-      
-      <canvas id="lineChart" height="400px !important", width="400"></canvas>
-      <!--
-        toDo: Format School Rank & Rating Style
-      -->
-      
-    </div>
-<?php /*while[]*/}?>

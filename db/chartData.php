@@ -1,8 +1,8 @@
 <?php
 
-if (isset($_GET["Neighborhood_ID"]))
+if (isset($_GET["Neighborhood_IDs"]))
 {
-  $Neighborhood_IDs = $_GET["Neighborhood_ID"];
+  $Neighborhood_IDs = $_GET["Neighborhood_IDs"];
   // echo $title;
   // echo " is your tab title";
   // echo $Neighborhood_ID;
@@ -13,6 +13,27 @@ else
   //echo "<p>no Neighborhood_ID supplied</p>";
 }
 
+if (isset($_GET["Property_Types"])) {
+    $Property_Types = $_GET["Property_Types"];
+    // echo $title;
+    // echo " is your tab title";
+    // echo $Neighborhood_ID;
+} else {
+    $Property_Types = 'All, Detached, Townhouse, Apartment';
+    //echo "<p>no Neighborhood_ID supplied</p>";
+}
+
+if (isset($_GET["Start_Date"])) {
+    $Start_Date = $_GET["Start_Date"];
+    // echo $title;
+    // echo " is your tab title";
+    // echo $Neighborhood_ID;
+} else {
+    $Start_Date = '2017-01-01';
+    //echo "<p>no Neighborhood_ID supplied</p>";
+}
+
+
 $mysqli = new mysqli("localhost", "root", "root", "local");
 // include "dbConn.php";
 
@@ -22,20 +43,34 @@ $return_arr = array();
 // create Neighborhood_ID string
 $nbr_ids = explode(",", $Neighborhood_IDs);
 $nbr_string = "";
+$pt_types = explode(",", $Property_Types);
+$pt_string = "";
+
 $chartDataSets =[];
-foreach($nbr_ids as $nbr_id){
-  $nbr_string .= "'" . trim($nbr_id) . "',";
-  $chartDataSets[] = array(
-    'nbr_ID' => trim($nbr_id),
-    'nbr_Data' => []
-  );
+
+foreach($pt_types as $pt_type){
+  $pt_string .= "'" . trim($pt_type) . "',";
+  foreach ($nbr_ids as $nbr_id) {
+    $nbr_string .= "'" . trim($nbr_id) . "',";
+    $chartDataSets[] = array(
+        'property_Type' => trim($pt_type),
+        'nbr_ID' => trim($nbr_id),
+        'nbr_Data' => []
+    );
+  }
 }
 $nbr_string = rtrim($nbr_string, ",");
+$pt_string = rtrim($pt_string, ",");
 // echo $nbr_string;
 // var_dump( $chartDataSets);
-// echo '<br/>';
+// echo '<hr/>';
 
-$strSql = "SELECT `Date`, HPI, Neighborhood_ID FROM pid_market WHERE Neighborhood_ID IN (" . $nbr_string . ") AND Date >= '2017-01-01'";
+$strSql = "SELECT `Date`, Property_Type, Neighborhood_ID, HPI FROM pid_market 
+           WHERE Neighborhood_ID IN (" . $nbr_string . ") 
+           AND 
+           Property_Type IN(" . $pt_string . ")
+           AND 
+           Date >= '" . $Start_Date . "'";
 // echo $strSql . "<br/>";
 
 $mysqli->real_query($strSql);
@@ -48,9 +83,11 @@ while ($row = $res->fetch_assoc()) {
   // echo $xValue;
   $xID = trim($row['Neighborhood_ID']);
   // echo $xID . "<br/>";
+  $xProperty_Type = trim($row['Property_Type']);
+
   foreach($chartDataSets as &$chartDataSet){
     // echo $chartDataSet['nbr_ID'] . "<br/>";
-    if($xID == trim($chartDataSet['nbr_ID'])){
+    if($xID == trim($chartDataSet['nbr_ID']) AND $xProperty_Type == trim($chartDataSet['property_Type'])){
       // echo "right ID<br/>";
       // array_push($return_arr, array(
       // 'x' => $xDate,
