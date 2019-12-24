@@ -44,8 +44,8 @@ if (isset($_GET['view'])) {
 <div class="rh_page rh_page__listing_page rh_page__main" style="width: 70%">
 
 <?php 
-  get_template_part('template-parts/content-single-community');
-  get_template_part('template-parts/content-market-stats');
+  get_template_part('template-parts/content', 'single-community');
+  get_template_part('template-parts/content', 'market-stats');
 ?>
 
   <?php //star school block //School[]

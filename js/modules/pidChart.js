@@ -7,6 +7,7 @@ class pidChart {
     this.neighborhoodCodes = $("#marketSection").attr("nbhCodes");
     //console.log($("#marketSection").attr("nbhNames"));
     this.neighborhoodNames = JSON.parse($("#marketSection").attr("nbhNames"));
+    console.log(this.neighborhoodNames);
     this.chartColors = {
       red: "rgb(255, 99, 132)",
       orange: "rgb(255, 159, 64)",

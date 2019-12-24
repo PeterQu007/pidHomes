@@ -85,7 +85,7 @@ foreach ($terms as $term) {
         'posts_per_page' => -1,
     ));
     // print_X($X, __LINE__, 'Archive-market Found posts: ', $Markets->found_posts); //d//
-    $metabox = nbh_2Level_terms_by_Slug($term->slug); //d//
+    $metabox = nbh_2Level_metabox_by_Slug($term->slug); //d//
     print_X($X, __LINE__, $metabox);
     set_query_var('qvar', $qvar);
     set_query_var('term', $term);

@@ -12,12 +12,12 @@
   $qvar = get_query_var('qvar'); //get neighborhood_code
 
   print_X($X, __LINE__, 'get_the_ID()', get_the_ID(), get_the_title(), $qvar); //d//
-  print_X($X, __LINE__, get_post_meta(get_the_ID(), 'neighborhood_code', false));
-  if (is_single(get_the_ID())){
-    echo '<div>true</div>';
-  }else{
-    echo '<div>false</div>';
-  }
+  // print_X($X, __LINE__, get_post_meta(get_the_ID(), 'neighborhood_code', false));
+  // if (is_single(get_the_ID())){
+  //   echo '<div>true</div>';
+  // }else{
+  //   echo '<div>false</div>';
+  // }
 
   if($qvar){
     $the_neighborhood = $qvar;
@@ -28,8 +28,16 @@
   $the_neighborhood=trim($the_neighborhood);
 
   $metabox = nbh_3level_metabox(get_the_ID());
-  print_X($X, __LINE__, $metabox); //d//
-
+  // print_X($X, __LINE__, $metabox); //d//
+  $neighborhood_codes = '';
+  $neighborhood_names = [];
+  foreach($metabox as $meta){
+    $neighborhood_codes .= $meta['3'] . ",";
+    $neighborhood_names[$meta['3']] = $meta['1'] ;
+  }
+  $neighborhood_codes = rtrim($neighborhood_codes, ',');
+  print_X($X, __LINE__, $neighborhood_names);
+  print_X($X, __LINE__, $neighborhood_codes, json_encode($neighborhood_names));
 
   global $wpdb;
   $results = $wpdb->get_results("SELECT Neighborhood_Code, nbh.RE_Area_Code, nbh.City_Code, city.City_Name, area.RE_Area_Name 
@@ -49,6 +57,7 @@
       @$nbh->RE_Area_Code => trim($nbh->RE_Area_Name),
       @$nbh->Neighborhood_Code => trim(get_the_title())
     );
+    print_X($X, __LINE__, $nbh_names);
     print_X($X, __LINE__, json_encode($nbh_names));
   }
       
@@ -56,7 +65,7 @@
 
 <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
   <div style="font-size: 20px; text-align: left; display: block" 
-        id="marketSection" nbhCodes="<?php echo $nbh_codes; ?>" nbhNames='<?php echo json_encode($nbh_names); ?>'>
+        id="marketSection" nbhCodes="<?php echo $neighborhood_codes; ?>" nbhNames='<?php echo json_encode($neighborhood_names); ?>'>
    
     <a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('market'); ?>">
       <i class="fas fa-school" aria-hidden="true"></i>

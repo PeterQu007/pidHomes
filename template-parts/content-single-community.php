@@ -8,8 +8,12 @@
   $X = set_debug(__FILE__);
   $communityID = get_query_var('communityID');
   // print_X('Blue', __FILE__ , $communityID);
-  $metabox = nbh_2level_metabox(get_the_ID());
-  print_X($X, __FILE__, $metabox);
+  $metabox = nbh_2Level_metabox_by_ID(get_the_ID());
+  // print_X($X, __LINE__, $metabox);
+  $post_slug = get_post_field('post_name', get_post());
+  // print_X($X, __LINE__, $post_slug);
+  // $metabox_by_slug=nbh_2Level_metabox_by_Slug($post_slug);
+  // print_X($X, __LINE__, $metabox_by_slug);
 ?>
 
 <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">

@@ -3,7 +3,7 @@
       $X = set_debug(__FILE__);
       //vars are from set_query_var() in the upper level module
       if(!$metabox){
-        $metabox = nbh_2Level_terms_by_Slug($term->slug); //d//
+        $metabox = nbh_2Level_metabox_by_Slug($term->slug); //d//
       }
       print_X($X, __LINE__, 'Community slug:', $term->slug , $metabox); //d//
     ?>

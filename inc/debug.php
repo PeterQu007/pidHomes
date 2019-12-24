@@ -12,7 +12,7 @@
       'content-single-community' => 'olive',
       'content-market-stats' => 'brown',
       'chartData' => 'orange',
-      'neighborhood-metabox' => 'olive'
+      'neighborhood-metabox' => 'OrangeRed'
     );
     // print_r(pathinfo($file)['filename']);
     // echo $debug_color['archive-market'];
