@@ -41,7 +41,7 @@ if (isset($_GET['view'])) {
   //entrance variable value for archive module
   //if it is null, means show all categories/taxonomies
   //if it is not null, means show specific categories/taxonomy
-  $qvar = get_query_var('property-neighborhood');
+  $qvar = get_query_var('property-neighborhood'); //query var is passed from url rewriting 
   print_X('blue', __LINE__, $qvar, get_the_ID(), get_the_title()); //d//
 ?>
 
@@ -85,7 +85,7 @@ foreach($terms as $term){
   set_query_var('qvar', $qvar);
   set_query_var('term', $term );
   set_query_var('metabox_tax', 'community');
-  get_template_part('/template-parts/content-metabox');
+  get_template_part('/template-parts/content-2Level-metabox');
 
   if($Communities->have_posts()){ ?>
 

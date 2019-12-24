@@ -193,6 +193,7 @@ add_rewrite_rule('^db/([^/]*)/?', get_theme_file_uri('/db/data.php'), 'top');
 
 //Add include modules
 require_once (get_stylesheet_directory() . '/inc/neighborhood-metabox.php');
+include_once get_stylesheet_directory() . '/inc/debug.php';
 
 //End of PHP
 
@@ -200,65 +201,25 @@ require_once (get_stylesheet_directory() . '/inc/neighborhood-metabox.php');
   GENERAL FUNCTION LIBRARY
 */
 
-/*
-  @color
-  @various messages
-  print the messages by color
-*/
-function print_x($color = 'red', ...$msgs)
-{
 
-  if(!$color){
-    $color = 'red';
-  }
-  echo '<div >';
-    echo '<hr height="1" style="padding-top: 3px; border-bottom: 1px solid; color: lightblue">';
-    $msgString = '<p style ="text-align: left; color:' . $color . '">';
-    foreach($msgs as $msg){
-      
-      if (!(is_object($msg) or is_array($msg))) {
-          if(file_exists($msg)){
-            $msg=basename($msg);
-          }
-          $msgString .=  print_var_name($msg) . "=" . $msg . " :: " ;
-      } elseif (is_array($msg)) {
-          $msgString .= "^ARRAY " . print_var_name($msg) . "[ " . count($msg) . " ]";
-          echo '<div style ="text-align: left!important; color:' . $color . '">';
-          //print_r($msg);
-          var_dump($msg);
-          echo ' </div>';
-      }elseif (is_object($msg)){
-        $msgString .= "^OBJECT " . $msg->name. "{ " . count(array($msg)) . " }";
-          echo '<div style ="text-align: left!important; color:' . $color . '">';
-          var_dump($msg);
-          //print_r($msg);
-          echo ' </div>';
-      }
-    }
-    $msgString .= '</p>';
-    echo $msgString; //prints the debug message
-    echo '<hr height="1" style="border: 1px solid; color: darkblue">';
 
-  echo '</div>';
-}
+// function print_var_name($var){
+//   foreach ($GLOBALS as $var_name => $value) {
+//       if ($value === $var) {
+//           return $var_name;
+//       }
+//   }
+//   return false;
+// }
 
-function print_var_name($var){
-  foreach ($GLOBALS as $var_name => $value) {
-      if ($value === $var) {
-          return $var_name;
-      }
-  }
-  return false;
-}
-
-function get_func_argNames($funcName)
-{
-    $f = new ReflectionFunction($funcName);
-    $result = array();
-    foreach ($f->getParameters() as $param) {
-        $result[] = $param->name;
-    }
-    return $result;
-}
+// function get_func_argNames($funcName)
+// {
+//     $f = new ReflectionFunction($funcName);
+//     $result = array();
+//     foreach ($f->getParameters() as $param) {
+//         $result[] = $param->name;
+//     }
+//     return $result;
+// }
 
 ?>

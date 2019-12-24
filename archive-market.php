@@ -41,9 +41,12 @@ if (isset($_GET['view'])) {
 //entrance variable value for archive module
 //if it is null, means show all categories/taxonomies
 //if it is not null, means show specific categories/taxonomy
-$qvar = get_query_var('property-neighborhood');
+$xColor = get_color(__FILE__);
+
+$qvar = get_query_var('property-neighborhood'); //query var is passed from url rewriting
+
 $debug_color = 'brown';
-print_X($debug_color, __FILE__, __LINE__, $qvar, get_the_ID()); //d//
+print_X($xColor, __FILE__, __LINE__, $qvar, get_the_ID()); //d//
 ?>
 
 <?php
@@ -62,11 +65,14 @@ if ($qvar) {
         'hide_empty' => false,
     ));
 }
-print_X('green', __FILE__, __LINE__, $terms); //d//
+print_X($xColor, __FILE__, __LINE__, $terms); //d//
 
 foreach ($terms as $term) {
     // print_X($debug_color, __FILE__, "Archive-community Show term id & name", $term->term_id, $term->name, $term->slug); //d//
     $termID = $term->term_id;
+    $neighborhood_code = get_term_meta($term->term_id, 'neighborhood_code', true);
+    print_X($xColor, __FILE__, __LINE__, $neighborhood_code);
+
     //Define the query to get community posts
     $Communities = new WP_Query(array(
         'post_type' => 'market',
@@ -83,14 +89,10 @@ foreach ($terms as $term) {
     set_query_var('qvar', $qvar);
     set_query_var('term', $term);
     set_query_var('metabox_tax', 'market');
-    get_template_part('/template-parts/content-metabox');
+    get_template_part('/template-parts/content-2Level-metabox');
 
-    if ($Communities->have_posts()) {?>
-
-    <?php
+    if ($Communities->have_posts()) {
         // print_X($debug_color, 'Archive-community found posts: ', $Communities->found_posts); //d//
-        $neighborhood_code = get_term_meta($term->term_id, 'neighborhood_code', true);
-        print_X('green', __FILE__, __LINE__, $neighborhood_code);
         // print_X('green', __FILE__, __LINE__, get_term_meta($term->term_id, null, false));
 
         $i = 0; //d//
