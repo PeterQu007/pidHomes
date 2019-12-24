@@ -5,9 +5,11 @@
 -->
 
 <?php
+  $X = set_debug(__FILE__);
   $communityID = get_query_var('communityID');
   // print_X('Blue', __FILE__ , $communityID);
   $metabox = nbh_2level_metabox(get_the_ID());
+  print_X($X, __FILE__, $metabox);
 ?>
 
 <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">

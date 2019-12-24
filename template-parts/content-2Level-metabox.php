@@ -1,9 +1,11 @@
     <?php
 
-      $xColor = get_color(__FILE__);
+      $X = set_debug(__FILE__);
       //vars are from set_query_var() in the upper level module
-      $metabox = nbh_top2level_terms($term->slug); //d//
-      print_X($xColor, __FILE__, __LINE__, 'Community slug:', $term->slug , $metabox); //d//
+      if(!$metabox){
+        $metabox = nbh_2Level_terms_by_Slug($term->slug); //d//
+      }
+      print_X($X, __LINE__, 'Community slug:', $term->slug , $metabox); //d//
     ?>
     <!-- 
       SET UP Sub Area title meta box 

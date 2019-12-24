@@ -37,12 +37,13 @@ if (isset($_GET['view'])) {
 <div class="rh_page rh_page__listing_page rh_page__main" style="width: 70%">
 
 <?php 
+  $X = set_debug(__FILE__);
   //Get query var in order to filter the neighborhoods
   //entrance variable value for archive module
   //if it is null, means show all categories/taxonomies
   //if it is not null, means show specific categories/taxonomy
   $qvar = get_query_var('property-neighborhood'); //query var is passed from url rewriting 
-  print_X('blue', __LINE__, $qvar, get_the_ID(), get_the_title()); //d//
+  print_X($X, __LINE__, $qvar, get_the_ID(), get_the_title()); //d//
 ?>
 
 <?php
@@ -61,7 +62,7 @@ If($qvar){
       'hide_empty' => false,
   ));
 }
-print_X('green', __FILE__, __LINE__, $terms); //d//
+print_X($X, __LINE__, $terms); //d//
 
 foreach($terms as $term){
   // print_X('Orange', "Archive-community Show term id & name", $term->term_id, $term->name, $term->slug); //d//
@@ -69,7 +70,7 @@ foreach($terms as $term){
   //Define the query to get community posts
 
   //Get Term customer field like neighborhood_group
-  print_X('green', __FILE__, __LINE__, get_term_meta($term->term_id, null, false));
+  print_X($X, __LINE__, get_term_meta($term->term_id, null, false));
   $Communities = new WP_Query(array(
       'post_type' => 'community',
       'tax_query' => array(

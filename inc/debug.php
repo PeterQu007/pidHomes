@@ -1,19 +1,28 @@
 <?php
-  $debug = basename(__FILE__) . ":: L:" . __LINE__;
+  // $debug = basename(__FILE__) . ":: L:" . __LINE__;
   
-  function get_color($file){
+  function set_debug($file){
+    //https: //www.quackit.com/css/css_color_codes.cfm
+
     $debug_color = array(
       'archive-market' => 'blue',
+      'archive-community' => 'Navy',
       'single-community' => 'green',
-      'chartData' => 'orange',
       'content-2Level-metabox' => 'purple',
       'content-single-community' => 'olive',
-      'content-market-stats' => 'brown'
+      'content-market-stats' => 'brown',
+      'chartData' => 'orange',
+      'neighborhood-metabox' => 'olive'
     );
     // print_r(pathinfo($file)['filename']);
     // echo $debug_color['archive-market'];
     // print_r($debug_color);
-    return $debug_color[pathinfo($file)['filename']];
+    $debug = (object)array(
+      "c" => $debug_color[pathinfo($file)['filename']], //for debug color
+      "f" => pathinfo($file)['filename'], //for debug file name
+      "l" => "::" //Line prefix
+    );
+    return $debug;
   }
 
   /*
@@ -21,14 +30,22 @@
   @various messages
   print the messages by color
 */
-  function print_x($color = 'red', ...$msgs)
+  function print_x($x, $line, ...$msgs)
   {
-    if(!$color){
-      $color = 'red';
+    if(!$x){
+      $x->c = 'red';
+      $x->f = pathinfo($file)['filename'];
+      $x->l = '::';
     }
+    $color = $x->c;
+    $file = $x->f;
+    $line = $x->l . $line . ' // ';
+
     echo '<div >';
       echo '<hr height="1" style="padding-top: 3px; border-bottom: 1px solid; color: lightblue">';
+
       $msgString = '<p style ="text-align: left; color:' . $color . '">';
+      $msgString .= $file . $line;
       foreach($msgs as $msg){
         
         if (!(is_object($msg) or is_array($msg))) {
@@ -53,6 +70,7 @@
       $msgString = rtrim($msgString, " // ");
       $msgString .= '</p>';
       echo $msgString; //prints the debug message
+
       echo '<hr height="1" style="border: 1px solid; color: darkblue">';
     echo '</div>';
   }

@@ -5,12 +5,14 @@
 
 <?php
 
-  $xColor = get_color(__FILE__);
+  $X = set_debug(__FILE__);
 
-  $qvar = get_query_var('qvar');
+  //get the neighborhood_code
+  //All markets | City code | district code | Neighborhood Code
+  $qvar = get_query_var('qvar'); //get neighborhood_code
 
-  print_X($xColor, __FILE__, __LINE__, 'get_the_ID()', get_the_ID(), get_the_title(), $qvar); //d//
-  print_X($xColor, __FILE__, __LINE__, get_post_meta(get_the_ID(), 'neighborhood_code', false));
+  print_X($X, __LINE__, 'get_the_ID()', get_the_ID(), get_the_title(), $qvar); //d//
+  print_X($X, __LINE__, get_post_meta(get_the_ID(), 'neighborhood_code', false));
   if (is_single(get_the_ID())){
     echo '<div>true</div>';
   }else{
@@ -26,7 +28,7 @@
   $the_neighborhood=trim($the_neighborhood);
 
   $metabox = nbh_3level_metabox(get_the_ID());
-  print_X($xColor, __FILE__, __LINE__, $metabox); //d//
+  print_X($X, __LINE__, $metabox); //d//
 
 
   global $wpdb;
@@ -38,7 +40,7 @@
 
   foreach($results as $nbh){
     $nbh_codes = trim($nbh->Neighborhood_Code) . ',' . trim($nbh->RE_Area_Code) . ',' . trim($nbh->City_Code);
-    print_X($xColor, __FILE__, __LINE__, $nbh_codes);
+    print_X($X, __LINE__, $nbh_codes);
     $nbh->City_Code = trim($nbh->City_Code);
     $nbh->RE_Area_Code = trim($nbh->RE_Area_Code);
     $nbh->Neighborhood_Code = trim($nbh->Neighborhood_Code);
@@ -47,7 +49,7 @@
       @$nbh->RE_Area_Code => trim($nbh->RE_Area_Name),
       @$nbh->Neighborhood_Code => trim(get_the_title())
     );
-    print_X($xColor, __FILE__, __LINE__, json_encode($nbh_names));
+    print_X($X, __LINE__, json_encode($nbh_names));
   }
       
 ?>

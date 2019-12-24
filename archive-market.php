@@ -1,6 +1,6 @@
 <?php
 /**
- * All Communities Page
+ * All Markets Page
  *
  * @package realhomes-child
  * @subpackage modern
@@ -17,7 +17,7 @@ if (empty($header_variation) || ('none' === $header_variation)) {
     get_template_part('assets/modern/partials/banner/header');
 } elseif (!empty($header_variation) && ('banner' === $header_variation)) {
     //echo 'property-archive';
-    get_template_part('assets/modern/partials/banner/community');
+    get_template_part('assets/modern/partials/banner/market');
 }
 
 if (inspiry_show_header_search_form()) {
@@ -41,17 +41,16 @@ if (isset($_GET['view'])) {
 //entrance variable value for archive module
 //if it is null, means show all categories/taxonomies
 //if it is not null, means show specific categories/taxonomy
-$xColor = get_color(__FILE__);
+$X = set_debug(__FILE__); //set file name and color
 
 $qvar = get_query_var('property-neighborhood'); //query var is passed from url rewriting
 
-$debug_color = 'brown';
-print_X($xColor, __FILE__, __LINE__, $qvar, get_the_ID()); //d//
+print_X($X, __LINE__, $qvar, get_the_ID()); //d//
 ?>
 
 <?php
 if ($qvar) {
-    // Debug:: surrey id is 87
+    // Sub Markets
     $terms = get_terms(array(
         'taxonomy' => 'property-neighborhood',
         'fields' => 'all', //'names',
@@ -59,22 +58,22 @@ if ($qvar) {
         'slug' => $qvar,
     ));
 } else {
+    // All market
     $terms = get_terms(array(
         'taxonomy' => 'property-neighborhood',
         'parent' => 0,
         'hide_empty' => false,
     ));
 }
-print_X($xColor, __FILE__, __LINE__, $terms); //d//
+print_X($X, __LINE__, $terms); //d//
 
 foreach ($terms as $term) {
-    // print_X($debug_color, __FILE__, "Archive-community Show term id & name", $term->term_id, $term->name, $term->slug); //d//
     $termID = $term->term_id;
     $neighborhood_code = get_term_meta($term->term_id, 'neighborhood_code', true);
-    print_X($xColor, __FILE__, __LINE__, $neighborhood_code);
+    print_X($X, __LINE__, $neighborhood_code);
 
-    //Define the query to get community posts
-    $Communities = new WP_Query(array(
+    //Define the query to get market posts
+    $Markets = new WP_Query(array(
         'post_type' => 'market',
         'tax_query' => array(
             array(
@@ -85,20 +84,23 @@ foreach ($terms as $term) {
         ),
         'posts_per_page' => -1,
     ));
-    // print_X($debug_color, __FILE__, 'Archive-community Found posts: ', $Communities->found_posts); //d//
+    // print_X($X, __LINE__, 'Archive-market Found posts: ', $Markets->found_posts); //d//
+    $metabox = nbh_2Level_terms_by_Slug($term->slug); //d//
+    print_X($X, __LINE__, $metabox);
     set_query_var('qvar', $qvar);
     set_query_var('term', $term);
     set_query_var('metabox_tax', 'market');
-    get_template_part('/template-parts/content-2Level-metabox');
+    set_query_var('metabox', $metabox);
+    get_template_part('/template-parts/content', '2Level-metabox');
 
-    if ($Communities->have_posts()) {
-        // print_X($debug_color, 'Archive-community found posts: ', $Communities->found_posts); //d//
-        // print_X('green', __FILE__, __LINE__, get_term_meta($term->term_id, null, false));
+    if ($Markets->have_posts()) {
+        // print_X($X, __LINE__, 'Archive-market found posts: ', $Markets->found_posts); //d//
+        // print_X($X, __LINE__, get_term_meta($term->term_id, null, false));
 
         $i = 0; //d//
-        while ($Communities->have_posts()) {
-            // print_X('Olive', 'Archive-community inside the LOOP: ', $i++); //d//
-            $Communities->the_post();?>
+        while ($Markets->have_posts()) {
+            // print_X($X, __LINE__, 'Archive-market inside the LOOP: ', $i++); //d//
+          $Markets->the_post();?>
           <div style="text-align: left">
             <h2><a href="<?php echo str_replace("/markets/", "/market/", get_the_permalink()); ?>">
               <?php the_title();?></a>
@@ -109,7 +111,7 @@ foreach ($terms as $term) {
 
     } else {
         //No POSTS
-        echo "<p> NO SCHOOLS ADDED, COMING SOON... </p>";
+        echo "<p> NO MARKETS ADDED, COMING SOON... </p>";
     }
 
     wp_reset_postdata();
