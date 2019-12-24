@@ -52,6 +52,7 @@ function pidRealty_Files()
     wp_enqueue_script('main-pidrealty-js', get_stylesheet_directory_uri().('/js/scripts-bundled.js'), null, microtime(), true);
     wp_enqueue_script('secondary-pidrealty-js', get_stylesheet_directory_uri() . ('/js/appjs-bundled.js'), null, microtime(), true);
     wp_enqueue_script('vendor-js', get_stylesheet_directory_uri().("/temp/scripts/Vendor.js"));
+    wp_enqueue_script('chartjs-crosshair', "//cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js");
     // wp_enqueue_script('chartjs', 'https://www.jsdelivr.com/package/npm/chart.js');
     //load css files
     wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
@@ -153,6 +154,31 @@ function add_property_neighborhood_var($vars){
   return $vars;
 }
 
+/**
+ * Add term meta to results of get_terms
+ * See /genesis/lib/functions/options.php for more info
+ *
+ *
+ * Genesis is forced to create its own term-meta data structure in
+ * the options table. Therefore, the following function merges that
+ * data into the term data structure, via a filter.
+ *
+ * @param array $terms
+ * @param string $taxonomy Taxonomy name that $terms are part of.
+ * @param array $args
+ * @return array $terms
+ */
+// function be_get_terms_filter($terms, $taxonomy, $args)
+// {
+//     foreach ($terms as $term) {
+//         $term = genesis_get_term_filter($term, $taxonomy);
+//     }
+
+//     return $terms;
+// }
+// add_filter('get_terms', 'be_get_terms_filter', 10, 3);
+
+
 //Add Rewrite Rules
 add_rewrite_rule('^schools/([^/]*)/?','index.php?post_type=school&property-neighborhood=$matches[1]','top');
 add_rewrite_rule('^school/([^/]*)/?','index.php?post_type=school&name=$matches[1]','top');
@@ -165,7 +191,9 @@ add_rewrite_rule('^market/([^/]*)/?', 'index.php?post_type=market&name=$matches[
 
 add_rewrite_rule('^db/([^/]*)/?', get_theme_file_uri('/db/data.php'), 'top');
 
+//Add include modules
 require_once (get_stylesheet_directory() . '/inc/neighborhood-metabox.php');
+
 //End of PHP
 
 /*
@@ -179,6 +207,7 @@ require_once (get_stylesheet_directory() . '/inc/neighborhood-metabox.php');
 */
 function print_x($color = 'red', ...$msgs)
 {
+
   if(!$color){
     $color = 'red';
   }
@@ -221,4 +250,15 @@ function print_var_name($var){
   }
   return false;
 }
+
+function get_func_argNames($funcName)
+{
+    $f = new ReflectionFunction($funcName);
+    $result = array();
+    foreach ($f->getParameters() as $param) {
+        $result[] = $param->name;
+    }
+    return $result;
+}
+
 ?>

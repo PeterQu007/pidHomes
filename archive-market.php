@@ -43,7 +43,7 @@ if (isset($_GET['view'])) {
 //if it is not null, means show specific categories/taxonomy
 $qvar = get_query_var('property-neighborhood');
 $debug_color = 'brown';
-// print_X($debug_color, __FILE__, __LINE__, $qvar); //d//
+print_X($debug_color, __FILE__, __LINE__, $qvar, get_the_ID()); //d//
 ?>
 
 <?php
@@ -62,7 +62,7 @@ if ($qvar) {
         'hide_empty' => false,
     ));
 }
-// print_X('green', __FILE__, __LINE__, $terms); //d//
+print_X('green', __FILE__, __LINE__, $terms); //d//
 
 foreach ($terms as $term) {
     // print_X($debug_color, __FILE__, "Archive-community Show term id & name", $term->term_id, $term->name, $term->slug); //d//
@@ -89,6 +89,10 @@ foreach ($terms as $term) {
 
     <?php
         // print_X($debug_color, 'Archive-community found posts: ', $Communities->found_posts); //d//
+        $neighborhood_code = get_term_meta($term->term_id, 'neighborhood_code', true);
+        print_X('green', __FILE__, __LINE__, $neighborhood_code);
+        // print_X('green', __FILE__, __LINE__, get_term_meta($term->term_id, null, false));
+
         $i = 0; //d//
         while ($Communities->have_posts()) {
             // print_X('Olive', 'Archive-community inside the LOOP: ', $i++); //d//
@@ -109,7 +113,11 @@ foreach ($terms as $term) {
     wp_reset_postdata();
 
 }
-;?>
+;
+    set_query_var('qvar', $neighborhood_code);
+    get_template_part('template-parts/content-market-stats');
+
+?>
 
   </div>
 

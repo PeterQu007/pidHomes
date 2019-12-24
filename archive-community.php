@@ -42,7 +42,7 @@ if (isset($_GET['view'])) {
   //if it is null, means show all categories/taxonomies
   //if it is not null, means show specific categories/taxonomy
   $qvar = get_query_var('property-neighborhood');
-  // print_X('blue', __LINE__, $qvar); //d//
+  print_X('blue', __LINE__, $qvar, get_the_ID(), get_the_title()); //d//
 ?>
 
 <?php
@@ -61,12 +61,15 @@ If($qvar){
       'hide_empty' => false,
   ));
 }
-// print_X('green', __FILE__, __LINE__, $terms); //d//
+print_X('green', __FILE__, __LINE__, $terms); //d//
 
 foreach($terms as $term){
   // print_X('Orange', "Archive-community Show term id & name", $term->term_id, $term->name, $term->slug); //d//
   $termID = $term->term_id; 
   //Define the query to get community posts
+
+  //Get Term customer field like neighborhood_group
+  print_X('green', __FILE__, __LINE__, get_term_meta($term->term_id, null, false));
   $Communities = new WP_Query(array(
       'post_type' => 'community',
       'tax_query' => array(

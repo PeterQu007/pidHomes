@@ -1,6 +1,8 @@
 <?php
 
 /*
+  MODULE OF FUNCTION.PHP
+  ======================
   @neighborhoodID
   return metabox for section banner menu
 */

@@ -86,6 +86,24 @@ class pidChart {
           mode: "index",
           intersect: false
         },
+        plugins: {
+          crosshair: {
+            sync: {
+              enabled: false
+            },
+            pan: {
+              incrementer: 3 // Defaults to 5 if not included.
+            },
+            callbacks: {
+              afterZoom: function(start, end) {
+                setTimeout(function() {
+                  chart6.data.datasets[0].data = generate(start, end);
+                  chart6.update();
+                }, 1000);
+              }
+            }
+          }
+        },
         hover: {
           mode: "nearest",
           intersect: true

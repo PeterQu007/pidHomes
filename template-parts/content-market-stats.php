@@ -4,14 +4,36 @@
 -->
 
 <?php
-  print_X('green', __FILE__, 'get_the_ID()', get_the_ID()); //d//
+
+  $qvar = get_query_var('qvar');
+
+  print_X('green', __FILE__, 'get_the_ID()', get_the_ID(), get_the_title(), $qvar); //d//
+  print_X('green', __FILE__, __LINE__, get_post_meta(get_the_ID(), 'neighborhood_code', false));
+  print_X('green', __FILE__, __LINE__, is_single(get_the_ID()));
+  if (is_single(get_the_ID())){
+    echo '<div>true</div>';
+  }else{
+    echo '<div>false</div>';
+  }
+
+  if($qvar){
+    $the_neighborhood = $qvar;
+  }else{
+    $the_neighborhood = get_the_title();
+  }
+
+  $the_neighborhood=trim($the_neighborhood);
+
+  $metabox = nbh_3level_metabox(get_the_ID());
+  print_X('green', __FILE__, $metabox); //d//
+
 
   global $wpdb;
   $results = $wpdb->get_results("SELECT Neighborhood_Code, nbh.RE_Area_Code, nbh.City_Code, city.City_Name, area.RE_Area_Name 
                                   FROM pid_neighborhoods nbh
                                   RIGHT JOIN pid_cities city ON city.City_ID = nbh.City_ID
                                   RIGHT JOIN pid_re_areas area ON area.RE_Area_Code = nbh.RE_Area_Code
-                                  WHERE neighborhood_name='" . get_the_title() . "'");
+                                  WHERE neighborhood_name='" . $the_neighborhood . "'");
   foreach($results as $nbh){
     $nbh_codes = trim($nbh->Neighborhood_Code) . ',' . trim($nbh->RE_Area_Code) . ',' . trim($nbh->City_Code);
     print_X('green', $nbh_codes);
@@ -26,8 +48,6 @@
     print_X('red', json_encode($nbh_names));
   }
       
-  $metabox = nbh_3level_metabox(get_the_ID());
-  // print_X('green', __FILE__, $metabox); //d//
 ?>
 
 <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
