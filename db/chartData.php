@@ -9,7 +9,7 @@ if (isset($_GET["Neighborhood_IDs"]))
 }
 else
 {
-  $Neighborhood_IDs = 'F51, F20';
+  $Neighborhood_IDs = 'F30A, F50, F53';
   //echo "<p>no Neighborhood_ID supplied</p>";
 }
 
@@ -48,10 +48,13 @@ $pt_string = "";
 
 $chartDataSets =[];
 
+foreach ($nbr_ids as $nbr_id) {
+  $nbr_string .= "'" . trim($nbr_id) . "',"; //query string for nbr codes
+};
+
 foreach($pt_types as $pt_type){
-  $pt_string .= "'" . trim($pt_type) . "',";
+  $pt_string .= "'" . trim($pt_type) . "',"; //query string for property types
   foreach ($nbr_ids as $nbr_id) {
-    $nbr_string .= "'" . trim($nbr_id) . "',";
     $chartDataSets[] = array(
         'property_Type' => trim($pt_type),
         'nbr_ID' => trim($nbr_id),
@@ -62,6 +65,7 @@ foreach($pt_types as $pt_type){
 $nbr_string = rtrim($nbr_string, ",");
 $pt_string = rtrim($pt_string, ",");
 // echo $nbr_string;
+// echo $pt_string;
 // var_dump( $chartDataSets);
 // echo '<hr/>';
 

@@ -5,6 +5,7 @@ class pidChart {
   constructor() {
     this.ctx = $("#lineChart");
     this.neighborhoodCodes = $("#marketSection").attr("nbhCodes");
+    console.log(this.neighborhoodCodes);
     //console.log($("#marketSection").attr("nbhNames"));
     this.neighborhoodNames = JSON.parse($("#marketSection").attr("nbhNames"));
     console.log(this.neighborhoodNames);
@@ -17,6 +18,16 @@ class pidChart {
       purple: "rgb(153, 102, 255)",
       grey: "rgb(231,233,237)"
     };
+    this.chartColors2 = [
+      "rgb(255, 99, 132)",
+      "rgb(255, 159, 64)",
+      "rgb(255, 205, 86)",
+      "rgb(75, 192, 192)",
+      "rgb(54, 162, 235)",
+      "rgb(153, 102, 255)",
+      "rgb(231,233,237)"
+    ];
+    // console.log(this.chartColors2);
     this.PropertyTypeSelect = $("#Property_Type");
     this.chartDataSets_All = [];
     this.chartDataSets_Detached = [];
@@ -24,11 +35,7 @@ class pidChart {
     this.chartDataSets_Apartment = [];
     this.pidChart = {};
     this.chartConfig = {};
-    this.configChart([
-      { label: "", data: {} },
-      { label: "", data: {} },
-      { label: "", data: {} }
-    ]);
+    this.configChart([], this.chartColors2);
     this.getChartData();
     // this.init(this.chartDataSets_All);
     this.events();
@@ -46,35 +53,56 @@ class pidChart {
     this.PropertyTypeSelect.on("change", this.updateChart.bind(this));
   }
 
-  configChart(dataSets) {
+  configChart(dataSets, colors) {
+    if (dataSets.length == 0) {
+      let codes = this.neighborhoodCodes.split(",");
+      for (var i = 0; i < codes.length; i++) {
+        dataSets.push({
+          label: "",
+          data: {}
+        });
+      }
+    }
+    //set up datasets for the chart
+    let chartDataSets = [];
+    for (var i = 0; i < dataSets.length; i++) {
+      chartDataSets.push({
+        label: dataSets[i].label,
+        fill: false,
+        backgroundColor: colors[i], //
+        borderColor: colors[i],
+        data: dataSets[i].data
+      });
+    }
     let config = {
       type: "line",
       data: {
         //labels: data[0],
         // datasets: dataSets
-        datasets: [
-          {
-            label: dataSets[0].label,
-            fill: false,
-            backgroundColor: this.chartColors.red, //"rgba(75, 192, 192, 0.4)",
-            borderColor: this.chartColors.red, //"rgba(75, 192, 192, 1)",
-            data: dataSets[0].data
-          },
-          {
-            label: dataSets[1].label,
-            fill: false,
-            backgroundColor: this.chartColors.blue, //"rgba(75, 75, 192, 0.4)",
-            borderColor: this.chartColors.blue, //"rgba(75, 75, 192, 1)",
-            data: dataSets[1].data
-          },
-          {
-            label: dataSets[2].label,
-            fill: false,
-            backgroundColor: this.chartColors.orange, //"rgba(75, 125, 192, 0.4)",
-            borderColor: this.chartColors.orange, //"rgba(75, 125, 192, 1)",
-            data: dataSets[2].data
-          }
-        ]
+        // datasets: [
+        //   {
+        //     label: dataSets[0].label,
+        //     fill: false,
+        //     backgroundColor: this.chartColors.red, //"rgba(75, 192, 192, 0.4)",
+        //     borderColor: this.chartColors.red, //"rgba(75, 192, 192, 1)",
+        //     data: dataSets[0].data
+        //   },
+        //   {
+        //     label: dataSets[1].label,
+        //     fill: false,
+        //     backgroundColor: this.chartColors.blue, //"rgba(75, 75, 192, 0.4)",
+        //     borderColor: this.chartColors.blue, //"rgba(75, 75, 192, 1)",
+        //     data: dataSets[1].data
+        //   },
+        //   {
+        //     label: dataSets[2].label,
+        //     fill: false,
+        //     backgroundColor: this.chartColors.orange, //"rgba(75, 125, 192, 0.4)",
+        //     borderColor: this.chartColors.orange, //"rgba(75, 125, 192, 1)",
+        //     data: dataSets[2].data
+        //   }
+        // ]
+        datasets: chartDataSets
       },
       options: {
         title: {
@@ -141,21 +169,21 @@ class pidChart {
     switch (e.target.value.trim()) {
       case "All":
         console.log("All");
-        this.configChart(this.chartDataSets_All);
+        this.configChart(this.chartDataSets_All, this.chartColors2);
         break;
       case "Detached":
         console.log("Detached");
-        this.configChart(this.chartDataSets_Detached);
+        this.configChart(this.chartDataSets_Detached, this.chartColors2);
         break;
       case "Townhouse":
         console.log("Townhouse");
         // this.chartConfig.data.datasets = this.chartDataSets_Townhouse;
-        this.configChart(this.chartDataSets_Townhouse);
+        this.configChart(this.chartDataSets_Townhouse, this.chartColors2);
         break;
       case "Apartment":
         console.log("Apartment");
         // this.chartConfig.data.datasets = this.chartDataSets_Apartment;
-        this.configChart(this.chartDataSets_Apartment);
+        this.configChart(this.chartDataSets_Apartment, this.chartColors2);
         break;
     }
     this.pidChart.config = this.chartConfig;
@@ -218,7 +246,7 @@ class pidChart {
         // console.log("ajax");
         console.log(self.chartDataSets_All);
         //self.init(self.chartDataSets_All);
-        self.configChart(self.chartDataSets_All);
+        self.configChart(self.chartDataSets_All, self.chartColors2);
         self.drawChart(self.chartConfig);
       }
     });

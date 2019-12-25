@@ -37,7 +37,7 @@ if (isset($_GET['view'])) {
 <div class="rh_page rh_page__listing_page rh_page__main" style="width: 70%">
 
 <?php
-//Get query var in order to filter the neighborhoods
+//Get query var from URL in order to filter the neighborhoods
 //entrance variable value for archive module
 //if it is null, means show all categories/taxonomies
 //if it is not null, means show specific categories/taxonomy
@@ -45,11 +45,11 @@ $X = set_debug(__FILE__); //set file name and color
 
 $qvar = get_query_var('property-neighborhood'); //query var is passed from url rewriting
 
-print_X($X, __LINE__, $qvar, get_the_ID()); //d//
+print_X($X, __LINE__, $qvar, 'Entry Post ID::', get_the_ID()); //d//
 ?>
 
 <?php
-if ($qvar) {
+if ($qvar /* query var */) {
     // Sub Markets
     $terms = get_terms(array(
         'taxonomy' => 'property-neighborhood',
@@ -66,6 +66,14 @@ if ($qvar) {
     ));
 }
 print_X($X, __LINE__, $terms); //d//
+
+/************************
+    SECTiON::Market Posts
+************************/
+set_query_var('qvar', $qvar);
+set_query_var('term', $terms[0]);
+set_query_var('metabox_tax', 'market');
+get_template_part('/template-parts/content', '2Level-metabox');
 
 foreach ($terms as $term) {
     $termID = $term->term_id;
@@ -85,13 +93,6 @@ foreach ($terms as $term) {
         'posts_per_page' => -1,
     ));
     // print_X($X, __LINE__, 'Archive-market Found posts: ', $Markets->found_posts); //d//
-    $metabox = nbh_2Level_metabox_by_Slug($term->slug); //d//
-    print_X($X, __LINE__, $metabox);
-    set_query_var('qvar', $qvar);
-    set_query_var('term', $term);
-    set_query_var('metabox_tax', 'market');
-    set_query_var('metabox', $metabox);
-    get_template_part('/template-parts/content', '2Level-metabox');
 
     if ($Markets->have_posts()) {
         // print_X($X, __LINE__, 'Archive-market found posts: ', $Markets->found_posts); //d//
@@ -118,8 +119,12 @@ foreach ($terms as $term) {
 
 }
 ;
-    set_query_var('qvar', $neighborhood_code);
-    get_template_part('template-parts/content-market-stats');
+
+/******************************
+ * SECTION 2::Market Statistics
+ */
+    set_query_var('qvar', $qvar /* this is the query var from url*/);
+    get_template_part('template-parts/content', 'market-stats');
 
 ?>
 

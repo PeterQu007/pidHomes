@@ -5,7 +5,7 @@
       if(!$metabox){
         $metabox = nbh_2Level_metabox_by_Slug($term->slug); //d//
       }
-      print_X($X, __LINE__, 'Community slug:', $term->slug , $metabox); //d//
+      // print_X($X, __LINE__, 'Community slug:', $term->slug , $metabox); //d//
     ?>
     <!-- 
       SET UP Sub Area title meta box 
@@ -24,30 +24,15 @@
         <?php } ?>
 
         <!-- Secondary Meta Box: show city name -->
-        
-        <a class="metabox__blog-home-link" href="<?php 
-          echo get_post_type_archive_link($metabox_tax) . $metabox[0]['level0_Term1_Slug']; ?>"> 
-          <i class="fas fa-city" aria-hidden="true"></i>
-          <?php echo $metabox[0]['level0_Term1_Name']; ?>
-        </a>
-
-        <a class="metabox__blog-home-link" href="<?php 
-          echo get_post_type_archive_link($metabox_tax) . $metabox[1]['level1_Term1_Slug']; ?>"> 
-          <i class="fas fa-city" aria-hidden="true"></i>
-          <?php echo $metabox[1]['level1_Term1_Name']; ?>
-        </a>
-          
-        <a class="metabox__blog-home-link" href="<?php 
-          echo get_post_type_archive_link($metabox_tax) . $metabox[2]['level1_Term2_Slug']; ?>"> 
-          <i class="fas fa-city" aria-hidden="true"></i>
-          <?php echo $metabox[2]['level1_Term2_Name']; ?>
-        </a>
-
-        <a class="metabox__blog-home-link" href="<?php 
-          echo get_post_type_archive_link($metabox_tax) . $metabox[3]['level1_Term3_Slug']; ?>"> 
-          <i class="fas fa-city" aria-hidden="true"></i>
-          <?php echo $metabox[3]['level1_Term3_Name']; ?>
-        </a>
+        <?php
+          for($i=0; $i < count($metabox); $i++){ ?>
+            <a class="metabox__blog-home-link" href="<?php 
+              echo get_post_type_archive_link($metabox_tax) . $metabox[$i][2]; ?>"> 
+              <i class="fas fa-city" aria-hidden="true"></i>
+              <?php echo $metabox[$i][1]; ?>
+            </a>
+          <?php }
+        ?>
 
       </div>
     </div>

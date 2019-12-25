@@ -47,12 +47,12 @@
       $msgString = '<p style ="text-align: left; color:' . $color . '">';
       $msgString .= $file . $line;
       foreach($msgs as $msg){
-        
         if (!(is_object($msg) or is_array($msg))) {
+            $msg = trim($msg);
             if(file_exists($msg)){
               $msg=basename($msg);
             }
-            $msgString .=  $msg . " // ";
+            $msgString .=  ( $msg ? $msg : 'null') . (substr($msg, -2) == "::" ? "" : " // ");
         } elseif (is_array($msg)) {
             $msgString .= "^ARRAY " . "[ " . count($msg) . " ] // ";
             echo '<div style ="text-align: left!important; color:' . $color . '">';

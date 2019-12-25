@@ -17,7 +17,7 @@ if (empty($header_variation) || ('none' === $header_variation)) {
     get_template_part('assets/modern/partials/banner/header');
 } elseif (!empty($header_variation) && ('banner' === $header_variation)) {
     //echo 'property-archive';
-    get_template_part('assets/modern/partials/banner/community');
+    get_template_part('assets/modern/partials/banner/market');
 }
 
 if (inspiry_show_header_search_form()) {
@@ -34,8 +34,7 @@ if (isset($_GET['view'])) {
 ?>
 
 <?php
-  $color = 'blue'; //d//
-  // print_x($color, __FILE__, get_the_ID()); //d//
+  $X = set_debug(__FILE__); //d//
 ?>
 
 <section class="rh_section rh_section--flex rh_wrap--padding rh_wrap--topPadding">
@@ -44,12 +43,12 @@ if (isset($_GET['view'])) {
     <?php
       //Market Stats Section
       //set_query_var('communityID', $communityID);
-      get_template_part('template-parts/content-market-stats');
+      get_template_part('template-parts/content', 'market-stats');
       //Community Section
       set_query_var('communityID', $communityID);
-      get_template_part('template-parts/content-single-community'); 
+      get_template_part('template-parts/content', 'single-community'); 
       //Active Listing Section
-      get_template_part('template-parts/content-active-listings');
+      get_template_part('template-parts/content', 'active-listings');
     ?>
 
   </div>
