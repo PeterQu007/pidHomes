@@ -4088,6 +4088,15 @@ body.admin-bar .search-overlay {
   font-weight: normal;
 }
 
+.metabox .metabox__blog-home-link-active{
+  background-color: #483D8B;
+  color: #fff;
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 3px 0 0 3px;
+  font-weight: normal;
+}
+
 .metabox .metabox__blog-home-link:hover {
   text-decoration: none;
   background-color: rgb(11, 47, 81);

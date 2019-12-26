@@ -13,7 +13,7 @@
 ?>
 
 <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
-  <div style="font-size: 20px; text-align: left; display: block">
+  <div style="font-size: 16px; text-align: left; display: block">
    
     <a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('school'); ?>">
       <i class="fas fa-school" aria-hidden="true"></i>

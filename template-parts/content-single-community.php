@@ -7,17 +7,18 @@
 <?php
   $X = set_debug(__FILE__);
   $communityID = get_query_var('communityID');
-  // print_X('Blue', __FILE__ , $communityID);
-  $metabox = nbh_2Level_metabox_by_ID(get_the_ID());
+  // print_X($X, __LINE__ , $communityID);
+  // $metabox = nbh_2Level_metabox_by_ID(get_the_ID());
+  $metabox = nbh_3level_metabox(get_the_ID());
   // print_X($X, __LINE__, $metabox);
-  $post_slug = get_post_field('post_name', get_post());
+  // $post_slug = get_post_field('post_name', get_post());
   // print_X($X, __LINE__, $post_slug);
   // $metabox_by_slug=nbh_2Level_metabox_by_Slug($post_slug);
   // print_X($X, __LINE__, $metabox_by_slug);
 ?>
 
 <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
-  <div style="font-size: 20px; text-align: left; display: block">
+  <div style="font-size: 16px; text-align: left; display: block">
     <?php
     if(!$communityID){?>
       <a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('community'); ?>">
@@ -30,25 +31,21 @@
 
     <!-- Top Level City -->
     <a class="metabox__blog-home-link" href="<?php 
-      echo get_site_url() . '/communities/' . $metabox[0]['level0_Term1_Slug']; ?>">
+      echo get_site_url() . '/communities/' . $metabox[0]['Term_Slug']; ?>">
       <i class="fas fa-city" aria-hidden="true"></i>
-      <?php echo $metabox[0]['level0_Term1_Name']; ?> </a>  
+      <?php echo $metabox[0]['Term_Name']; ?> </a>  
 
-    <!-- Top Level City -->
-    <a class="metabox__blog-home-link" href="<?php 
-      echo get_site_url() . '/communities/' . $metabox[1]['level1_Term1_Slug']; ?>">
-      <i class="fas fa-city" aria-hidden="true"></i>
-      <?php echo $metabox[1]['level1_Term1_Name']; ?> </a>
-    <!-- Level 2 City District -->
-    <a class="metabox__blog-home-link" href="<?php 
-      echo get_site_url() . '/communities/' . $metabox[2]['level1_Term2_Slug']; ?>">
-      <i class="fas fa-building" aria-hidden="true"></i>
-      <?php echo $metabox[2]['level1_Term2_Name']; ?> </a>
-    <!-- Level 3 City Neighborhoods -->
-    <a class="metabox__blog-home-link" href="<?php 
-      echo get_site_url() . '/community/' . $metabox[3]['level1_Term3_Slug']; ?>">
-      <i class="fas fa-university" aria-hidden="true"></i>
-      <?php echo $metabox[3]['level1_Term3_Name']; ?> </a>
+    <?php 
+      global $post;
+      $post_slug = $post->post_name;
+      for($i=1; $i < count($metabox); $i++){
+        $active = $metabox[$i]['Term_Slug'] == $post_slug;
+        ?>
+          <a class="<?php echo $active ? 'metabox__blog-home-link-active' : 'metabox__blog-home-link'; ?>" href="<?php 
+            echo get_site_url() . '/communities/' . $metabox[$i]['Term_Slug']; ?>">
+            <i class="fas fa-city" aria-hidden="true"></i>
+            <?php echo $metabox[$i]['Term_Name']; ?> </a>
+      <?php } ?>
 
     <span class="metabox__main"><?php //the_title();//x//?></span>
   </div>
@@ -82,12 +79,12 @@
   while ($Communities->have_posts()) { //while[]
       $Communities->the_post();  ?>
         <div style="text-align: left">
-          <h2><?php the_title();?></h2>
+          <h3><?php the_title();?></h3>
           <?php get_field('banner_image') ?>
           <?php if (!$communityID) {?>
             <div class="acf-map">
               <?php
-$mapLocation = get_field('map_location');?>
+                $mapLocation = get_field('map_location');?>
                 <div class="marker" data-lat="<?php echo $mapLocation['lat'] ?>" data-lng="<?php echo $mapLocation['lng'] ?>">
                 <h3><a href="<?php the_permalink();?>"><?php the_title();?></a> </h3>
                 <?php echo $mapLocation['address']; ?>

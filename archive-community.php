@@ -97,9 +97,9 @@ foreach($terms as $term){
         // print_X('Olive', 'Archive-community inside the LOOP: ', $i++); //d//
         $Communities->the_post();?>
           <div style="text-align: left">
-            <h2><a href="<?php echo str_replace("/communities/", "/community/", get_the_permalink());?>">
+            <h3><a href="<?php echo str_replace("/communities/", "/community/", get_the_permalink());?>">
               <?php the_title();?></a>
-            </h2>
+            </h3>
             <div><?php the_excerpt();?> </div>
           </div>
     <?php }

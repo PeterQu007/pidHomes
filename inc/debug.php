@@ -7,6 +7,7 @@
     $debug_color = array(
       'archive-market' => 'blue',
       'archive-community' => 'Navy',
+      'content-market-posts' => 'SteelBlue',
       'single-community' => 'green',
       'content-2Level-metabox' => 'purple',
       'content-single-community' => 'olive',

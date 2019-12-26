@@ -44,10 +44,12 @@ function nbh_3level_metabox($neighborhoodID){
               '1'=> $topTermName,
               '2' => $topTermSlug,
               '3' => get_term_meta($topTermID, 'neighborhood_code', true),
-              'level1TermID' => $topTermID,
-              'level1TermName' => $topTermName,
-              'level1TermSlug' => $topTermSlug,
-              'level1TermCode' => get_term_meta($topTermID, 'neighborhood_code', true),
+              'Term_ID' => $topTermID,
+              'Term_Name' => $topTermName,
+              'Term_Slug' => $topTermSlug,
+              'Term_Code' => get_term_meta($topTermID, 'neighborhood_code', true),
+              'show_metabox' => true,
+              'get_chartdata' => true
             ));
 
     array_push($metabox, array(
@@ -55,20 +57,24 @@ function nbh_3level_metabox($neighborhoodID){
               '1' => $level2TermName,
               '2' => $level2TermSlug,
               '3' => get_term_meta($level2TermID, 'neighborhood_code', true),
-              'level2TermID' => $level2TermID,
-              'level2TermName' => $level2TermName,
-              'level2TermSlug' => $level2TermSlug,
-              'level2TermCode' => get_term_meta($level2TermID, 'neighborhood_code', true)
+              'Term_ID' => $level2TermID,
+              'Term_Name' => $level2TermName,
+              'Term_Slug' => $level2TermSlug,
+              'Term_Code' => get_term_meta($level2TermID, 'neighborhood_code', true),
+              'show_metabox' => true,
+              'get_chartdata' => true
           ));
      array_push($metabox, array(
               '0' => $level3TermID,
               '1' => $level3TermName,
               '2' => $level3TermSlug,
               '3' => get_term_meta($level3TermID, 'neighborhood_code', true),
-              'level3TermID' => $level3TermID,
-              'level3TermName' => $level3TermName,
-              'level3TermSlug' => $level3TermSlug,
-              'level3TermCode' => get_term_meta($level3TermID, 'neighborhood_code', true)
+              'Term_ID' => $level3TermID,
+              'Term_Name' => $level3TermName,
+              'Term_Slug' => $level3TermSlug,
+              'Term_Code' => get_term_meta($level3TermID, 'neighborhood_code', true),
+              'show_metabox' => true,
+              'get_chartdata' => true
              ));   
     
     // print_X('red', __FILE__, $metabox);
@@ -121,40 +127,40 @@ function nbh_2Level_metabox_by_ID($nbhID){
       '1' => $topLevelTerm->name,
       '2' => $topLevelTerm->slug,
       '3' => $topTermCode,
-      'level0_Term1_ID' => $topLevelTerm->term_id,
-      'level0_Term1_Name' => $topLevelTerm->name,
-      'level0_Term1_Slug' => $topLevelTerm->slug,
-      'level0_Term1_Code' => $topTermCode
+      'Term_ID' => $topLevelTerm->term_id,
+      'Term_Name' => $topLevelTerm->name,
+      'Term_Slug' => $topLevelTerm->slug,
+      'Term_Code' => $topTermCode
     ));
   array_push($metabox, array(
       '0' => $level2Term1->term_id,
       '1' => $level2Term1->name,
       '2' => $level2Term1->slug,
       '3' => get_term_meta($level2Term1->term_id, 'neighborhood_code', true),
-      'level1_Term1_ID' => $level2Term1->term_id,
-      'level1_Term1_Name' => $level2Term1->name,
-      'level1_Term1_Slug' => $level2Term1->slug,
-      'level1_Term1_Code' => get_term_meta($level2Term1->term_id, 'neighborhood_code', true)
+      'Term_ID' => $level2Term1->term_id,
+      'Term_Name' => $level2Term1->name,
+      'Term_Slug' => $level2Term1->slug,
+      'Term_Code' => get_term_meta($level2Term1->term_id, 'neighborhood_code', true)
     ));
   array_push($metabox, array(
       '0' => $level2Term2->term_id,
       '1' => $level2Term2->name,
       '2' => $level2Term2->slug,
       '3' => get_term_meta($level2Term2->term_id, 'neighborhood_code', true),
-      'level1_Term2_ID' => $level2Term2->term_id,
-      'level1_Term2_Name' => $level2Term2->name,
-      'level1_Term2_Slug' => $level2Term2->slug,
-      'level1_Term2_Code' => get_term_meta($level2Term2->term_id, 'neighborhood_code', true)
+      'Term_ID' => $level2Term2->term_id,
+      'Term_Name' => $level2Term2->name,
+      'Term_Slug' => $level2Term2->slug,
+      'Term_Code' => get_term_meta($level2Term2->term_id, 'neighborhood_code', true)
     ));
   array_push($metabox, array(
       '0' => $level2Term3->term_id,
       '1' => $level2Term3->name,
       '2' => $level2Term3->slug,
       '3' => get_term_meta($level2Term3->term_id, 'neighborhood_code', true),
-      'level1_Term3_ID' => $level2Term3->term_id,
-      'level1_Term3_Name' => $level2Term3->name,
-      'level1_Term3_Slug' => $level2Term3->slug,
-      'level1_Term3_Code' => get_term_meta($level2Term3->term_id, 'neighborhood_code', true)
+      'Term_ID' => $level2Term3->term_id,
+      'Term_Name' => $level2Term3->name,
+      'Term_Slug' => $level2Term3->slug,
+      'Term_Code' => get_term_meta($level2Term3->term_id, 'neighborhood_code', true)
     ));
   return $metabox;
 }
@@ -169,14 +175,14 @@ function nbh_2Level_metabox_by_Slug($communityTermSlug){
   $metabox = [];
 
   $term = get_term_by('slug', $communityTermSlug, 'property-neighborhood');
-
-  // print_x('', __FUNCTION__, $term); //d//
+  // print_x($X, __LINE__, __FUNCTION__, $term); //d//
 
   // Loop for top community term
-  while($term->parent){
+  if($term->parent){
     $term = get_term_by('id', $term->parent, 'property-neighborhood');
   }
   $topLevelTerm = $term;
+  // print_x($X, __LINE__, __FUNCTION__, $term); //d//
 
   // Fetch second level (City District) terms
   $level2Terms = get_terms(array(
@@ -190,55 +196,133 @@ function nbh_2Level_metabox_by_Slug($communityTermSlug){
 
   // print_x('', 'level2Terms', $level2Terms); //d//
 
-  $level2Term1 = $level2Terms[0];
-  $level2Term2 = $level2Terms[1];
-  $level2Term3 = $level2Terms[2];
-
   // Output the results with Normalized Var names
   array_push($metabox, array(
       '0' => $topLevelTerm->term_id,
       '1' => $topLevelTerm->name,
       '2' => $topLevelTerm->slug,
       '3' => get_term_meta($topLevelTerm->term_id, 'neighborhood_code', true),
-      'level0_Term1_ID' => $topLevelTerm->term_id,
-      'level0_Term1_Name' => $topLevelTerm->name,
-      'level0_Term1_Slug' => $topLevelTerm->slug,
-      'level0_Term1_Code' => get_term_meta($topLevelTerm->term_id, 'neighborhood_code', true)
+      '4' => true,
+      'Term_ID' => $topLevelTerm->term_id,
+      'Term_Name' => $topLevelTerm->name,
+      'Term_Slug' => $topLevelTerm->slug,
+      'Term_Code' => get_term_meta($topLevelTerm->term_id, 'neighborhood_code', true),
+      'show_metabox' => true
   ));
-  array_push($metabox, array(
-      '0' => $level2Term1->term_id,
-      '1' => $level2Term1->name,
-      '2' => $level2Term1->slug,
-      '3' => get_term_meta($level2Term1->term_id, 'neighborhood_code', true),
-      'level1_Term1_ID' => $level2Term1->term_id,
-      'level1_Term1_Name' => $level2Term1->name,
-      'level1_Term1_Slug' => $level2Term1->slug,
-      'level1_Term1_Code' => get_term_meta($level2Term1->term_id, 'neighborhood_code', true)
-  ));
-  array_push($metabox, array(
-      '0' => $level2Term2->term_id,
-      '1' => $level2Term2->name,
-      '2' => $level2Term2->slug,
-      '3' => get_term_meta($level2Term2->term_id, 'neighborhood_code', true),
-      'level1_Term2_ID' => $level2Term2->term_id,
-      'level1_Term2_Name' => $level2Term2->name,
-      'level1_Term2_Slug' => $level2Term2->slug,
-      'level1_Term2_Code' => get_term_meta($level2Term2->term_id, 'neighborhood_code', true)
-  ));
-  array_push($metabox, array(
-      '0' => $level2Term3->term_id,
-      '1' => $level2Term3->name,
-      '2' => $level2Term3->slug,
-      '3' => get_term_meta($level2Term3->term_id, 'neighborhood_code', true),
-      'level1_Term3_ID' => $level2Term3->term_id,
-      'level1_Term3_Name' => $level2Term3->name,
-      'level1_Term3_Slug' => $level2Term3->slug,
-      'level1_Term3_Code' => get_term_meta($level2Term3->term_id, 'neighborhood_code', true)
-  ));
+
+  for($i=0; $i < count($level2Terms); $i++){
+    array_push($metabox, array(
+        '0' => $level2Terms[$i]->term_id,
+        '1' => $level2Terms[$i]->name,
+        '2' => $level2Terms[$i]->slug,
+        '3' => get_term_meta($level2Terms[$i]->term_id, 'neighborhood_code', true),
+        '4' => true,
+        'Term_ID' => $level2Terms[$i]->term_id,
+        'Term_Name' => $level2Terms[$i]->name,
+        'Term_Slug' => $level2Terms[$i]->slug,
+        'Term_Code' => get_term_meta($level2Terms[$i]->term_id, 'neighborhood_code', true),
+        'show_metabox' => true
+    ));
+  }
 
   // print_X($X, __LINE__, __FUNCTION__, $metabox);
   return $metabox;
 }
+
+function nbh_Direct_2Level_metabox_by_Slug($communityTermSlug)
+{
+
+    $X = set_debug(__FILE__);
+
+    $metabox = [];
+
+    $level1Term = get_term_by('slug', $communityTermSlug, 'property-neighborhood');
+    $level1Terms =[];
+    // print_x($X, __LINE__, __FUNCTION__, $level1Term);
+
+    // Loop for top community term
+    if ($level1Term->parent) {
+        $topLevelTerm = get_term_by('id', $level1Term->parent, 'property-neighborhood');
+        $level1Terms = get_terms(array(
+          'taxonomy' => 'property-neighborhood',
+          'parent' => $topLevelTerm->term_id, //get direct children
+          'orderby' => 'slug', //district slug is named by [city]-#
+          'order' => 'ASC', //'DESC',
+          //'child_of' => $topTermID, //get all children
+          'hide_empty' => false,
+        ));
+    }else{
+      $level1Terms[] = $level1Term;
+    }
+    // print_X($X, __LINE__, "TopLevelTerms::", $topLevelTerms);
+
+    // Fetch second level (City District) terms
+    $level2Terms = get_terms(array(
+        'taxonomy' => 'property-neighborhood',
+        'parent' => $level1Term->term_id, //get direct children
+        'orderby' => 'slug', //district slug is named by [city]-#
+        'order' => 'ASC', //'DESC',
+        //'child_of' => $topTermID, //get all children
+        'hide_empty' => false,
+    ));
+
+    // Output the results with Normalized Var names
+    if(isset($topLevelTerm)){
+      array_push($metabox, array(
+          '0' => $topLevelTerm->term_id,
+          '1' => $topLevelTerm->name,
+          '2' => $topLevelTerm->slug,
+          '3' => get_term_meta($topLevelTerm->term_id, 'neighborhood_code', true),
+          '4' => true,
+          '5' => true,
+          'Term_ID' => $topLevelTerm->term_id,
+          'Term_Name' => $topLevelTerm->name,
+          'Term_Slug' => $topLevelTerm->slug,
+          'Term_Code' => get_term_meta($topLevelTerm->term_id, 'neighborhood_code', true),
+          'show_metabox' => true,
+          'get_chartdata' => true
+      ));
+    }
+
+    for($i = 0; $i < count($level1Terms); $i++){
+      array_push($metabox, array(
+          '0' => $level1Terms[$i]->term_id,
+          '1' => $level1Terms[$i]->name,
+          '2' => $level1Terms[$i]->slug,
+          '3' => get_term_meta($level1Terms[$i]->term_id, 'neighborhood_code', true),
+          '4' => true,
+          '5' => $level1Terms[$i]->term_id == $level1Term->term_id ? true : false,
+          'Term_ID' => $level1Terms[$i]->term_id,
+          'Term_Name' => $level1Terms[$i]->name,
+          'Term_Slug' => $level1Terms[$i]->slug,
+          'Term_Code' => get_term_meta($level1Terms[$i]->term_id, 'neighborhood_code', true),
+          'show_metabox' => true,
+          'get_chartdata' => $level1Terms[$i]->term_id == $level1Term->term_id ? true : false
+      ));
+    }
+
+    for($i = 0; $i<count($level2Terms); $i++){
+      array_push($metabox, array(
+          '0' => $level2Terms[$i]->term_id,
+          '1' => $level2Terms[$i]->name,
+          '2' => $level2Terms[$i]->slug,
+          '3' => get_term_meta($level2Terms[$i]->term_id, 'neighborhood_code', true),
+          '4' => isset($topLevelTerm) ? false : true,
+          '5' => true,
+          'Term_ID' => $level2Terms[$i]->term_id,
+          'Term_Name' => $level2Terms[$i]->name,
+          'Term_Slug' => $level2Terms[$i]->slug,
+          'Term_Code' => get_term_meta($level2Terms[$i]->term_id, 'neighborhood_code', true),
+          'show_metabox' => isset($topLevelTerm) ? false : true,
+          'get_chartdata' => true
+      ));
+    }
+
+
+    // print_X($X, __LINE__, __FUNCTION__, $metabox);
+    return $metabox;
+}
+
     
 ?>
 

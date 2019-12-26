@@ -85,7 +85,7 @@ if (isset($_GET['view'])) {
   if ($Results->have_posts()) {
     ?>
     <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
-    <div style="font-size: 20px; text-align: left; display: block">
+    <div style="font-size: 16px; text-align: left; display: block">
       <a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('school'); ?>">
       <i class="fa fa-school" aria-hidden="true">
       </i> All Schools
@@ -100,7 +100,7 @@ if (isset($_GET['view'])) {
       $Results->the_post();?>
         <div style="text-align: left">
         <?php //rewrite schools permalink to singular school ?>
-        <h2><a href="<?php echo str_replace('/schools/', '/school/', get_the_permalink());?>"><?php the_title();?></a></h2>
+        <h3><a href="<?php echo str_replace('/schools/', '/school/', get_the_permalink());?>"><?php the_title();?></a></h3>
         <div><?php the_excerpt();?></div>
         </div>
 
