@@ -42,15 +42,13 @@ if (isset($_GET['view'])) {
   //if it is null, means show all categories/taxonomies
   //if it is not null, means show specific categories/taxonomy
   $X = set_debug(__FILE__); //set file name and color
-
   $qvar = get_query_var('property-neighborhood'); //query var is passed from url rewriting
-
-  print_X($X, __LINE__, $qvar, 'Entry Post ID::', get_the_ID()); //d//
+//   print_X($X, __LINE__, $qvar, 'Entry Post ID::', get_the_ID()); //d//
 
   /**********************
    * SECTION 1::Market Posts
    */
-  get_template_part('/template-parts/content', 'market-posts');
+  get_template_part('/template-parts/content', 'x-postx');
 
   /******************************
    * SECTION 2::Market Statistics

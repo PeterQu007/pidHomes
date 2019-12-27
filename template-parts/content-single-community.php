@@ -79,7 +79,7 @@
   while ($Communities->have_posts()) { //while[]
       $Communities->the_post();  ?>
         <div style="text-align: left">
-          <h3><?php the_title();?></h3>
+          <h2><?php the_title();?></h2>
           <?php get_field('banner_image') ?>
           <?php if (!$communityID) {?>
             <div class="acf-map">

@@ -33,106 +33,29 @@ if (isset($_GET['view'])) {
 
 ?>
 
-<?php
-  $communityID = get_query_var('communityID');
-  // echo 'get_the_ID()' . get_the_ID(); //d//
-  // echo 'communityID: ' . $communityID; //d//
-  // require get_stylesheet_directory() . '/inc/generate-neighborhood-metabox.php';
-?>
-
 <section class="rh_section rh_section--flex rh_wrap--padding rh_wrap--topPadding">
-<div class="rh_page rh_page__listing_page rh_page__main" style="width: 70%">
+  <div class="rh_page rh_page__listing_page rh_page__main" style="width: 70%">
 
-<?php 
-  get_template_part('template-parts/content', 'single-community');
-  get_template_part('template-parts/content', 'market-stats');
-?>
+    <?php
+    $communityID = get_query_var('communityID');
+    // echo 'get_the_ID()' . get_the_ID(); //d//
+    // echo 'communityID: ' . $communityID; //d//
+    // require get_stylesheet_directory() . '/inc/generate-neighborhood-metabox.php';
+      get_template_part('template-parts/content', 'single-community');
+      get_template_part('template-parts/content', 'market-stats');
+      // run school contents
+      set_query_var('post_type', 'school');
+      get_template_part('template-parts/content', 'x-postx');
 
-  <?php //star school block //School[]
-    // echo get_the_ID(); //d//
-    $terms = get_the_terms(get_the_ID(), 'property-neighborhood');
-    // print_r($terms); //d//
-    foreach ($terms as $term) {
-        
-      //$termID = $term->term_id; //d//
-      //$termName = $term->name;
-      //echo $termID;
-      //echo $termName;
-      $termChildren= get_term_children($term->term_id, 'property-neighborhood');
-      if(!$termChildren){
-        $termID = $term->term_id;
-        $termName = $term->name;
-        $termSlug = $term->slug;
-        // echo $termID; //d//
-        // echo $termName; //d//
-      }
-    }
-  
-  // echo $termName; //d//
-
-  $Results = new WP_Query(array(
-    'post_type' => 'school',
-    'tax_query' => array(
-        array(
-            'taxonomy' => 'property-neighborhood',
-            'field' => 'slug',
-            'terms' => $termName,
-        ),
-    ),
-    'posts_per_page' => -1,
-  ));
-
-  if ($Results->have_posts()) {
+      echo do_shortcode("[wpdatatable id=1 var2='Surrey' ]");
+      get_template_part('template-parts/content-active-listings');
     ?>
-    <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
-    <div style="font-size: 16px; text-align: left; display: block">
-      <a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('school'); ?>">
-      <i class="fa fa-school" aria-hidden="true">
-      </i> All Schools
-      </a>
-      <!-- <a class="metabox__blog-home-link" href="<?php echo get_term_link($termID); ?>"> <?php echo $termName; ?> </a> -->
-      <a class="metabox__blog-home-link" href="<?php 
-        echo get_site_url($termID) . '/schools/' . $termSlug; ?>"> <?php echo $termName; ?> </a>
-    </div>
-    </div>
-    <?php 
-    while ($Results->have_posts()) {
-      $Results->the_post();?>
-        <div style="text-align: left">
-        <?php //rewrite schools permalink to singular school ?>
-        <h3><a href="<?php echo str_replace('/schools/', '/school/', get_the_permalink());?>"><?php the_title();?></a></h3>
-        <div><?php the_excerpt();?></div>
-        </div>
-
-      <?php 
-    }
-  }
-  // print_X('blue', __FILE__, __LINE__, __FUNCTION__, 'shortCode');
-  echo do_shortcode("[wpdatatable id=1 var2='Burnaby' ]");
-  echo do_shortcode("[wpdatachart id=2]");
-
-  wp_reset_query(); //School[]?> 
-
-  <?php 
-    get_template_part('template-parts/content-active-listings');
-  ?>
 
   </div>
 
   <div class="rh_page rh_page_sidebar" style="width: 30%">
-
-  <?php
-
-// if ('grid' === $view_type) {
-//     get_template_part('assets/modern/partials/taxonomy/grid-layout');
-// } else {
-//     get_template_part('assets/modern/partials/taxonomy/list-layout');
-// }
-get_sidebar('default');
-
-?>
-
-</div>
+    <?php get_sidebar('default');?>
+  </div>
 </section>
 
 <?php

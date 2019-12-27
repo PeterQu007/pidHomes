@@ -6,12 +6,10 @@
 <?php
 
   $X = set_debug(__FILE__);
-
   //get the neighborhood_code
   //All markets | City code | district code | Neighborhood Code
   $qvar = get_query_var('qvar'); //get property-neighborhood slug
-
-  // print_X($X, __LINE__, 'get_the_ID::', get_the_ID(), get_the_title(), $qvar); //d//
+  // print_X($X, __LINE__, 'get_the_ID::', get_the_ID(), get_the_title(), 'is_single::', is_single(get_the_ID()), '$qvar::', $qvar); //d//
 
   if(is_single(get_the_ID())){
     $the_neighborhood = trim(get_the_ID());
@@ -72,15 +70,20 @@
   <div style="font-size: 16px; text-align: left; display: block" 
         id="marketSection" nbhCodes="<?php echo $neighborhood_code_string; ?>" nbhNames='<?php echo json_encode($nbh_names); ?>'>
    
-    <a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('market'); ?>">
-      <i class="fas fa-reply-all" aria-hidden="true"></i>
-      All
-    </a>
+    <?php if($qvar){ ?> 
+      <a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('market'); ?>">
+        <i class="fas fa-reply-all" aria-hidden="true"></i>
+        All
+      </a>
+    <?php } ?>
     <!-- Top Level City -->
-    <a class="metabox__blog-home-link" href="<?php 
-      echo get_site_url() . '/markets/' . $metabox[0][2]; ?>">
-      <i class="fas fa-chart-area" aria-hidden="true"></i>
-      <?php echo $metabox[0][1]; ?> </a>
+    <?php if($metabox[0]['Term_ID']){
+      ?>
+      <a class="metabox__blog-home-link" href="<?php 
+        echo get_site_url() . '/markets/' . $metabox[0][2]; ?>">
+        <i class="fas fa-chart-area" aria-hidden="true"></i>
+        <?php echo $metabox[0][1]; ?> </a>
+    <?php } ?>
     <!-- Level 2 City District -->
     <?php for($i=1; $i < count($metabox); $i++){ 
       if($metabox[$i]['show_metabox']){

@@ -18,7 +18,20 @@
         <!-- First MetaBox Could invisible if in All Communities Mode-->
         <?php if($qvar){ ?>
           <a class="metabox__blog-home-link" href="<?php echo  get_post_type_archive_link($metabox_tax); ?>">
-            <i class="<?php echo "fas fa-map-marked"; ?>" aria-hidden="true"></i> 
+            <i class="<?php 
+            switch($metabox_tax){
+              case 'school':
+                echo "fas fa-school";
+                break;
+              case 'community':
+                echo "fas fa-map-marked";
+                break;
+              case 'market':
+                echo 'fas fa-chart-area';
+                break;
+            }
+            
+            ?>" aria-hidden="true"></i> 
             All
           </a>  
         <?php } ?>

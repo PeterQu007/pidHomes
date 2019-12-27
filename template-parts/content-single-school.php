@@ -4,12 +4,13 @@
 -->
 
 <?php
+  $X = set_debug(__FILE__);
   $communityID = get_query_var('communityID');
   // echo 'get_the_ID()' . get_the_ID(); //d//
   // echo 'communityID: ' . $communityID; //d//
   //require get_stylesheet_directory() . '/inc/generate-neighborhood-metabox.php';
   $metabox = nbh_3level_metabox(get_the_ID());
-  // print_r($metabox); //d//
+  // print_X($X, __LINE__, "metabox::", $metabox); //d//
 ?>
 
 <div class="metabox metabox--with-home-link" style="font-size: 20px; text-align: left; display: block">
@@ -17,23 +18,23 @@
    
     <a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('school'); ?>">
       <i class="fas fa-school" aria-hidden="true"></i>
-      All Schools
+      All
      </a>
     <!-- Top Level City -->
     <a class="metabox__blog-home-link" href="<?php 
-      echo get_site_url() . '/schools/' . $metabox[0]["level1TermSlug"]; ?>">
+      echo get_site_url() . '/schools/' . $metabox[0]["Term_Slug"]; ?>">
       <i class="fas fa-city" aria-hidden="true"></i>
-      <?php echo $metabox[0]["level1TermName"]; ?> </a>
+      <?php echo $metabox[0]["Term_Name"]; ?> </a>
     <!-- Level 2 City District -->
     <a class="metabox__blog-home-link" href="<?php 
-      echo get_site_url() . '/schools/' . $metabox[1]["level2TermSlug"]; ?>">
+      echo get_site_url() . '/schools/' . $metabox[1]["Term_Slug"]; ?>">
       <i class="fas fa-building" aria-hidden="true"></i>
-      <?php echo $metabox[1]["level2TermName"]; ?> </a>
+      <?php echo $metabox[1]["Term_Name"]; ?> </a>
     <!-- Level 3 City Neighborhoods -->
     <a class="metabox__blog-home-link" href="<?php 
-      echo get_site_url() . '/schools/' . $metabox[2]["level3TermSlug"]; ?>">
+      echo get_site_url() . '/schools/' . $metabox[2]["Term_Slug"]; ?>">
       <i class="fas fa-university" aria-hidden="true"></i>
-      <?php echo $metabox[2]["level3TermName"]; ?> </a>
+      <?php echo $metabox[2]["Term_Name"]; ?> </a>
 
     <span class="metabox__main"><?php //the_title();//x//?></span>
 
@@ -49,14 +50,14 @@ while (have_posts()) {
     <?php get_field('banner_image')?>
     <div><?php the_content();?> </div>
     <div class="acf-map">
-            <?php
-              $mapLocation = get_field('map_location');?>
-                <div class="marker" data-lat="<?php echo $mapLocation['lat'] ?>" data-lng="<?php echo $mapLocation['lng'] ?>">
-                <h3><a href="<?php the_permalink();?>"><?php the_title();?></a> </h3>
-                <?php echo $mapLocation['address']; ?>
-                </div>
-            </div>
+      <?php
+        $mapLocation = get_field('map_location');?>
+          <div class="marker" data-lat="<?php echo $mapLocation['lat'] ?>" data-lng="<?php echo $mapLocation['lng'] ?>">
+          <h3><a href="<?php the_permalink();?>"><?php the_title();?></a> </h3>
+          <?php echo $mapLocation['address']; ?>
           </div>
+      </div>
+    </div>
     <?php 
     global $wpdb;
     //$school = $wpdb->get_var("SELECT COUNT(*) FROM pid_schools WHERE school_name='Fraser Heights'");

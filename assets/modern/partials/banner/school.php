@@ -37,7 +37,7 @@ if (function_exists('putRevSlider') && (!empty($rev_slider_alias))) {
         //$Communities = get_post_type_labels(get_post_type_object(get_post_type(get_the_ID())));
         //$banner_title = $Communities->name;
         //echo '<p> get_query_var(): '. get_query_var('property-neighborhood') . '</p>';
-        $banner_title="Greater Vancouver Communities";
+        $banner_title = "Greater Vancouver Schools";
     }
 
     // website level banner title show/hide setting

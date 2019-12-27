@@ -117,9 +117,9 @@ function nbh_2Level_metabox_by_ID($nbhID){
   ));
   // print_X('green', $level2Terms); //d//
 
-  $level2Term1 = $level2Terms[0];
-  $level2Term2 = $level2Terms[1];
-  $level2Term3 = $level2Terms[2];
+  // $level2Term1 = $level2Terms[0];
+  // $level2Term2 = $level2Terms[1];
+  // $level2Term3 = $level2Terms[2];
 
   // Output the results with Normalized Var names
   array_push($metabox, array(
@@ -130,38 +130,54 @@ function nbh_2Level_metabox_by_ID($nbhID){
       'Term_ID' => $topLevelTerm->term_id,
       'Term_Name' => $topLevelTerm->name,
       'Term_Slug' => $topLevelTerm->slug,
-      'Term_Code' => $topTermCode
+      'Term_Code' => $topTermCode,
+      'show_metabox' => true
     ));
-  array_push($metabox, array(
-      '0' => $level2Term1->term_id,
-      '1' => $level2Term1->name,
-      '2' => $level2Term1->slug,
-      '3' => get_term_meta($level2Term1->term_id, 'neighborhood_code', true),
-      'Term_ID' => $level2Term1->term_id,
-      'Term_Name' => $level2Term1->name,
-      'Term_Slug' => $level2Term1->slug,
-      'Term_Code' => get_term_meta($level2Term1->term_id, 'neighborhood_code', true)
-    ));
-  array_push($metabox, array(
-      '0' => $level2Term2->term_id,
-      '1' => $level2Term2->name,
-      '2' => $level2Term2->slug,
-      '3' => get_term_meta($level2Term2->term_id, 'neighborhood_code', true),
-      'Term_ID' => $level2Term2->term_id,
-      'Term_Name' => $level2Term2->name,
-      'Term_Slug' => $level2Term2->slug,
-      'Term_Code' => get_term_meta($level2Term2->term_id, 'neighborhood_code', true)
-    ));
-  array_push($metabox, array(
-      '0' => $level2Term3->term_id,
-      '1' => $level2Term3->name,
-      '2' => $level2Term3->slug,
-      '3' => get_term_meta($level2Term3->term_id, 'neighborhood_code', true),
-      'Term_ID' => $level2Term3->term_id,
-      'Term_Name' => $level2Term3->name,
-      'Term_Slug' => $level2Term3->slug,
-      'Term_Code' => get_term_meta($level2Term3->term_id, 'neighborhood_code', true)
-    ));
+
+    for($i=0; $i < count($level2Terms); $i++){
+      array_push($metabox, array(
+          '0' => $level2Terms[$i]->term_id,
+          '1' => $level2Terms[$i]->name,
+          '2' => $level2Terms[$i]->slug,
+          '3' => get_term_meta($level2Terms[$i]->term_id, 'neighborhood_code', true),
+          'Term_ID' => $level2Terms[$i]->term_id,
+          'Term_Name' => $level2Terms[$i]->name,
+          'Term_Slug' => $level2Terms[$i]->slug,
+          'Term_Code' => get_term_meta($level2Terms[$i]->term_id, 'neighborhood_code', true),
+          'show_metabox' => true
+        ));
+    }
+
+  // array_push($metabox, array(
+  //     '0' => $level2Term1->term_id,
+  //     '1' => $level2Term1->name,
+  //     '2' => $level2Term1->slug,
+  //     '3' => get_term_meta($level2Term1->term_id, 'neighborhood_code', true),
+  //     'Term_ID' => $level2Term1->term_id,
+  //     'Term_Name' => $level2Term1->name,
+  //     'Term_Slug' => $level2Term1->slug,
+  //     'Term_Code' => get_term_meta($level2Term1->term_id, 'neighborhood_code', true)
+  //   ));
+  // array_push($metabox, array(
+  //     '0' => $level2Term2->term_id,
+  //     '1' => $level2Term2->name,
+  //     '2' => $level2Term2->slug,
+  //     '3' => get_term_meta($level2Term2->term_id, 'neighborhood_code', true),
+  //     'Term_ID' => $level2Term2->term_id,
+  //     'Term_Name' => $level2Term2->name,
+  //     'Term_Slug' => $level2Term2->slug,
+  //     'Term_Code' => get_term_meta($level2Term2->term_id, 'neighborhood_code', true)
+  //   ));
+  // array_push($metabox, array(
+  //     '0' => $level2Term3->term_id,
+  //     '1' => $level2Term3->name,
+  //     '2' => $level2Term3->slug,
+  //     '3' => get_term_meta($level2Term3->term_id, 'neighborhood_code', true),
+  //     'Term_ID' => $level2Term3->term_id,
+  //     'Term_Name' => $level2Term3->name,
+  //     'Term_Slug' => $level2Term3->slug,
+  //     'Term_Code' => get_term_meta($level2Term3->term_id, 'neighborhood_code', true)
+  //   ));
   return $metabox;
 }
 
@@ -202,7 +218,6 @@ function nbh_2Level_metabox_by_Slug($communityTermSlug){
       '1' => $topLevelTerm->name,
       '2' => $topLevelTerm->slug,
       '3' => get_term_meta($topLevelTerm->term_id, 'neighborhood_code', true),
-      '4' => true,
       'Term_ID' => $topLevelTerm->term_id,
       'Term_Name' => $topLevelTerm->name,
       'Term_Slug' => $topLevelTerm->slug,
@@ -216,7 +231,6 @@ function nbh_2Level_metabox_by_Slug($communityTermSlug){
         '1' => $level2Terms[$i]->name,
         '2' => $level2Terms[$i]->slug,
         '3' => get_term_meta($level2Terms[$i]->term_id, 'neighborhood_code', true),
-        '4' => true,
         'Term_ID' => $level2Terms[$i]->term_id,
         'Term_Name' => $level2Terms[$i]->name,
         'Term_Slug' => $level2Terms[$i]->slug,
@@ -236,30 +250,35 @@ function nbh_Direct_2Level_metabox_by_Slug($communityTermSlug)
 
     $metabox = [];
 
-    $level1Term = get_term_by('slug', $communityTermSlug, 'property-neighborhood');
-    $level1Terms =[];
-    // print_x($X, __LINE__, __FUNCTION__, $level1Term);
+    // if($communityTermSlug){
+      $level1Term = get_term_by('slug', $communityTermSlug, 'property-neighborhood');
+      $level1Terms =[];
+      // print_x($X, __LINE__, __FUNCTION__, '$communityTermSlug::', $communityTermSlug, '$level1Term::', $level1Term);
 
-    // Loop for top community term
-    if ($level1Term->parent) {
-        $topLevelTerm = get_term_by('id', $level1Term->parent, 'property-neighborhood');
-        $level1Terms = get_terms(array(
-          'taxonomy' => 'property-neighborhood',
-          'parent' => $topLevelTerm->term_id, //get direct children
-          'orderby' => 'slug', //district slug is named by [city]-#
-          'order' => 'ASC', //'DESC',
-          //'child_of' => $topTermID, //get all children
-          'hide_empty' => false,
-        ));
-    }else{
-      $level1Terms[] = $level1Term;
-    }
-    // print_X($X, __LINE__, "TopLevelTerms::", $topLevelTerms);
+      // Loop for top community term
+      if ($level1Term->parent) {
+          $topLevelTerm = get_term_by('id', $level1Term->parent, 'property-neighborhood');
+          $level1Terms = get_terms(array(
+            'taxonomy' => 'property-neighborhood',
+            'parent' => $topLevelTerm->term_id, //get direct children
+            'orderby' => 'slug', //district slug is named by [city]-#
+            'order' => 'ASC', //'DESC',
+            //'child_of' => $topTermID, //get all children
+            'hide_empty' => false,
+          ));
+      }else{
+        $level1Terms[] = $level1Term;
+      }
+      // print_X($X, __LINE__, "TopLevelTerms::", $topLevelTerms);
+    // }else{
+    //   $level1Term = null;
+    //   $level1Terms = [];
+    // }
 
     // Fetch second level (City District) terms
     $level2Terms = get_terms(array(
         'taxonomy' => 'property-neighborhood',
-        'parent' => $level1Term->term_id, //get direct children
+        'parent' => isset($level1Term) ? $level1Term->term_id : null, //get direct children
         'orderby' => 'slug', //district slug is named by [city]-#
         'order' => 'ASC', //'DESC',
         //'child_of' => $topTermID, //get all children
@@ -273,8 +292,6 @@ function nbh_Direct_2Level_metabox_by_Slug($communityTermSlug)
           '1' => $topLevelTerm->name,
           '2' => $topLevelTerm->slug,
           '3' => get_term_meta($topLevelTerm->term_id, 'neighborhood_code', true),
-          '4' => true,
-          '5' => true,
           'Term_ID' => $topLevelTerm->term_id,
           'Term_Name' => $topLevelTerm->name,
           'Term_Slug' => $topLevelTerm->slug,
@@ -290,8 +307,6 @@ function nbh_Direct_2Level_metabox_by_Slug($communityTermSlug)
           '1' => $level1Terms[$i]->name,
           '2' => $level1Terms[$i]->slug,
           '3' => get_term_meta($level1Terms[$i]->term_id, 'neighborhood_code', true),
-          '4' => true,
-          '5' => $level1Terms[$i]->term_id == $level1Term->term_id ? true : false,
           'Term_ID' => $level1Terms[$i]->term_id,
           'Term_Name' => $level1Terms[$i]->name,
           'Term_Slug' => $level1Terms[$i]->slug,
@@ -307,8 +322,6 @@ function nbh_Direct_2Level_metabox_by_Slug($communityTermSlug)
           '1' => $level2Terms[$i]->name,
           '2' => $level2Terms[$i]->slug,
           '3' => get_term_meta($level2Terms[$i]->term_id, 'neighborhood_code', true),
-          '4' => isset($topLevelTerm) ? false : true,
-          '5' => true,
           'Term_ID' => $level2Terms[$i]->term_id,
           'Term_Name' => $level2Terms[$i]->name,
           'Term_Slug' => $level2Terms[$i]->slug,
