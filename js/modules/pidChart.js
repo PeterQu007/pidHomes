@@ -216,7 +216,7 @@ class pidChart {
 
     $.ajax({
       url:
-        "http://pidrealty.local/wp-content/themes/realhomes-child/db/chartData.php",
+        "https://pidrealty.local/wp-content/themes/realhomes-child/db/chartData.php",
       method: "get",
       data: { Neighborhood_IDs: nbhCodes },
       dataType: "JSON",

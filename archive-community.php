@@ -35,7 +35,7 @@ if (isset($_GET['view'])) {
 
 <section class="rh_section rh_section--flex rh_wrap--padding rh_wrap--topPadding">
   <div class="rh_page rh_page__listing_page rh_page__main" style="width: 70%">
-
+    
     <?php 
       $X = set_debug(__FILE__);
       //Get query var in order to filter the neighborhoods
@@ -44,7 +44,26 @@ if (isset($_GET['view'])) {
       //if it is not null, means show specific categories/taxonomy
       $qvar = get_query_var('property-neighborhood'); //query var is passed from url rewriting 
       // print_X($X, __LINE__, $qvar, get_the_ID(), get_the_title()); //d//
-
+      ?>
+      <div >
+        <h2> <?php echo $qvar ?> </h2>
+        <?php
+          //get the guid for demographics
+          $mysqli = new mysqli("localhost", "root", "root", "local");
+          $strSql = "SELECT GEO_UID FROM pid_census_subdivision_bc
+                    WHERE GEO_Name_nom = '" . $qvar . "'" ;
+          $mysqli->real_query($strSql);
+          $res = $mysqli->use_result();
+          // print_X($X, __LINE__, $res);
+          while ($row = $res->fetch_assoc()){
+            // print_X($X, __LINE__, $row);
+            $GEO_UID = $row['GEO_UID'];
+          }
+        ?>
+        <div id = "demographic" class = "wrapper" uid="<?php echo $GEO_UID; ?>">
+        </div>
+      </div>
+      <?php
       get_template_part('template-parts/content', 'x-postx');
 
       get_template_part('template-parts/content', 'market-stats');

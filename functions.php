@@ -52,6 +52,7 @@ function pidRealty_Files()
     wp_enqueue_script('main-pidrealty-js', get_stylesheet_directory_uri().('/js/scripts-bundled.js'), null, microtime(), true);
     wp_enqueue_script('secondary-pidrealty-js', get_stylesheet_directory_uri() . ('/js/appjs-bundled.js'), null, microtime(), true);
     wp_enqueue_script('vendor-js', get_stylesheet_directory_uri().("/temp/scripts/Vendor.js"));
+    wp_enqueue_script('ajax-cors', get_stylesheet_directory_uri(). ("/js/modules/jquery.ajax-cross-origin.min.js"));
     wp_enqueue_script('chartjs-crosshair', "//cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js");
     // wp_enqueue_script('chartjs', 'https://www.jsdelivr.com/package/npm/chart.js');
     //load css files
@@ -194,6 +195,13 @@ add_rewrite_rule('^db/([^/]*)/?', get_theme_file_uri('/db/data.php'), 'top');
 //Add include modules
 require_once (get_stylesheet_directory() . '/inc/neighborhood-metabox.php');
 include_once get_stylesheet_directory() . '/inc/debug.php';
+
+// function add_cors_http_header()
+// {
+//     header("Access-Control-Allow-Origin: *");
+// }
+// add_action('init', 'add_cors_http_header');
+
 
 //End of PHP
 
