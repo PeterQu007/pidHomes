@@ -23,10 +23,25 @@
     14 = Visible minority
 
  */
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 $url = (isset($_GET['url'])) ? $_GET['url'] : false;
 $lang = (isset($_GET['lang'])) ? $_GET['lang'] : 'E';
-$dguid = (isset($_GET['dguid'])) ? $_GET['dguid'] : '2016A00055915004' /* Surrey */; 
+// $dguid = (isset($_GET['dguid'])) ? $_GET['dguid'] : '2016A00055915004' /* Surrey */; 
 // $dguid = (isset($_GET['dguid'])) ? $_GET['dguid'] : '2016A00055915015' /* Richmond */ ;
+// $dguid = (isset($_GET['dguid'])) ? $_GET['dguid'] : '2016A00055915022' /* Vancouver */ ;
+$dguid = (isset($_GET['dguid'])) ? $_GET['dguid'] : '2016A00055915025' /* Burnaby */ ;
+if(isset($_GET['city_code'])){
+    $city_code = $_GET['City_Code'];
+}else{
+    $mysqli = new mysqli("localhost", "root", "root", "local");
+    $sql_query = "SELECT City_Code FROM pid_census_subdivision_bc WHERE GEO_UID='" . $dguid . "'";
+    $mysqli->real_query($sql_query);
+    $result = $mysqli->use_result();
+    $city_code = $result->fetch_assoc()['City_Code'];
+    // echo $city_code . '</br>';
+    $mysqli->close();
+}
 $topic = (isset($_GET['topic'])) ? $_GET['topic'] : 0;
 $notes = (isset($_GET['notes'])) ? $_GET['notes'] : 0;
 $stat = (isset($_GET['stat'])) ? $_GET['stat'] : 0;
@@ -79,50 +94,20 @@ $demographics = json_decode($string);
             ?>
             </tr>
 <?php
+$geo_uid = array_search('GEO_UID', $demographics->COLUMNS);
+$geo_id = array_search('GEO_ID', $demographics->COLUMNS);
+$geo_type = array_search('GEO_TYPE', $demographics->COLUMNS);
 $indent_id = array_search('INDENT_ID', $demographics->COLUMNS);
 $topic_theme_id = array_search('TOPIC_THEME', $demographics->COLUMNS);
 $text_name_nom = array_search('TEXT_NAME_NOM', $demographics->COLUMNS);
 $t_data_donnee = array_search('T_DATA_DONNEE', $demographics->COLUMNS);
 $m_data_donnee = array_search('M_DATA_DONNEE', $demographics->COLUMNS);
 $f_data_donnee = array_search('F_DATA_DONNEE', $demographics->COLUMNS);
-
 $text_id = array_search('TEXT_ID', $demographics->COLUMNS);
-var_dump($topic_theme_id);
+// var_dump($topic_theme_id);
 // $json = json_encode($string);
 $json = $string;
 /**************
- * CREATE TABLE `pid_city_population` (
-  `Population_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `City_Code` varchar(6) NOT NULL,
-  `GEO_UID` varchar(45) NOT NULL,
-  `TEXT_ID` varchar(25) NOT NULL,
-  `HIER_ID` varchar(25) NOT NULL,
-  `INDENT_ID` varchar(25) NOT NULL,
-  `Year` int(11) NOT NULL,
-  `Population` int(11) NOT NULL,
-  `Population_Male` int(11) DEFAULT NULL,
-  `Population_Female` int(11) DEFAULT NULL,
-  `Population_Change` float NOT NULL,
-  `Population_Density_per_square_kilometre` float NOT NULL,
-  `Land_Area_in_Square_Kilometres` float NOT NULL,
-  `Median_Age` float NOT NULL,
-  `Average_Age` float NOT NULL,
-  `Total_Private_Dwellings` int(11) NOT NULL,
-  `Single-Detached_House` int(11) NOT NULL,
-  `Apartment_5_Or_More_Storeys` int(11) NOT NULL,
-  `Other_Attached_Dwelling` int(11) NOT NULL,
-  `Movable_Dwelling` int(11) NOT NULL,
-  `Median_total_income` decimal(10,2) DEFAULT NULL,
-  `Median_after_tax_income` decimal(10,2) DEFAULT NULL,
-  `Average_total_income` decimal(10,2) DEFAULT NULL,
-  `Average_after_tax_income` decimal(10,2) DEFAULT NULL,
-  `Education_Total` int(11) DEFAULT NULL,
-  `Education_No_Certificate` int(11) DEFAULT NULL,
-  `Education_High_school` int(11) DEFAULT NULL,
-  `Education_Postsecondary` int(11) DEFAULT NULL,
-  PRIMARY KEY (`Population_ID`),
-  UNIQUE KEY `City_Population_ID_UNIQUE` (`Population_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
  * 
  */
 $sql_row_for_population_table =[];
@@ -131,7 +116,7 @@ $sql_row_for_ethnicity_table = [];
 $sql_row_for_ethnicity_minority_group = [];
 
 // $sql_row_for_population_table['TEXT_ID'] = 5;
-$sql_rows = [];
+$sql_rows_for_population_table = [];
 $sql_rows_for_Housing = [];
 $sql_rows_for_ethnicity = [];
 $sql_rows_for_ethnicity_minority_group =[];
@@ -143,6 +128,16 @@ $sql_row_for_population_table = array();
 $sql_row_for_housing_table = array();
 $sql_row_for_ethnicity_table = array();
 $sql_row_for_ethnicity_minority_group = array();
+
+$sql_row_for_population_table['City_Code'] = $city_code;
+$sql_row_for_population_table['GEO_UID'] = $demographics->DATA[0][$geo_uid];
+$sql_row_for_population_table['GEO_ID'] = $demographics->DATA[0][$geo_id];
+$sql_row_for_population_table['GEO_TYPE'] = $demographics->DATA[0][$geo_type];
+// $sql_row_for_population_table['TEXT_ID'] = $demographics->DATA[0][$text_id];
+// $sql_row_for_population_table['HIER_ID'] = $demographics->DATA[0][array_search('HIER_ID', $demographics->COLUMNS)];
+// $sql_row_for_population_table['INDENT_ID'] = $demographics->DATA[0][$indent_id];
+$sql_row_for_population_table['Year'] = strval(substr($demographics->DATA[0][$geo_uid], 0, 4));
+
 
 foreach($demographics->DATA as $datarow){
     $output = false;
@@ -158,6 +153,7 @@ foreach($demographics->DATA as $datarow){
             }
         break;
         case 'Families, households and marital status' : // 4
+            $level = 2;
             if(!(strval($datarow[$text_id])<=3009)){
                 continue 2;
             }
@@ -330,7 +326,7 @@ foreach($demographics->DATA as $datarow){
             case 'Families, households and marital status':
                 switch(trim($datarow[$text_name_nom])){
                     case 'Total - Occupied private dwellings by structural type of dwelling - 100% data':
-                        $sql_row_for_population_table['Total_Private_Dwelling'] = $datarow[$t_data_donnee];
+                        $sql_row_for_population_table['Total_Private_Dwellings'] = $datarow[$t_data_donnee];
                     break;
                     case 'Single-detached house':
                         $sql_row_for_population_table['Single_Detached_House'] = $datarow[$t_data_donnee];
@@ -343,6 +339,22 @@ foreach($demographics->DATA as $datarow){
                     break;
                     case 'Movable dwelling':
                         $sql_row_for_population_table['Movable_Dwelling'] = $datarow[$t_data_donnee];
+                    break;
+
+                    case 'Semi-detached house':
+                        $sql_row_for_population_table['Semi_Detached_House'] = $datarow[$t_data_donnee];
+                    break;
+                    case 'Row house':
+                        $sql_row_for_population_table['Townhouse'] = $datarow[$t_data_donnee];
+                    break;
+                    case 'Apartment or flat in a duplex':
+                        $sql_row_for_population_table['Apartment_in_a_duplex'] = $datarow[$t_data_donnee];
+                    break;
+                    case 'Apartment in a building that has fewer than five storeys':
+                        $sql_row_for_population_table['Apartment_less_than_5_Storeys'] = $datarow[$t_data_donnee];
+                    break;
+                    case 'Other single-attached house':
+                        $sql_row_for_population_table['Other_single_attached_house'] = $datarow[$t_data_donnee];
                     break;
                     default:
                     break;
@@ -432,17 +444,91 @@ foreach($demographics->DATA as $datarow){
 
 $sql_rows_for_Housing[] = $sql_row_for_housing_table;
 $sql_rows_for_ethnicity[] =$sql_row_for_ethnicity_table;
-$sql_rows[] = $sql_row_for_population_table;
+$sql_rows_for_population_table[] = $sql_row_for_population_table;
 
 ?>
 
         </table>
     </div>
 <?php
+
 var_dump($sql_rows_for_Housing);
 var_dump($sql_row_for_ethnicity_table);
 var_dump($sql_rows_for_ethnicity_minority_group);
-var_dump($sql_rows);
+var_dump($sql_rows_for_population_table);
+
+$mysqli = new mysqli("localhost", "root", "root", "local");
+if (mysqli_connect_errno()) {
+    printf("Connect failed: %s\n", mysqli_connect_error());
+    exit();
+}
+
+$sql_query = "SELECT count(GEO_UID) count FROM pid_population WHERE GEO_UID='" . $sql_row_for_population_table['GEO_UID'] . "'";
+// printf($sql_query);
+$mysqli->real_query($sql_query);
+$res = $mysqli->use_result();
+if($res->fetch_assoc()['count'] == 0) {
+    $res->close(); //release first query;
+    $sql_insert = "INSERT INTO pid_population (City_Code,GEO_UID,GEO_ID,GEO_TYPE,
+                                `Year`,Population,Population_Male,Population_Female,Population_Change,
+                                Population_Density_per_square_kilometre,Land_Area_in_Square_Kilometres,Median_Age,Average_Age,
+                                Total_Private_Dwellings,Single_Detached_House,Apartment_5_Or_More_Storeys,
+                                Other_Attached_Dwelling,Semi_Detached_House,Townhouse,Apartment_less_than_5_Storeys,
+                                Apartment_in_a_duplex,Other_single_attached_house,Movable_Dwelling,
+                                Median_total_income,Median_after_tax_income,Average_total_income,Average_after_tax_income,
+                                Education_Total,Education_No_Certificate,Education_High_school,Education_Postsecondary ) 
+                                VALUES(?,?,?,?,
+                                ?,?,?,?,?,
+                                ?,?,?,?,
+                                ?,?,?,
+                                ?,?,?,?,
+                                ?,?,?,
+                                ?,?,?,?,
+                                ?,?,?,?)";
+                                    
+    if($stmt = $mysqli->prepare($sql_insert)){
+    $stmt->bind_param('ssssiiiidddddiiiiiiiiiiddddiiii', 
+                            $sql_row_for_population_table['City_Code'],
+                            $sql_row_for_population_table['GEO_UID'],
+                            $sql_row_for_population_table['GEO_ID'],
+                            $sql_row_for_population_table['GEO_TYPE'],
+                            $sql_row_for_population_table['Year'],
+                            $sql_row_for_population_table['Population'],
+                            $sql_row_for_population_table['Population_Male'],
+                            $sql_row_for_population_table['Population_Female'],
+                            $sql_row_for_population_table['Population_Change'],
+                            $sql_row_for_population_table['Population_Density_per_square_kilometre'],
+                            $sql_row_for_population_table['Land_Area_in_Square_Kilometres'],
+                            $sql_row_for_population_table['Median_Age'],
+                            $sql_row_for_population_table['Average_Age'],
+                            $sql_row_for_population_table['Total_Private_Dwellings'],
+                            $sql_row_for_population_table['Single_Detached_House'],
+                            $sql_row_for_population_table['Apartment_5_Or_More_Storeys'],
+                            $sql_row_for_population_table['Other_Attached_Dwelling'],
+                            $sql_row_for_population_table['Semi_Detached_House'],
+                            $sql_row_for_population_table['Townhouse'],
+                            $sql_row_for_population_table['Apartment_less_than_5_Storeys'],
+                            $sql_row_for_population_table['Apartment_in_a_duplex'],
+                            $sql_row_for_population_table['Other_single_attached_house'],
+                            $sql_row_for_population_table['Movable_Dwelling'],
+                            $sql_row_for_population_table['Median_total_income'],
+                            $sql_row_for_population_table['Median_after_tax_income'],
+                            $sql_row_for_population_table['Average_total_income'],
+                            $sql_row_for_population_table['Average_after_tax_income'],
+                            $sql_row_for_population_table['Education_Total'],
+                            $sql_row_for_population_table['Education_No_Certificate'],
+                            $sql_row_for_population_table['Education_High_school'],
+                            $sql_row_for_population_table['Education_Postsecondary']
+                        );
+    $stmt->execute();
+    }else{
+        $error = $mysqli->errno . ' ' . $mysqli->error;
+        echo __LINE__ . ' ' . $error;
+    };
+}else{
+    printf("error::record exists!!!");
+}
+
 
 $callback = (isset($_GET['callback'])) ? $_GET['callback'] : false;
 if ($callback) {
