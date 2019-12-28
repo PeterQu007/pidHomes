@@ -6,7 +6,7 @@ class pidDemographics {
     //this.getDemographics();
     //this.getResults();
     //this.getHttpRequest();
-    this.getData();
+    // this.getData();
   }
 
   events() {}

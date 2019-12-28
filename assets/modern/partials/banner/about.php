@@ -52,8 +52,8 @@ if (function_exists('putRevSlider') && (!empty($rev_slider_alias))) {
     <div >
       <div class="large-hero__text-content">
   		<div class="wrapper"> 
-  			<h1 class="large-hero__title">Peter Qu <i class="fa fa-star site-header__fa-padding"></i> GREAT VANCOUVER REALTOR</h1>
-  			<h2 class="large-hero__subtitle">GREAT VANCOUVER REALTOR</h2>
+  			<h1 class="large-hero__title">Peter Qu <i class="fa fa-star site-header__fa-padding"></i> GREATER VANCOUVER REALTOR</h1>
+  			<h2 class="large-hero__subtitle">GREATER VANCOUVER REALTOR</h2>
         <div class="large-hero__title" style="margin: 10px!important; text-align: center; width:100%!important; border-bottom: none ">
                 <span style="font-size: 3rem"><i class="fa fa-star site-header__fa-padding"></i>Professionalism </span>
                 

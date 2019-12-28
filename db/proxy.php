@@ -25,12 +25,29 @@
  */
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+function url(){
+  return sprintf(
+    "%s://%s%s",
+    isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+    $_SERVER['SERVER_NAME'] ,
+    ""  // $_SERVER['REQUEST_URI']
+  );
+}
+
+// echo url();
+
+include_once('D:\wamp64\www\pidRealty\app\public\wp-content\themes\realhomes-child\inc\debug.php');
+// $X = set_debug(__FILE__);
+
 $url = (isset($_GET['url'])) ? $_GET['url'] : false;
 $lang = (isset($_GET['lang'])) ? $_GET['lang'] : 'E';
-// $dguid = (isset($_GET['dguid'])) ? $_GET['dguid'] : '2016A00055915004' /* Surrey */; 
+$dguid = (isset($_GET['dguid'])) ? $_GET['dguid'] : '2016A00055915004' /* Surrey */; 
 // $dguid = (isset($_GET['dguid'])) ? $_GET['dguid'] : '2016A00055915015' /* Richmond */ ;
 // $dguid = (isset($_GET['dguid'])) ? $_GET['dguid'] : '2016A00055915022' /* Vancouver */ ;
-$dguid = (isset($_GET['dguid'])) ? $_GET['dguid'] : '2016A00055915025' /* Burnaby */ ;
+// $dguid = (isset($_GET['dguid'])) ? $_GET['dguid'] : '2016A00055915025' /* Burnaby */ ;
+// $dguid = (isset($_GET['dguid'])) ? $_GET['dguid'] : '2016A00055915034' /* Coquitlam */ ;
+// print_X($X, __LINE__, $dguid);
+
 if(isset($_GET['city_code'])){
     $city_code = $_GET['City_Code'];
 }else{
@@ -42,6 +59,7 @@ if(isset($_GET['city_code'])){
     // echo $city_code . '</br>';
     $mysqli->close();
 }
+// SETUP TOPIC THEME:
 $topic = (isset($_GET['topic'])) ? $_GET['topic'] : 0;
 $notes = (isset($_GET['notes'])) ? $_GET['notes'] : 0;
 $stat = (isset($_GET['stat'])) ? $_GET['stat'] : 0;
@@ -125,19 +143,44 @@ $sql_rows_for_ethnicity_minority_group =[];
 $level =1 ;
 $row_id =1;
 $sql_row_for_population_table = array();
-$sql_row_for_housing_table = array();
-$sql_row_for_ethnicity_table = array();
-$sql_row_for_ethnicity_minority_group = array();
-
 $sql_row_for_population_table['City_Code'] = $city_code;
 $sql_row_for_population_table['GEO_UID'] = $demographics->DATA[0][$geo_uid];
 $sql_row_for_population_table['GEO_ID'] = $demographics->DATA[0][$geo_id];
 $sql_row_for_population_table['GEO_TYPE'] = $demographics->DATA[0][$geo_type];
+$sql_row_for_population_table['Year'] = strval(substr($demographics->DATA[0][$geo_uid], 0, 4));
 // $sql_row_for_population_table['TEXT_ID'] = $demographics->DATA[0][$text_id];
 // $sql_row_for_population_table['HIER_ID'] = $demographics->DATA[0][array_search('HIER_ID', $demographics->COLUMNS)];
 // $sql_row_for_population_table['INDENT_ID'] = $demographics->DATA[0][$indent_id];
-$sql_row_for_population_table['Year'] = strval(substr($demographics->DATA[0][$geo_uid], 0, 4));
 
+$sql_row_for_housing_table = array();
+$sql_row_for_housing_table['City_Code'] = $city_code;
+$sql_row_for_housing_table['GEO_UID'] = $demographics->DATA[0][$geo_uid];
+$sql_row_for_housing_table['GEO_ID'] = $demographics->DATA[0][$geo_id];
+$sql_row_for_housing_table['GEO_TYPE'] = $demographics->DATA[0][$geo_type];
+$sql_row_for_housing_table['Year'] = strval(substr($demographics->DATA[0][$geo_uid], 0, 4));
+
+$sql_row_for_ethnicity_table = array();
+$sql_row_for_ethnicity_table['City_Code'] = $city_code;
+$sql_row_for_ethnicity_table['GEO_UID'] = $demographics->DATA[0][$geo_uid];
+$sql_row_for_ethnicity_table['GEO_ID'] = $demographics->DATA[0][$geo_id];
+$sql_row_for_ethnicity_table['GEO_TYPE'] = $demographics->DATA[0][$geo_type];
+$sql_row_for_ethnicity_table['Year'] = strval(substr($demographics->DATA[0][$geo_uid], 0, 4));
+$sql_row_for_ethnicity_table['TEXT_ID'] = $demographics->DATA[0][$text_id];
+$sql_row_for_ethnicity_table['HIER_ID'] = $demographics->DATA[0][array_search('HIER_ID', $demographics->COLUMNS)];
+$sql_row_for_ethnicity_table['INDENT_ID'] = $demographics->DATA[0][$indent_id];
+$sql_row_for_ethnicity_table['TOPIC_THEME'] = 'IMMIGRATION';
+$sql_row_for_ethnicity_table['Minority_from_Country'] = "ALL";
+
+$sql_row_for_ethnicity_minority_group = array();
+$sql_row_for_ethnicity_minority_group['City_Code'] = $city_code;
+$sql_row_for_ethnicity_minority_group['GEO_UID'] = $demographics->DATA[0][$geo_uid];
+$sql_row_for_ethnicity_minority_group['GEO_ID'] = $demographics->DATA[0][$geo_id];
+$sql_row_for_ethnicity_minority_group['GEO_TYPE'] = $demographics->DATA[0][$geo_type];
+$sql_row_for_ethnicity_minority_group['Year'] = strval(substr($demographics->DATA[0][$geo_uid], 0, 4));
+$sql_row_for_ethnicity_minority_group['TEXT_ID'] = $demographics->DATA[0][$text_id];
+$sql_row_for_ethnicity_minority_group['HIER_ID'] = $demographics->DATA[0][array_search('HIER_ID', $demographics->COLUMNS)];
+$sql_row_for_ethnicity_minority_group['INDENT_ID'] = $demographics->DATA[0][$indent_id];
+$sql_row_for_ethnicity_minority_group['TOPIC_THEME'] = 'MINORITY';
 
 foreach($demographics->DATA as $datarow){
     $output = false;
@@ -402,7 +445,7 @@ foreach($demographics->DATA as $datarow){
             case 'Immigration and citizenship':
                 switch(trim($datarow[$text_name_nom])){
                     case 'Non-immigrants':
-                        $sql_row_for_ethnicity_table['Non-immigrants'] = $datarow[$t_data_donnee];
+                        $sql_row_for_ethnicity_table['Non_immigrants'] = $datarow[$t_data_donnee];
                     break;
                     case 'Immigrants':
                         $sql_row_for_ethnicity_table['Immigrants'] = $datarow[$t_data_donnee];
@@ -432,8 +475,8 @@ foreach($demographics->DATA as $datarow){
                         $sql_row_for_ethnicity_table['Total_visible_minority_population'] = $datarow[$t_data_donnee];
                     break;
                     default:
-                        $sql_row_for_ethnicity_minority_group['Immigrant_from_Country'] = trim($datarow[$text_name_nom]);
-                        $sql_row_for_ethnicity_minority_group['Immigrant_from_Country_Count'] =$datarow[$t_data_donnee];
+                        $sql_row_for_ethnicity_minority_group['Minority_from_Country'] = trim($datarow[$text_name_nom]);
+                        $sql_row_for_ethnicity_minority_group['Total_visible_minority_population'] =$datarow[$t_data_donnee];
                         $sql_rows_for_ethnicity_minority_group[] = $sql_row_for_ethnicity_minority_group;
                     break;
                 }
@@ -442,9 +485,12 @@ foreach($demographics->DATA as $datarow){
     }
 }
 
-$sql_rows_for_Housing[] = $sql_row_for_housing_table;
+//$sql_rows_for_Housing[] = $sql_row_for_housing_table;
+// $sql_rows_for_population_table[] = $sql_row_for_population_table;
 $sql_rows_for_ethnicity[] =$sql_row_for_ethnicity_table;
-$sql_rows_for_population_table[] = $sql_row_for_population_table;
+foreach($sql_rows_for_ethnicity_minority_group as $row){
+    $sql_rows_for_ethnicity[] = $row;
+}
 
 ?>
 
@@ -452,10 +498,11 @@ $sql_rows_for_population_table[] = $sql_row_for_population_table;
     </div>
 <?php
 
-var_dump($sql_rows_for_Housing);
-var_dump($sql_row_for_ethnicity_table);
-var_dump($sql_rows_for_ethnicity_minority_group);
-var_dump($sql_rows_for_population_table);
+// var_dump($sql_row_for_housing_table);
+// var_dump($sql_row_for_ethnicity_table);
+// var_dump($sql_rows_for_ethnicity_minority_group);
+var_dump($sql_rows_for_ethnicity);
+// var_dump($sql_rows_for_population_table);
 
 $mysqli = new mysqli("localhost", "root", "root", "local");
 if (mysqli_connect_errno()) {
@@ -463,6 +510,9 @@ if (mysqli_connect_errno()) {
     exit();
 }
 
+/***********************
+ * Populate pid_population TABLE
+ */
 $sql_query = "SELECT count(GEO_UID) count FROM pid_population WHERE GEO_UID='" . $sql_row_for_population_table['GEO_UID'] . "'";
 // printf($sql_query);
 $mysqli->real_query($sql_query);
@@ -521,14 +571,145 @@ if($res->fetch_assoc()['count'] == 0) {
                             $sql_row_for_population_table['Education_Postsecondary']
                         );
     $stmt->execute();
+    $stmt->close();
     }else{
         $error = $mysqli->errno . ' ' . $mysqli->error;
         echo __LINE__ . ' ' . $error;
     };
 }else{
-    printf("error::record exists!!!");
+    $res->close();
+    printf("error::population record exists!!!/n/l");
 }
 
+/*****************
+ * Populate pid_Housing TABLE
+ */
+$sql_query = "SELECT count(GEO_UID) count FROM pid_housing WHERE GEO_UID='" . $sql_row_for_housing_table['GEO_UID'] . "'";
+// printf($sql_query);
+$mysqli->real_query($sql_query);
+$res = $mysqli->use_result();
+if($res->fetch_assoc()['count'] == 0) {
+    $res->close(); //release first query;
+    $sql_insert = "INSERT INTO pid_housing (City_Code,GEO_UID,GEO_ID,GEO_TYPE,
+                                `Year`,Total_Private_Dwelling, Condominium, Not_condominium,
+                                Tenure_by_Owner, Tenure_by_Renter, Tenure_Other,
+                                Owner_mortgage_percentage, 
+                                Median_Monthly_Shelter_Costs_for_owned_dwellings, Average_Monthly_Shelter_Costs_for_owned_dwellings,
+                                Median_Monthly_Shelter_Costs_for_rented_dwellings, Average_Monthly_Shelter_Costs_for_rented_dwellings)
+                                VALUES(?,?,?,?,
+                                ?,?,?,?,
+                                ?,?,?,?,
+                                ?,?,
+                                ?,?
+                                )";
+                                    
+    if($stmt = $mysqli->prepare($sql_insert)){
+        echo '<br> housing stmt OK </br>';
+        $stmt->bind_param('ssssiiiiiiiddddd', 
+                                $sql_row_for_housing_table['City_Code'],
+                                $sql_row_for_housing_table['GEO_UID'],
+                                $sql_row_for_housing_table['GEO_ID'],
+                                $sql_row_for_housing_table['GEO_TYPE'],
+                                $sql_row_for_housing_table['Year'],
+                                $sql_row_for_housing_table['Total_Private_Dwelling'],
+                                $sql_row_for_housing_table['Condominium'],
+                                $sql_row_for_housing_table['Not_condominium'],
+                                $sql_row_for_housing_table['Tenure_by_Owner'],
+                                $sql_row_for_housing_table['Tenure_by_Renter'],
+                                $sql_row_for_housing_table['Tenure_Other'],
+                                $sql_row_for_housing_table['Owner_mortgage_percentage'],
+                                $sql_row_for_housing_table['Median_Monthly_Shelter_Costs_for_owned_dwellings'],
+                                $sql_row_for_housing_table['Average_Monthly_Shelter_Costs_for_owned_dwellings'],
+                                $sql_row_for_housing_table['Median_Monthly_Shelter_Costs_for_rented_dwellings'],
+                                $sql_row_for_housing_table['Average_Monthly_Shelter_Costs_for_rented_dwellings']
+                            );
+        if($stmt->execute()){
+            echo '</br>housing record affected: ';
+            echo $stmt->affected_rows;
+            echo '</br>';
+            $stmt->close();
+        }else{
+            $error = $mysqli->errno . ' ' . $mysqli->error;
+            echo __LINE__ . ' ' . $error;
+        };
+    }else{
+        $error = $mysqli->errno . ' ' . $mysqli->error;
+        echo __LINE__ . ' ' . $error;
+    };
+}else{
+    printf("error::housing record exists!!!");
+    $res->close();
+}
+
+/**********************
+ * Populate Ethnicity TABLE
+ */
+// if(true){
+//     exit;
+// }
+
+$sql_query = "SELECT count(GEO_UID) count FROM pid_ethnicity WHERE GEO_UID='" . $sql_row_for_ethnicity_table['GEO_UID'] . "'";
+printf("\n%s\n",$sql_query);
+$mysqli->real_query($sql_query);
+$error = $mysqli->errno . ' ' . $mysqli->error;
+echo '</br>'. __LINE__ . ' ' . $error;
+$res = $mysqli->use_result();
+if($res->fetch_assoc()['count'] == 0) {
+    $res->close(); //release first query;
+    $sql_insert = "INSERT INTO pid_ethnicity (City_Code,GEO_UID,GEO_ID,GEO_TYPE, TEXT_ID, HIER_ID, INDENT_ID, TOPIC_THEME,
+                                `Year`,Immigrants, Non_immigrants, Non_permanent_residents, 
+                                Economic_immigrants, Immigrants_sponsored_by_family, Refugees, Other_immigrants,
+                                Total_visible_minority_population, Minority_from_Country)
+                                VALUES(?,?,?,?,?,?,?,?,
+                                ?,?,?,?,
+                                ?,?,?,?,
+                                ?,?
+                                )";
+    foreach($sql_rows_for_ethnicity as $row){
+        if($stmt = $mysqli->prepare($sql_insert)){
+            echo '<br> ethnicity stmt OK </br>';
+            $stmt->bind_param('ssssssssiiiiiiiiis', 
+                                    $row['City_Code'],
+                                    $row['GEO_UID'],
+                                    $row['GEO_ID'],
+                                    $row['GEO_TYPE'],
+                                    $row['TEXT_ID'],
+                                    $row['HIER_ID'],
+                                    $row['INDENT_ID'],
+                                    $row['TOPIC_THEME'],
+                                    $row['Year'],
+                                    $row['Immigrants'],
+                                    $row['Non_immigrants'],
+                                    $row['Non_permanent_residents'],
+                                    $row['Economic_immigrants'],
+                                    $row['Immigrants_sponsored_by_family'],
+                                    $row['Refugees'],
+                                    $row['Other_immigrants'],
+                                    $row['Total_visible_minority_population'],
+                                    $row['Minority_from_Country'],
+                                );
+            if($stmt->execute()){
+                echo '</br>ethnicity record affected: ';
+                echo $stmt->affected_rows;
+                echo '</br>';
+                $stmt->close();
+            }else{
+                $error = $mysqli->errno . ' ' . $mysqli->error;
+                echo __LINE__ . ' ' . $error;
+            };
+        }else{
+            $error = $mysqli->errno . ' ' . $mysqli->error;
+            echo '</br>' . __LINE__ . ' ' . $error;
+        };
+    }
+}else{
+    $res->close();
+    printf("error::ethnicity record exists!!!");
+}
+
+
+//close connection
+$mysqli->close();
 
 $callback = (isset($_GET['callback'])) ? $_GET['callback'] : false;
 if ($callback) {
@@ -537,4 +718,4 @@ if ($callback) {
     echo $jsonp;
     exit;
 }
-echo $json;
+// echo $json;

@@ -42,22 +42,34 @@ if (isset($_GET['view'])) {
       //entrance variable value for archive module
       //if it is null, means show all categories/taxonomies
       //if it is not null, means show specific categories/taxonomy
-      $qvar = get_query_var('property-neighborhood'); //query var is passed from url rewriting 
-      // print_X($X, __LINE__, $qvar, get_the_ID(), get_the_title()); //d//
+      $qvar = trim(get_query_var('property-neighborhood')); //query var is passed from url rewriting 
+      // print_X($X, __LINE__, '$qvar::', $qvar, get_the_ID(), get_the_title()); //d//
       ?>
       <div >
         <h2> <?php echo $qvar ?> </h2>
         <?php
-          //get the guid for demographics
-          $mysqli = new mysqli("localhost", "root", "root", "local");
-          $strSql = "SELECT GEO_UID FROM pid_census_subdivision_bc
-                    WHERE GEO_Name_nom = '" . $qvar . "'" ;
-          $mysqli->real_query($strSql);
-          $res = $mysqli->use_result();
-          // print_X($X, __LINE__, $res);
-          while ($row = $res->fetch_assoc()){
-            // print_X($X, __LINE__, $row);
-            $GEO_UID = $row['GEO_UID'];
+          if($qvar == ''){
+            // print_X($X, __LINE__, 'All Vancouver Markets Data');
+            echo do_shortcode("[wpdatatable id=10]"); //population
+            echo do_shortcode("[wpdatatable id=9]"); //education
+          }else{
+            print_X($X, __LINE__, 'Single City Markets Data');
+            //get the guid for demographics
+            $mysqli = new mysqli("localhost", "root", "root", "local");
+            $strSql = "SELECT GEO_UID, City_Code FROM pid_census_subdivision_bc
+                      WHERE GEO_Name_nom = '" . $qvar . "'" ;
+            print_X($X, __LINE__, $strSql);
+            $mysqli->real_query($strSql);
+            $res = $mysqli->use_result();
+            // print_X($X, __LINE__, $res);
+            while ($row = $res->fetch_assoc()){
+              // print_X($X, __LINE__, $row);
+              $GEO_UID = $row['GEO_UID'];
+              $City_Code = $row['City_Code'];
+            };
+            echo do_shortcode("[wpdatatable id=6 var1='" . $City_Code . "']");
+            echo do_shortcode("[wpdatatable id=7 var1='" . $City_Code . "']");
+            echo do_shortcode("[wpdatatable id=8 var1='" . $City_Code . "']");
           }
         ?>
         <div id = "demographic" class = "wrapper" uid="<?php echo $GEO_UID; ?>">
@@ -65,10 +77,15 @@ if (isset($_GET['view'])) {
       </div>
       <?php
       get_template_part('template-parts/content', 'x-postx');
-
+      if($qvar == ''){
+        echo do_shortcode("[wpdatatable id=11]"); // house inventory
+        echo do_shortcode("[wpdatatable id=16]"); // housing
+      }
       get_template_part('template-parts/content', 'market-stats');
-      set_query_var('post_type', 'school');
-      get_template_part('template-parts/content', 'x-postx');
+      if($qvar != ''){
+        set_query_var('post_type', 'school');
+        get_template_part('template-parts/content', 'x-postx');
+      }
 
     ?>
     
