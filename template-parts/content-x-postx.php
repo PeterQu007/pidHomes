@@ -49,8 +49,11 @@ if ($qvar/* query var */) {
 }
 // print_X($X, __LINE__, $terms); //d//
 
-foreach ($terms as $term) {
-
+?>
+<?php 
+foreach ($terms as $term) { ?>
+    <session id='<?php echo $post_type . '_' . $term->slug . '_' . $page; ?>' post_type = '<?php echo $post_type; ?>'>
+    <?php 
     $termID = $term->term_id;
 
     $x_Posts = new WP_Query(array(
@@ -63,8 +66,9 @@ foreach ($terms as $term) {
             ),
         ),
         'paged' => $page, //find the last page for URL
-        'posts_per_page' => 3,
+        'posts_per_page' => 1,
     ));
+    // print_X($X, __FILE__, $x_Posts->query_vars);
 
     set_query_var('qvar', $qvar);
     set_query_var('term', $term);
@@ -95,22 +99,44 @@ foreach ($terms as $term) {
         ));
         if (  $x_Posts->max_num_pages > 1 ) {
             echo '<div class="loadmore2">More Neighborhoods</div>'; // you can use <a> as well
+            ?><script>
+                ajax_session["<?php echo $post_type . '_' . $term->slug . '_' . $page ?>"] 
+                = 
+                ['<?php echo json_encode( $x_Posts->query_vars ) ?>',
+                    '<?php echo $x_Posts->max_num_pages ?>', 
+                    '<?php echo $page ?>' , 
+                    '<?php echo $post_type_labels->name ?>'];
+                console.log(ajax_session);
+            </script><?php
         }
     } else {
         //No POSTS
         echo "<p> NO " . strtoupper($post_type_labels->singular_name) . " ADDED, COMING SOON... </p>";
     }
     ?>
+
     <script>
-        var posts_myajax = '<?php echo serialize( $x_Posts->query_vars ) ?>',
-        current_page_myajax = 1,
-        max_page_myajax = <?php echo $x_Posts->max_num_pages ?>;
-        // console.log(pid_Data.siteurl);
+        var post_type = '<?php echo $post_type; ?>';
+        console.log(post_type);
+        switch(post_type){
+            case 'school':
+                var posts_school = '<?php echo json_encode( $x_Posts->query_vars ); ?>',
+                current_page_school = '<?php echo $page_school; ?>', //1,
+                max_page_school = <?php echo $x_Posts->max_num_pages ?>;
+                // console.log(posts_school);
+                break;
+            case 'community':
+                var posts_community = '<?php echo json_encode( $x_Posts->query_vars ); ?>',
+                current_page_community = '<?php echo $page_nbh; ?>', //1,
+                max_page_community = <?php echo $x_Posts->max_num_pages ?>;
+                // console.log(posts_community);
+                break;
+        }
     </script>
-    <script src="<?php echo get_stylesheet_directory_uri()?>/js/loadmore.js"></script>
 
     <?php
     wp_reset_postdata();
-
-
+?>
+</session>
+<?php 
 }

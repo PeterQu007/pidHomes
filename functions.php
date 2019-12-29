@@ -45,6 +45,11 @@ if ( ! function_exists( 'inspiry_load_translation_from_child' ) ) {
 
 /*Add Child Functions
 */
+// echo get_stylesheet_directory_uri().'/inc/debug.php';
+// include_once(get_stylesheet_directory_uri().'/inc/debug.php');
+include_once get_stylesheet_directory() . '/inc/debug.php';
+
+$X = set_debug(__FILE__);
 
 function pidRealty_Files()
 {
@@ -61,10 +66,13 @@ function pidRealty_Files()
     wp_enqueue_style('pidRealty_secondary_style', get_stylesheet_directory_uri().("/temp/styles.css"));
     //wp_enqueue_style('pidRealty_main_style', get_stylesheet_directory_uri());
     if(!is_home()){
-      wp_register_script('loadmore', get_stylesheet_directory_uri(). ("/js/loadmore.js" ));
-      wp_localize_script('loadmore', 'pid_Data', array( 'siteurl' => get_option('siteurl')));
+      // wp_register_script('loadmore', get_stylesheet_directory_uri(). ("/js/loadmore.js" ));
+      wp_localize_script('main-pidrealty-js', 'pid_Data', array( 
+        'siteurl' => get_site_url(),
+        'nonce' => wp_create_nonce('wp_rest')
+      ));
       // Enqueued script with localized data.
-      wp_enqueue_script('loadmore');
+      // wp_enqueue_script('loadmore');
       // alert("not home");
     }
 }
@@ -211,34 +219,34 @@ add_rewrite_rule('^market/([^/]*)/?', 'index.php?post_type=market&name=$matches[
 add_rewrite_rule('^db/([^/]*)/?', get_theme_file_uri('/db/data.php'), 'top');
 
 
-function pid_load_more_scripts() {
- 	if ( is_home() ) {
-		global $wp_query; 
+// function pid_load_more_scripts() {
+//  	if ( is_home() ) {
+// 		global $wp_query; 
  
-		// In most cases it is already included on the page and this line can be removed
-		//wp_enqueue_script('jquery');
+// 		// In most cases it is already included on the page and this line can be removed
+// 		//wp_enqueue_script('jquery');
  
-		// register our main script but do not enqueue it yet
-		wp_register_script( 'my_loadmore', get_stylesheet_directory_uri() . '/js/loadmore.js', array('jquery') );
+// 		// register our main script but do not enqueue it yet
+// 		wp_register_script( 'my_loadmore', get_stylesheet_directory_uri() . '/js/loadmore.js', array('jquery') );
  
-		// now the most interesting part
-		// we have to pass parameters to myloadmore.js script but we can get the parameters values only in PHP
-		// you can define variables directly in your HTML but I decided that the most proper way is wp_localize_script()
-		wp_localize_script( 'my_loadmore', 'loadmore_params', array(
-			'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
-			'posts' => serialize( $wp_query->query_vars ), // everything about your loop is here
-			'current_page' => get_query_var( 'paged' ) ? get_query_var('paged') : 1,
-			'max_page' => $wp_query->max_num_pages
-		) );
+// 		// now the most interesting part
+// 		// we have to pass parameters to myloadmore.js script but we can get the parameters values only in PHP
+// 		// you can define variables directly in your HTML but I decided that the most proper way is wp_localize_script()
+// 		wp_localize_script( 'my_loadmore', 'loadmore_params', array(
+// 			'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
+// 			'posts' => serialize( $wp_query->query_vars ), // everything about your loop is here
+// 			'current_page' => get_query_var( 'paged' ) ? get_query_var('paged') : 1,
+// 			'max_page' => $wp_query->max_num_pages
+// 		) );
  
-	 	wp_enqueue_script( 'my_loadmore' );
- 	}
-}
-add_action( 'wp_enqueue_scripts', 'pid_load_more_scripts' );
+// 	 	wp_enqueue_script( 'my_loadmore' );
+//  	}
+// }
+// add_action( 'wp_enqueue_scripts', 'pid_load_more_scripts' );
 
 //ajax handler
 function pid_loadmore_ajax_handler(){
- 
+  $X = set_debug(__FILE__);
 	// prepare our arguments for the query
 	$args = json_decode( stripslashes( $_POST['query'] ), true );
 	$args['paged'] = $_POST['page'] + 1; // we need next page to be loaded
@@ -246,20 +254,36 @@ function pid_loadmore_ajax_handler(){
  
 	// it is always better to use WP_Query but not here
 	query_posts( $args );
- 
+  print_X($X, __LINE__, $args['paged']);
+  $post_type = $args['post_type'];
+  $post_type_labels = get_post_type_labels(get_post_type_object($post_type));
+
 	if( have_posts() ) :
- 
+    $iLoop =1;
 		// run the loop
 		while( have_posts() ): the_post();
- 
+      print_X($X, __LINE__, '$iLoop::', $iLoop++);
 			// look into your theme code how the posts are inserted, but you can use your own HTML of course
 			// do you remember? - my example is adapted for Twenty Seventeen theme
       // get_template_part( 'template-parts/content', get_post_format() );
       //get_template_part('template-parts/content', 'x-postx');
-			// for the test purposes comment the line above and uncomment the below one
-      the_title();
-      echo '</br>';
- 
+      ?>
+        <div style="text-align: left">
+            <h3><a href="<?php echo str_replace("/" . strtolower($post_type_labels->name) . "/",
+            "/" . strtolower($post_type_labels->singular_name) . "/",
+            strtolower(get_the_permalink())); ?>">
+                <?php the_title();?></a>
+            </h3>
+            <div><?php the_excerpt();?> </div>
+        </div>
+      <?php
+      // for the test purposes comment the line above and uncomment the below one
+        // the_title();
+
+        // echo '</br>';
+        // the_excerpt();
+        // echo '</br>';
+
 		endwhile;
  
 	endif;
@@ -270,7 +294,6 @@ add_action('wp_ajax_nopriv_loadmore', 'pid_loadmore_ajax_handler'); // wp_ajax_n
 
 //Add include modules
 require_once (get_stylesheet_directory() . '/inc/neighborhood-metabox.php');
-include_once get_stylesheet_directory() . '/inc/debug.php';
 
 // function add_cors_http_header()
 // {

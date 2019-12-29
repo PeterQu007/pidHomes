@@ -32,7 +32,9 @@ if (isset($_GET['view'])) {
 }
 
 ?>
-
+<script>
+  var ajax_session = new Object();
+</script>
 <section class="rh_section rh_section--flex rh_wrap--padding rh_wrap--topPadding">
   <div class="rh_page rh_page__listing_page rh_page__main" style="width: 70%">
     
@@ -68,7 +70,7 @@ if (isset($_GET['view'])) {
         <button>Apply filter</button>
         <input type="hidden" name="action" value="myfilter">
       </form>
-
+        <div id = "demographic" class = "wrapper" uid="<?php echo $GEO_UID; ?>">
           <?php
 
           if($qvar == ''){
@@ -102,7 +104,6 @@ if (isset($_GET['view'])) {
             echo do_shortcode("[wpdatatable id=17 var1='" . $City_Code . "']"); //immigration & minority
           }
         ?>
-        <div id = "demographic" class = "wrapper" uid="<?php echo $GEO_UID; ?>">
         </div>
       </div>
       <?php
@@ -131,6 +132,9 @@ if (isset($_GET['view'])) {
   </div>
 
 </section>
+
+
+<script src="<?php echo get_stylesheet_directory_uri()?>/js/loadmore.js"></script>
 
 <?php
 

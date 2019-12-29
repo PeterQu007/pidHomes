@@ -1,5 +1,6 @@
 jQuery(function($) {
   //blog posts static page
+
   $(".loadmore").click(function() {
     var button = $(this),
       data = {
@@ -18,7 +19,7 @@ jQuery(function($) {
       success: function(data) {
         if (data) {
           button
-            .text("More posts")
+            .text("More " + ajax_session[query_id][0].post_type)
             .prev()
             .after(data); // insert new posts
           loadmore_params.current_page++;
@@ -34,14 +35,18 @@ jQuery(function($) {
 
   $(".loadmore2").click(function() {
     //custom query on front-page.php
+    let query_id = $(this)
+      .closest("session")
+      .attr("id");
+    console.log(query_id);
     var button = $(this),
       data = {
         action: "loadmore",
-        query: posts_myajax,
-        page: current_page_myajax
+        query: ajax_session[query_id][0],
+        page: ajax_session[query_id][2]
       };
-    // var site_url = WPURLS.siteurl;
-    console.log(pid_Data.siteurl + "/wp-admin/admin-ajax.php");
+    // console.log(pid_Data.siteurl + "/wp-admin/admin-ajax.php");
+    console.log(data);
     $.ajax({
       url: pid_Data.siteurl + "/wp-admin/admin-ajax.php", // AJAX handler
       data: data,
@@ -52,12 +57,13 @@ jQuery(function($) {
       success: function(data) {
         if (data) {
           button
-            .text("More posts")
+            .text("More " + ajax_session[query_id][3])
             .prev()
             .after(data); // insert new posts
-          current_page_myajax++;
 
-          if (current_page_myajax == max_page_myajax) button.remove(); // if last page, remove the button
+          ajax_session[query_id][2]++;
+          if (ajax_session[query_id][2] == ajax_session[query_id][1])
+            button.remove();
         } else {
           //button.remove(); // if no data, remove the button as well
         }
