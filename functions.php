@@ -60,9 +60,15 @@ function pidRealty_Files()
     wp_enqueue_style('font-awesome', get_stylesheet_directory_uri().("/assets/lib/fontawesome/css/font-awesome.min.css"));
     wp_enqueue_style('pidRealty_secondary_style', get_stylesheet_directory_uri().("/temp/styles.css"));
     //wp_enqueue_style('pidRealty_main_style', get_stylesheet_directory_uri());
+    if(!is_home()){
+      wp_register_script('loadmore', get_stylesheet_directory_uri(). ("/js/loadmore.js" ));
+      wp_localize_script('loadmore', 'pid_Data', array( 'siteurl' => get_option('siteurl')));
+      // Enqueued script with localized data.
+      wp_enqueue_script('loadmore');
+      // alert("not home");
+    }
 }
 add_action('wp_enqueue_scripts', 'pidRealty_Files');
-
 
 function pidHomes_child_features()
 {
@@ -203,6 +209,64 @@ add_rewrite_rule('^markets/([^/]*)/?', 'index.php?post_type=market&property-neig
 add_rewrite_rule('^market/([^/]*)/?', 'index.php?post_type=market&name=$matches[1]', 'top');
 //Database
 add_rewrite_rule('^db/([^/]*)/?', get_theme_file_uri('/db/data.php'), 'top');
+
+
+function pid_load_more_scripts() {
+ 	if ( is_home() ) {
+		global $wp_query; 
+ 
+		// In most cases it is already included on the page and this line can be removed
+		//wp_enqueue_script('jquery');
+ 
+		// register our main script but do not enqueue it yet
+		wp_register_script( 'my_loadmore', get_stylesheet_directory_uri() . '/js/loadmore.js', array('jquery') );
+ 
+		// now the most interesting part
+		// we have to pass parameters to myloadmore.js script but we can get the parameters values only in PHP
+		// you can define variables directly in your HTML but I decided that the most proper way is wp_localize_script()
+		wp_localize_script( 'my_loadmore', 'loadmore_params', array(
+			'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
+			'posts' => serialize( $wp_query->query_vars ), // everything about your loop is here
+			'current_page' => get_query_var( 'paged' ) ? get_query_var('paged') : 1,
+			'max_page' => $wp_query->max_num_pages
+		) );
+ 
+	 	wp_enqueue_script( 'my_loadmore' );
+ 	}
+}
+add_action( 'wp_enqueue_scripts', 'pid_load_more_scripts' );
+
+//ajax handler
+function pid_loadmore_ajax_handler(){
+ 
+	// prepare our arguments for the query
+	$args = json_decode( stripslashes( $_POST['query'] ), true );
+	$args['paged'] = $_POST['page'] + 1; // we need next page to be loaded
+	$args['post_status'] = 'publish';
+ 
+	// it is always better to use WP_Query but not here
+	query_posts( $args );
+ 
+	if( have_posts() ) :
+ 
+		// run the loop
+		while( have_posts() ): the_post();
+ 
+			// look into your theme code how the posts are inserted, but you can use your own HTML of course
+			// do you remember? - my example is adapted for Twenty Seventeen theme
+      // get_template_part( 'template-parts/content', get_post_format() );
+      //get_template_part('template-parts/content', 'x-postx');
+			// for the test purposes comment the line above and uncomment the below one
+      the_title();
+      echo '</br>';
+ 
+		endwhile;
+ 
+	endif;
+	die; // here we exit the script and even no wp_reset_query() required!
+}
+add_action('wp_ajax_loadmore', 'pid_loadmore_ajax_handler'); // wp_ajax_{action}
+add_action('wp_ajax_nopriv_loadmore', 'pid_loadmore_ajax_handler'); // wp_ajax_nopriv_{action}
 
 //Add include modules
 require_once (get_stylesheet_directory() . '/inc/neighborhood-metabox.php');

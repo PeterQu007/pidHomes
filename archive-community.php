@@ -50,8 +50,27 @@ if (isset($_GET['view'])) {
       // print_X($X, __LINE__, 'page::', $pid_page, 'qvar::', $qvar, 'post type qvar::', $post_type_qvar);
       ?>
       <div >
-        
+      <form action="<?php echo site_url() ?>/wp-admin/admin-ajax.php" method="POST" id="filter">
         <?php
+          if( $terms = get_terms( array(
+              'taxonomy' => 'property-neighborhood', // to make it simple I use default categories
+              'parent' => 0,
+              'orderby' => 'name'
+            ) ) ) : 
+            // if categories exist, display the dropdown
+            echo '<select name="categoryfilter"><option value="">Select Neighborhood...</option>';
+            foreach ( $terms as $term ) :
+              echo '<option value="' . $term->term_id . '">' . $term->name . '</option>'; // ID of the category as an option value
+            endforeach;
+            echo '</select>';
+          endif; 
+        ?>
+        <button>Apply filter</button>
+        <input type="hidden" name="action" value="myfilter">
+      </form>
+
+          <?php
+
           if($qvar == ''){
             // print_X($X, __LINE__, 'All Vancouver Markets Data');
             echo do_shortcode("[wpdatatable id=10]"); //population

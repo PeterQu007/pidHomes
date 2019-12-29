@@ -93,15 +93,24 @@ foreach ($terms as $term) {
             'current' => $page,
             'total' => $x_Posts->max_num_pages 
         ));
-        if (  $wp_query->max_num_pages > 1 ) {
-            echo '<div class="misha_loadmore">More Neighborhoods</div>'; // you can use <a> as well
+        if (  $x_Posts->max_num_pages > 1 ) {
+            echo '<div class="loadmore2">More Neighborhoods</div>'; // you can use <a> as well
         }
-
     } else {
         //No POSTS
         echo "<p> NO " . strtoupper($post_type_labels->singular_name) . " ADDED, COMING SOON... </p>";
     }
+    ?>
+    <script>
+        var posts_myajax = '<?php echo serialize( $x_Posts->query_vars ) ?>',
+        current_page_myajax = 1,
+        max_page_myajax = <?php echo $x_Posts->max_num_pages ?>;
+        // console.log(pid_Data.siteurl);
+    </script>
+    <script src="<?php echo get_stylesheet_directory_uri()?>/js/loadmore.js"></script>
 
+    <?php
     wp_reset_postdata();
+
 
 }
