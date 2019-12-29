@@ -179,17 +179,29 @@ function add_property_neighborhood_var($vars){
 // }
 // add_filter('get_terms', 'be_get_terms_filter', 10, 3);
 
+function custom_query_vars_filter($vars) {
+  $vars[] .= 'page1';
+  $vars[] .= 'page2';
+  return $vars;
+}
+add_filter( 'query_vars', 'custom_query_vars_filter' );
 
+/************
+ * NOTICE
+ * AFTER CHANGE THE REWRITE RULE, WORDPRESS NEEDS RESET PERMALINK ON ADMIN PANEL
+ */
 //Add Rewrite Rules
+add_rewrite_rule('^schools/([^/]*)/page/([^/]*)/?','index.php?post_type=school&property-neighborhood=$matches[1]&page2=$matches[2]','top');
 add_rewrite_rule('^schools/([^/]*)/?','index.php?post_type=school&property-neighborhood=$matches[1]','top');
 add_rewrite_rule('^school/([^/]*)/?','index.php?post_type=school&name=$matches[1]','top');
-
-add_rewrite_rule('^communities/([^/]*)/?','index.php?post_type=community&property-neighborhood=$matches[1]','top');
+//Community
+add_rewrite_rule('^communities/([^/]*)/page/([^/]*)/?','index.php?post_type=community&property-neighborhood=$matches[1]&page1=$matches[2]','top');
+add_rewrite_rule('^communities/([^/]*)/?','index.php?&post_type=community&property-neighborhood=$matches[1]','top');
 add_rewrite_rule('^community/([^/]*)/?','index.php?post_type=community&name=$matches[1]','top');
-
+//Market
 add_rewrite_rule('^markets/([^/]*)/?', 'index.php?post_type=market&property-neighborhood=$matches[1]', 'top');
 add_rewrite_rule('^market/([^/]*)/?', 'index.php?post_type=market&name=$matches[1]', 'top');
-
+//Database
 add_rewrite_rule('^db/([^/]*)/?', get_theme_file_uri('/db/data.php'), 'top');
 
 //Add include modules

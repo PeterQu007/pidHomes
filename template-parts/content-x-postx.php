@@ -11,10 +11,22 @@ if (is_single(get_the_ID())) {
 } else {
   $qvar = get_query_var('property-neighborhood');
 }
+$page_nbh = get_query_var('page1',1);
+$page_school = get_query_var('page2' ,1);
+print_X($X, __LINE__, 'page community::', $page_nbh, 'page school::', $page_school, 'qvar::', $qvar);
+
 $post_type = get_query_var('post_type');
 // print_X($X, __LINE__, 'query var::', $qvar, 'post type::', $post_type, 'post ID::', get_the_ID());
 if(!$post_type){
   $post_type = get_post_type();
+}
+switch($post_type){
+case 'community':
+    $page = $page_nbh;
+break;
+case 'school':
+    $page = $page_school;
+break;
 }
 $post_type_labels = get_post_type_labels(get_post_type_object($post_type));
 // print_X($X, __LINE__, 'query var::', $qvar, 'post type::', $post_type, 'post type obj::', $post_type_labels);
@@ -50,7 +62,8 @@ foreach ($terms as $term) {
                 'terms' => $term->slug,
             ),
         ),
-        'posts_per_page' => -1,
+        'paged' => $page, //find the last page for URL
+        'posts_per_page' => 3,
     ));
 
     set_query_var('qvar', $qvar);
@@ -75,6 +88,14 @@ foreach ($terms as $term) {
                 <div><?php the_excerpt();?> </div>
             </div>
         <?php }
+        echo paginate_links(array(
+            'format' => 'page/%#%',
+            'current' => $page,
+            'total' => $x_Posts->max_num_pages 
+        ));
+        if (  $wp_query->max_num_pages > 1 ) {
+            echo '<div class="misha_loadmore">More Neighborhoods</div>'; // you can use <a> as well
+        }
 
     } else {
         //No POSTS

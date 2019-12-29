@@ -498,10 +498,10 @@ foreach($sql_rows_for_ethnicity_minority_group as $row){
     </div>
 <?php
 
-// var_dump($sql_row_for_housing_table);
+var_dump($sql_row_for_housing_table);
 // var_dump($sql_row_for_ethnicity_table);
 // var_dump($sql_rows_for_ethnicity_minority_group);
-var_dump($sql_rows_for_ethnicity);
+// var_dump($sql_rows_for_ethnicity);
 // var_dump($sql_rows_for_population_table);
 
 $mysqli = new mysqli("localhost", "root", "root", "local");

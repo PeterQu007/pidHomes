@@ -7,13 +7,51 @@
  * 3. Prevent adjustments of font size after orientation changes in IE and iOS.
  */
 
-.rh_banner__image-about { height: 60rem; }
+.rh_banner__image-about {
+  height: 60rem;
+}
 
 html {
   font-family: sans-serif; /* 1 */
   line-height: 1.15; /* 2 */
   -ms-text-size-adjust: 100%; /* 3 */
   -webkit-text-size-adjust: 100%; /* 3 */
+}
+
+/**********
+Customize the elements
+**/
+h2 {
+  font-size: 2.2rem;
+  margin-top: 2rem;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+.h2_title {
+  background-color: #faf0ca;
+  font-size: 3.6rem;
+  margin-top: 2px;
+  color: #0d3b66;
+}
+
+.misha_loadmore{
+	background-color: #ddd;
+	border-radius: 2px;
+	display: block;
+	text-align: center;
+	font-size: 14px;
+	font-size: 0.875rem;
+	font-weight: 800;
+	letter-spacing:1px;
+	cursor:pointer;
+	text-transform: uppercase;
+	padding: 10px 0;
+	transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.3s ease-in-out;  
+}
+.misha_loadmore:hover{
+	background-color: #767676;
+	color: #fff;
 }
 
 /**
@@ -4088,8 +4126,8 @@ body.admin-bar .search-overlay {
   font-weight: normal;
 }
 
-.metabox .metabox__blog-home-link-active{
-  background-color: #483D8B;
+.metabox .metabox__blog-home-link-active {
+  background-color: #483d8b;
   color: #fff;
   display: inline-block;
   padding: 10px 15px;
@@ -4112,4 +4150,3 @@ body.admin-bar .search-overlay {
   border-bottom: none;
   margin-bottom: 0;
 }
-
