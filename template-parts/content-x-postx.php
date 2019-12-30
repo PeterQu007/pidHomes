@@ -110,8 +110,14 @@ foreach ($terms as $term) {
                     '<?php echo $post_type_labels->name ?>'];
                 console.log(ajax_session);
             </script><?php
-            misha_paginator($x_Posts);
-            echo '<div class="loadmore2">More ' . $post_type_labels->name . ' ...</div>'; // you can use <a> as well
+            misha_paginator($x_Posts, $session_id);
+            if($page == $x_Posts->max_num_pages){
+                $is_last_page = true;
+                echo '<div class="loadmore2" id="load_more_' . $session_id . '" ></div>'; // you can use <a> as well
+            }else{
+                $is_last_page = false;
+                echo '<div class="loadmore2" id="load_more_' . $session_id . '" >More ' . $post_type_labels->name . ' ...</div>'; // you can use <a> as well
+            }
         }
     } else {
         //No POSTS
@@ -122,20 +128,14 @@ foreach ($terms as $term) {
     <script>
         var post_type = '<?php echo $post_type; ?>';
         console.log(post_type);
-        switch(post_type){
-            case 'school':
-                var posts_school = '<?php echo json_encode( $x_Posts->query_vars ); ?>',
-                current_page_school = '<?php echo $page_school; ?>', //1,
-                max_page_school = <?php echo $x_Posts->max_num_pages ?>;
-                // console.log(posts_school);
-                break;
-            case 'community':
-                var posts_community = '<?php echo json_encode( $x_Posts->query_vars ); ?>',
-                current_page_community = '<?php echo $page_nbh; ?>', //1,
-                max_page_community = <?php echo $x_Posts->max_num_pages ?>;
-                // console.log(posts_community);
-                break;
+        let button_id = 'load_more_' + '<?php echo $session_id ?>';
+        let load_more_button = document.getElementById(button_id);
+        if(<?php echo $is_last_page; ?>){
+            load_more_button.style.pointerEvents = "none";
+        }else{
+            load_more_button.style.pointerEvents = "auto";
         }
+
     </script>
 
     <?php

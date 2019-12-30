@@ -250,7 +250,7 @@ function pid_loadmore_ajax_handler(){
   $X = set_debug(__FILE__);
 	// prepare our arguments for the query
 	$args = json_decode( stripslashes( $_POST['query'] ), true );
-	$args['paged'] = $_POST['page'] + 1; // we need next page to be loaded
+	$args['paged'] = $_POST['page']; // we need next page to be loaded
   $args['post_status'] = 'publish';
   $session_id = $_POST['session_id'];
  
@@ -297,7 +297,7 @@ add_action('wp_ajax_nopriv_loadmore', 'pid_loadmore_ajax_handler'); // wp_ajax_n
 /****************
  * CUSTOMIZE THE PAGINATOR
  */
-function misha_paginator($query){
+function misha_paginator($query, $session_id){
 
   $X = set_debug(__FILE__);
  
@@ -335,7 +335,7 @@ function misha_paginator($query){
 	if( empty( $current_page ) || $current_page == 0) $current_page = 1;
  
 	// you can play with this parameter - how much links to display in pagination
-	$links_in_the_middle = 4;
+	$links_in_the_middle = 10;
 	$links_in_the_middle_minus_1 = $links_in_the_middle-1;
  
 	// the code below is required to display the pagination properly for large amount of pages
@@ -352,49 +352,77 @@ function misha_paginator($query){
 	if( $first_link_in_the_middle <= 0 ) $first_link_in_the_middle = 1;
  
 	// begin to generate HTML of the pagination
-  $pagination = '<nav id="misha_pagination" class="wpDataTables wpDataTablesWrapper no-footer" role="navigation">
+  $pagination = '<nav id="pid_pagination_' . $session_id . '" class="wpDataTables wpDataTablesWrapper no-footer" role="navigation">
                 <div class="dataTables_paginate paging_full_numbers">';
  
   // arrow first page
-  $pagination.= '<a class="paginate_button first disabled pid-page-numbers" page_id="1"></a>';
+  if($current_page == 1){
+    $pagination.= '<a class="paginate_button first disabled pid-page-numbers" page_id="first"></a>';
+  }else{
+    $pagination.= '<a class="paginate_button first pid-page-numbers" page_id="first"></a>';
+  }
                 
 	// when to display "..." and the first page before it
-	if ($first_link_in_the_middle >= 3 && $links_in_the_middle < $max_page) {
-		$pagination.= '<a class="paginate_button pid-page-numbers" page_id="1">1</a>'; //'. $first_page_url . $search_query . '
+	// if ($first_link_in_the_middle >= 3 && $links_in_the_middle < $max_page) {
+	// 	$pagination.= '<a class="paginate_button pid-page-numbers" page_id="1">1</a>'; //'. $first_page_url . $search_query . '
  
-		if( $first_link_in_the_middle != 2 )
-			$pagination .= '<span class="paginate_button pid-page-numbers extend">...</span>';
-	}
+	// 	if( $first_link_in_the_middle != 2 )
+	// 		$pagination .= '<span class="paginate_button pid-page-numbers extend">...</span>';
+	// }
 
 	// arrow left (previous page)
-	if ($current_page != 1)
-    $pagination.= '<a class="paginate_button previous disabled pid-page-numbers"></a>'; //'. $first_page_url . '/page/' . ($current_page-1) . $search_query . '
+	if ($current_page == 1){
+    $pagination.= '<a class="paginate_button previous disabled pid-page-numbers" page_id="previous"></a>'; //'. $first_page_url . '/page/' . ($current_page-1) . $search_query . '
+  }else{
+    $pagination.= '<a class="paginate_button previous pid-page-numbers" page_id="previous"></a>'; //'. $first_page_url . '/page/' . ($current_page-1) . $search_query . '
+  }
+
   $pagination.='<span>';
 	// loop page links in the middle between "..." and "..."
-	for($i = $first_link_in_the_middle; $i <= $last_link_in_the_middle; $i++) {
-		if($i == $current_page) {
-			$pagination.= '<a class="paginate_button current pid-page-numbers">'.$i.'</a>';
-		} else {
-			$pagination .= '<a class="paginate_button pid-page-numbers" name="test' . $i. '" page_id=' . $i . ' >' .$i. '</a>'; //'. $first_page_url . '/page/' . $i . $search_query .'
-		}
-	}
+	// for($i = $first_link_in_the_middle; $i <= $last_link_in_the_middle; $i++) {
+	// 	if($i == $current_page) {
+	// 		$pagination.= '<a class="paginate_button current pid-page-numbers">'.$i.'</a>';
+	// 	} else {
+	// 		$pagination .= '<a class="paginate_button pid-page-numbers" page_id="' . $i . '" >' .$i. '</a>'; //'. $first_page_url . '/page/' . $i . $search_query .'
+	// 	}
+  // }
+  
+  for($i = 1; $i <= $max_page; $i++) {
+    if($i == $current_page) {
+      $pagination.= '<a class="paginate_button current pid-page-numbers" page_id="' . $i . '">'.$i.'</a>';
+    } else {
+      $pagination .= '<a class="paginate_button pid-page-numbers" page_id="' . $i . '" >' .$i. '</a>'; //'. $first_page_url . '/page/' . $i . $search_query .'
+    }
+  }
+
  
 	// when to display "..." and the last page after it
-	if ( $last_link_in_the_middle < $max_page ) {
+	// if ( $last_link_in_the_middle < $max_page ) {
  
-		if( $last_link_in_the_middle != ($max_page-1) )
-			$pagination .= '<span class="pid-page-numbers extend">...</span>';
+	// 	if( $last_link_in_the_middle != ($max_page-1) )
+	// 		$pagination .= '<span class="pid-page-numbers extend">...</span>';
  
-		$pagination .= '<a class="pid-page-numbers" page_id="' . $max_page . '">'. $max_page .'</a>'; //'. $first_page_url . '/page/' . $max_page . $search_query .'
-  }
+	// 	$pagination .= '<a class="pid-page-numbers" page_id="' . $max_page . '">'. $max_page .'</a>'; //'. $first_page_url . '/page/' . $max_page . $search_query .'
+  // }
   $pagination.='</span>';
+
 	// arrow right (next page)
-	if ($current_page != $last_link_in_the_middle )
-    $pagination.= '<a class="paginate_button next pid-page-numbers"></a>'; //'. $first_page_url . '/page/' . ($current_page+1) . $search_query .'
+	// if ($current_page != $last_link_in_the_middle )
+  //   $pagination.= '<a class="paginate_button next pid-page-numbers"></a>'; //'. $first_page_url . '/page/' . ($current_page+1) . $search_query .'
  
+  if($current_page == $max_page){
+    $pagination.= '<a class="paginate_button next disabled pid-page-numbers" page_id="next"></a>'; //'. $first_page_url . '/page/' . ($current_page+1) . $search_query .'
+  }else{
+    $pagination.= '<a class="paginate_button next pid-page-numbers" page_id="next"></a>'; //'. $first_page_url . '/page/' . ($current_page+1) . $search_query .'
+  }
   // arrow last page
-  $pagination.= '<a class="paginate_button last disabled pid-page-numbers" page_id="1"></a>';
-    // end HTML
+  if($current_page == $max_page){
+    $pagination.= '<a class="paginate_button last disabled pid-page-numbers" page_id="last"></a>';
+  }else{
+    $pagination.= '<a class="paginate_button last pid-page-numbers" page_id="last"></a>';
+  }
+  
+  // end HTML
 	$pagination.= "</div></nav>\n";
  
 	// haha, this is our load more posts link

@@ -1,5 +1,39 @@
 jQuery(function($) {
   //blog posts static page
+  console.log("loadmore.js loaded");
+
+  function pagination(nav_id, button_id, button_text, current_page, last_page) {
+    console.log("pagination");
+    let nav = $("#" + nav_id);
+    let nav_current_anchor = nav.find("a[page_id='" + current_page + "']");
+    let nav_anchors = nav.find("a");
+    let nav_first = nav.find("[page_id='first']");
+    let nav_previous = nav.find("[page_id='previous']");
+    let nav_next = nav.find("[page_id='next']");
+    let nav_last = nav.find("[page_id='last']");
+    let button = document.getElementById(button_id);
+
+    console.log(nav_current_anchor);
+    nav_anchors.removeClass("current");
+    nav_anchors.removeClass("disabled");
+    nav_current_anchor.addClass("current");
+    current_page = Number(current_page);
+    last_page = Number(last_page);
+    switch (current_page) {
+      case last_page:
+        nav_last.addClass("disabled");
+        nav_next.addClass("disabled");
+        button.innerHTML = "";
+        button.style.pointerEvents = "none";
+        break;
+      case 1:
+        nav_first.addClass("disabled");
+        nav_previous.addClass("disabled");
+      default:
+        button.innerHTML = button_text;
+        button.style.pointerEvents = "auto";
+    }
+  }
 
   $(".loadmore").click(function() {
     var button = $(this),
@@ -39,11 +73,15 @@ jQuery(function($) {
       .closest("session")
       .attr("id");
     console.log(query_id);
+    let last_page = ajax_session[query_id][1];
+    // try to load next page...
+    ajax_session[query_id][2]++;
+    let new_current_page = ajax_session[query_id][2];
     var button = $(this),
       data = {
         action: "loadmore",
         query: ajax_session[query_id][0],
-        page: ajax_session[query_id][2],
+        page: new_current_page,
         session_id: query_id
       };
     var nav = $(this)
@@ -61,18 +99,28 @@ jQuery(function($) {
       success: function(data) {
         if (data) {
           nav.prev().before(data);
-          button.text("More " + ajax_session[query_id][3]);
+          // button.text("More " + ajax_session[query_id][3]);
           // .prev()
           // .after(data); // insert new posts
 
-          ajax_session[query_id][2]++;
-          if (ajax_session[query_id][2] == ajax_session[query_id][1]) {
-            button.text("");
-            button.off("click");
-          } else {
-            button.text("More " + ajax_session[query_id][3]);
-            button.on("click", loadbutton);
-          }
+          // ajax_session[query_id][2]++; //for next page
+          // if (ajax_session[query_id][2] == ajax_session[query_id][1]) {
+          //   button.text("");
+          //   button.off("click");
+          // } else {
+          //   button.text("More " + ajax_session[query_id][3]);
+          // }
+          // re do pagination
+          let nav_id = "pid_pagination_" + query_id;
+          let button_id = "load_more_" + query_id;
+          let button_text = "More " + ajax_session[query_id][3];
+          pagination(
+            nav_id,
+            button_id,
+            button_text,
+            new_current_page,
+            last_page
+          );
         } else {
           button.text(""); // if no data, remove the button as well
         }
@@ -100,12 +148,30 @@ jQuery(function($) {
     // console.log(post_div);
     let nav = $(this).closest("nav");
     let page_number = page_anchor.attr("page_id");
-    ajax_session[query_id][2] = page_number;
-
+    let last_page = ajax_session[query_id][1];
+    let current_page = ajax_session[query_id][2];
+    switch (page_number) {
+      case "first":
+        ajax_session[query_id][2] = 1;
+        break;
+      case "last":
+        ajax_session[query_id][2] = last_page;
+        break;
+      case "previous":
+        ajax_session[query_id][2]--;
+        break;
+      case "next":
+        ajax_session[query_id][2]++;
+        break;
+      default:
+        ajax_session[query_id][2] = page_number;
+    }
+    let new_current_page = ajax_session[query_id][2];
+    console.log(new_current_page);
     var data = {
       action: "loadmore",
       query: ajax_session[query_id][0],
-      page: ajax_session[query_id][2] - 1,
+      page: new_current_page,
       session_id: query_id
     };
 
@@ -124,47 +190,32 @@ jQuery(function($) {
           post_div.remove();
           nav.prev().before(data);
 
-          button.text("More " + ajax_session[query_id][3]);
+          // button.text("More " + ajax_session[query_id][3]);
 
-          console.log(ajax_session[query_id][2]);
-          console.log(ajax_session[query_id][1]);
-          if (ajax_session[query_id][2] == ajax_session[query_id][1]) {
-            button.text("");
-            button.off("click");
-          } else {
-            button.text("More " + ajax_session[query_id][3]);
-            button.on("click");
-          }
+          // console.log(ajax_session[query_id][2]); //current page
+          // console.log(ajax_session[query_id][1]); //max page
+          // if (ajax_session[query_id][2] == ajax_session[query_id][1]) {
+          //   button.text("");
+          //   button.off("click");
+          // } else {
+          //   button.text("More " + ajax_session[query_id][3]);
+          //   button.on("click");
+          // }
           //re-pagination by javascript
-          page_anchors.removeClass("current");
+          let nav_id = "pid_pagination_" + query_id;
+          let button_id = "load_more_" + query_id;
+          let button_text = "More " + ajax_session[query_id][3];
+          pagination(
+            nav_id,
+            button_id,
+            button_text,
+            new_current_page,
+            last_page
+          );
         } else {
           button.text("");
         }
       }
     });
-  });
-
-  $("body").on("click", "#misha_loadmore", function() {
-    $.ajax({
-      url: pid_Data.siteurl + "/wp-admin/admin-ajax.php", // AJAX handler
-      data: {
-        action: "loadmore",
-        query: misha_loadmore_params.posts,
-        page: misha_loadmore_params.current_page,
-        first_page: pid_Data.first_page // here is the new parameter
-      },
-      type: "POST",
-      beforeSend: function(xhr) {
-        $("#misha_loadmore").text("Loading...");
-      },
-      success: function(data) {
-        $("#misha_loadmore").remove(); // remove button
-        $("#misha_pagination")
-          .before(data)
-          .remove(); // add new posts and remove pagination links
-        misha_loadmore_params.current_page++;
-      }
-    });
-    return false;
   });
 });

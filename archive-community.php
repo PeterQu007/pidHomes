@@ -133,7 +133,7 @@ if (isset($_GET['view'])) {
 
 </section>
 
-
+<!-- LOAD LOADMORE.JS -->
 <script src="<?php echo get_stylesheet_directory_uri()?>/js/loadmore.js"></script>
 
 <?php
