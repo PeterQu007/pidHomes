@@ -51,8 +51,11 @@ if ($qvar/* query var */) {
 
 ?>
 <?php 
-foreach ($terms as $term) { ?>
-    <session id='<?php echo $post_type . '_' . $term->slug . '_' . $page; ?>' post_type = '<?php echo $post_type; ?>'>
+foreach ($terms as $term) { 
+        $session_id = $post_type . '_' . $term->slug . '_' . $page;
+    ?>
+    
+    <session id='<?php echo $session_id ?>' post_type = '<?php echo $post_type; ?>' name='<?php echo $session_id ?>'>
     <?php 
     $termID = $term->term_id;
 
@@ -83,7 +86,7 @@ foreach ($terms as $term) { ?>
             // print_X($X, __LINE__, 'Archive-market inside the LOOP::', $i++); //d//
             $x_Posts->the_post();
             // print_X($X, __LINE__, 'post type name::', $post_type_labels->name, 'post type singular name::', $post_type_labels->singular_name);?>
-            <div style="text-align: left">
+            <div style="text-align: left" class="<?php echo $session_id ?>">
                 <h3><a href="<?php echo str_replace("/" . strtolower($post_type_labels->name) . "/",
                 "/" . strtolower($post_type_labels->singular_name) . "/",
                 strtolower(get_the_permalink())); ?>">
@@ -92,15 +95,14 @@ foreach ($terms as $term) { ?>
                 <div><?php the_excerpt();?> </div>
             </div>
         <?php }
-        echo paginate_links(array(
-            'format' => 'page/%#%',
-            'current' => $page,
-            'total' => $x_Posts->max_num_pages 
-        ));
+        // echo paginate_links(array(
+        //     'format' => 'page/%#%',
+        //     'current' => $page,
+        //     'total' => $x_Posts->max_num_pages 
+        // ));
         if (  $x_Posts->max_num_pages > 1 ) {
-            echo '<div class="loadmore2">More Neighborhoods</div>'; // you can use <a> as well
             ?><script>
-                ajax_session["<?php echo $post_type . '_' . $term->slug . '_' . $page ?>"] 
+                ajax_session["<?php echo $session_id ?>"] 
                 = 
                 ['<?php echo json_encode( $x_Posts->query_vars ) ?>',
                     '<?php echo $x_Posts->max_num_pages ?>', 
@@ -108,6 +110,8 @@ foreach ($terms as $term) { ?>
                     '<?php echo $post_type_labels->name ?>'];
                 console.log(ajax_session);
             </script><?php
+            misha_paginator($x_Posts);
+            echo '<div class="loadmore2">More ' . $post_type_labels->name . ' ...</div>'; // you can use <a> as well
         }
     } else {
         //No POSTS
