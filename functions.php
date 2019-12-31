@@ -297,7 +297,7 @@ add_action('wp_ajax_nopriv_loadmore', 'pid_loadmore_ajax_handler'); // wp_ajax_n
 /****************
  * CUSTOMIZE THE PAGINATOR
  */
-function misha_paginator($query, $session_id){
+function pid_paginator($query, $session_id){
 
   $X = set_debug(__FILE__);
  

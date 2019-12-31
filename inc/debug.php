@@ -48,7 +48,12 @@
       $msgString = '<p style ="text-align: left; color:' . $color . '">';
       $msgString .= $file . $line;
       foreach($msgs as $msg){
-        if (!(is_object($msg) or is_array($msg))) {
+        if(is_bool($msg)){
+          $bool_value = $msg ? 'true' : 'false';
+          $msgString .= $bool_value;
+        }elseif(is_numeric($msg)){
+          $msgString .=$msg;
+        }elseif (!(is_object($msg) or is_array($msg))) {
             $msg = trim($msg);
             if(file_exists($msg)){
               $msg=basename($msg);

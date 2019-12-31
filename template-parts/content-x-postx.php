@@ -13,7 +13,7 @@ if (is_single(get_the_ID())) {
 }
 $page_nbh = get_query_var('page1',1);
 $page_school = get_query_var('page2' ,1);
-print_X($X, __LINE__, 'page community::', $page_nbh, 'page school::', $page_school, 'qvar::', $qvar);
+// print_X($X, __LINE__, 'page community::', $page_nbh, 'page school::', $page_school, 'qvar::', $qvar);
 
 $post_type = get_query_var('post_type');
 // print_X($X, __LINE__, 'query var::', $qvar, 'post type::', $post_type, 'post ID::', get_the_ID());
@@ -69,7 +69,7 @@ foreach ($terms as $term) {
             ),
         ),
         'paged' => $page, //find the last page for URL
-        'posts_per_page' => 1,
+        'posts_per_page' => 3,
     ));
     // print_X($X, __FILE__, $x_Posts->query_vars);
 
@@ -110,7 +110,6 @@ foreach ($terms as $term) {
                     '<?php echo $post_type_labels->name ?>'];
                 console.log(ajax_session);
             </script><?php
-            misha_paginator($x_Posts, $session_id);
             if($page == $x_Posts->max_num_pages){
                 $is_last_page = true;
                 echo '<div class="loadmore2" id="load_more_' . $session_id . '" ></div>'; // you can use <a> as well
@@ -118,22 +117,27 @@ foreach ($terms as $term) {
                 $is_last_page = false;
                 echo '<div class="loadmore2" id="load_more_' . $session_id . '" >More ' . $post_type_labels->name . ' ...</div>'; // you can use <a> as well
             }
+            pid_paginator($x_Posts, $session_id);
         }
     } else {
         //No POSTS
+        $is_last_page = false;
         echo "<p> NO " . strtoupper($post_type_labels->singular_name) . " ADDED, COMING SOON... </p>";
     }
+    // print_X($X, __LINE__, $is_last_page);
     ?>
 
     <script>
         var post_type = '<?php echo $post_type; ?>';
         console.log(post_type);
-        let button_id = 'load_more_' + '<?php echo $session_id ?>';
-        let load_more_button = document.getElementById(button_id);
-        if(<?php echo $is_last_page; ?>){
-            load_more_button.style.pointerEvents = "none";
-        }else{
-            load_more_button.style.pointerEvents = "auto";
+        var button_id = 'load_more_' + '<?php echo $session_id ?>';
+        var load_more_button = document.getElementById(button_id);
+        if(load_more_button){
+            if(<?php echo ($is_last_page) ? 1 : 0; ?>){
+                load_more_button.style.pointerEvents = "none";
+            }else{
+                load_more_button.style.pointerEvents = "auto";
+            }
         }
 
     </script>
