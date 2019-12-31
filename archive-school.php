@@ -40,9 +40,6 @@ if (isset($_GET['view'])) {
 
         <?php
         $X = set_debug(__FILE__);
-        // for($i=0; $i<3 ; $i++){
-        //     print_X($X, __LINE__, "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        // }
         include_once(get_stylesheet_directory() . '/db/pdoConn.php');
         //Get query var in order to filter the neighborhoods
         //entrance variable value for archive module
@@ -51,8 +48,7 @@ if (isset($_GET['view'])) {
         $qvar = get_query_var('property-neighborhood'); //query var is passed from url rewriting
         $term = get_term_by('slug', $qvar, 'property-neighborhood');
         $page_school = get_query_var('page2', 1);
-        // print_X($X, __LINE__, $qvar, $page_school, ' term_id::', $term->term_id);
-
+        // print_X1($X, __LINE__, $qvar, $page_school, ' term_id::', $term->term_id);
         if($qvar){
             $stmt_check_term_level = $pdo->prepare("CALL procedure_term_single_path_by_term_id(?)");
             $stmt_check_term_level->bindParam(1, $term->term_id , PDO::PARAM_INT);
@@ -65,58 +61,42 @@ if (isset($_GET['view'])) {
             $stmt_check_term_level = null;
             $pdo = null;
             // exit;
-
-            // $mysqli = new mysqli("localhost", "root", "root", "local");
-            // $strSql = "SELECT c.city_name, t.slug, d.Neighborhood_Name, d.Neighborhood_Code FROM local.wp_terms t
-            //             Inner join pid_neighborhoods d ON d.Neighborhood_Name = t.name
-            //             Inner join pid_cities c ON c.City_Code = d.City_Code
-            //             WHERE slug = '" . $qvar . "'" 
-            //            ;
-            // print_X($X, __LINE__, $strSql);
-            // $mysqli->real_query($strSql);
-            // $res = $mysqli->use_result();
-            // print_X($X, __LINE__, $res);
-            // while ($row = $res->fetch_assoc()){
-            //   print_X($X, __LINE__, $row);
-            //   $Neighborhood_Code = $row['Neighborhood_Code'];
-            //   $City_Name = $row['city_name'];
-            //   $Neighborhood_Name = $row['Neighborhood_Name'];
-            //   $City_District = $row['City_District'];
-            // };
-            // $mysqli->close();
+            $Neighborhood_Name = $term_single_path[count($term_single_path)-1]['neighborhood_name'];
         }else{
             $Neighborhood_Name = "Greater Vancouver";
         }
         ?>
         <h2 class="h2_title"> <?php echo ucfirst($Neighborhood_Name) . " Schools" ?> </h2>
         <?php
+        get_template_part('template-parts/content', 'x-postx');
+        // print_X($X, __LINE__, $qvar); //d//
 
         if($qvar){
             foreach($term_single_path as $nbh){
-                print_X($X, __LINE__, $nbh);
-                print_X($X, __LINE__, $nbh['name']);
+                // print_X($X, __LINE__, $nbh);
+                // print_X($X, __LINE__, $nbh['name']);
                 switch($nbh['level']){
-                case 0:
+                case 0: //city level
                     $City_name = $nbh['name'];
                     $wpdt_id_high_school =21;
                     $wpdt_id_elementary_school=24;
                 break;
-                case 1:
+                case 1: //district level
                     $District_name = $nbh['name'];
                     $wpdt_id_high_school =20;
                     $wpdt_id_elementary_school=23;
                 break;
-                case 2:
+                case 2: //neighborhood level
                     $Neighborhood_name = $nbh['name'];
                     $wpdt_id_high_school =1;
                     $wpdt_id_elementary_school=19;
                 break;
                 }
             }
-            print_X($X, __LINE__, $City_name, $District_name, $Neighborhood_name);
-            print_X($X, __LINE__, $wpdt_id_high_school, $wpdt_id_elementary_school);
+            // print_X($X, __LINE__, $City_name, $District_name, $Neighborhood_name);
+            // print_X($X, __LINE__, 'high school table id::', $wpdt_id_high_school, 'elementary school table id::',  $wpdt_id_elementary_school);
             $school_paras = "var1='". $City_name ."' var2='" . $District_name . "' var3='". $Neighborhood_name. "'";
-            print_X($X, __LINE__, $school_paras);
+            // print_X($X, __LINE__, $school_paras);
             echo '<h3 style="text-align: left"> High Schools </h3>';
             echo do_shortcode("[wpdatatable id=" .$wpdt_id_high_school. " " . $school_paras." ]"); //high schools
             echo '<h3 style="text-align: left"> Elementary Schools </h3>';
@@ -127,8 +107,6 @@ if (isset($_GET['view'])) {
             echo '<h3 style="text-align: left"> Elementary Schools </h3>';
             echo do_shortcode("[wpdatatable id=25]"); //[wpdatatable id=19] elementary schools
         }
-        get_template_part('template-parts/content', 'x-postx');
-        // print_X($X, __LINE__, $qvar); //d//
         ?>
 
     </div>

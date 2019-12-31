@@ -43,8 +43,19 @@
     $line = $x->l . $line . ' // ';
 
     echo '<div >';
-      echo '<hr height="1" style="padding-top: 3px; border-bottom: 1px solid; color: lightblue">';
-
+      ?>
+      <style>
+        hr.debug {
+          height: 1px;
+        }
+      </style>
+      <hr class = "debug" style="padding-top: 3px; border-bottom: 1px solid; color: lightblue">
+      <?php
+      // echo '<hr class = "debug" style="padding-top: 3px; border-bottom: 1px solid; color: lightblue">';
+      // bypass the advance search box
+      // for($i=0; $i<3 ; $i++){
+      //     print_X($X, __LINE__, "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+      // }
       $msgString = '<p style ="text-align: left; color:' . $color . '">';
       $msgString .= $file . $line;
       foreach($msgs as $msg){
@@ -80,4 +91,66 @@
       echo '<hr height="1" style="border: 1px solid; color: darkblue">';
     echo '</div>';
   }
+
+    function print_x1($x, $line, ...$msgs)
+  {
+    if(!$x){
+      $x->c = 'red';
+      $x->f = pathinfo($file)['filename'];
+      $x->l = '::';
+    }
+    $color = $x->c;
+    $file = $x->f;
+    $line = $x->l . $line . ' // ';
+
+    echo '<div >';
+      ?>
+      <style>
+        hr.first_debug_output {
+          height: 300px;
+        }
+      </style>
+      <hr class = "first_debug_output" style="padding-top: 3px; border-bottom: 1px solid; color: lightblue">
+      <?php
+      // echo '<hr class = "debug" style="padding-top: 3px; border-bottom: 1px solid; color: lightblue">';
+      // bypass the advance search box
+      // for($i=0; $i<3 ; $i++){
+      //     print_X($X, __LINE__, "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+      // }
+      $msgString = '<p style ="text-align: left; color:' . $color . '">';
+      $msgString .= $file . $line;
+      foreach($msgs as $msg){
+        if(is_bool($msg)){
+          $bool_value = $msg ? 'true' : 'false';
+          $msgString .= $bool_value;
+        }elseif(is_numeric($msg)){
+          $msgString .=$msg;
+        }elseif (!(is_object($msg) or is_array($msg))) {
+            $msg = trim($msg);
+            if(file_exists($msg)){
+              $msg=basename($msg);
+            }
+            $msgString .=  ( $msg ? $msg : 'null') . (substr($msg, -2) == "::" ? "" : " // ");
+        } elseif (is_array($msg)) {
+            $msgString .= "^ARRAY " . "[ " . count($msg) . " ] // ";
+            echo '<div style ="text-align: left!important; color:' . $color . '">';
+            //print_r($msg);
+            var_dump($msg);
+            echo ' </div>';
+        }elseif (is_object($msg)){
+            $msgString .= "^OBJECT " . $msg->name. "{ " . count(array($msg)) . " } // ";
+            echo '<div style ="text-align: left!important; color:' . $color . '">';
+            var_dump($msg);
+            //print_r($msg);
+            echo ' </div>';
+        }
+      }
+      $msgString = rtrim($msgString, " // ");
+      $msgString .= '</p>';
+      echo $msgString; //prints the debug message
+
+      echo '<hr height="1" style="border: 1px solid; color: darkblue">';
+    echo '</div>';
+  }
+
 ?>
