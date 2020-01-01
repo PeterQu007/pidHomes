@@ -8,8 +8,8 @@
   $X = set_debug(__FILE__);
   $communityID = get_query_var('communityID');
   // print_X($X, __LINE__ , $communityID);
-  // $metabox = nbh_2Level_metabox_by_ID(get_the_ID());
-  $metabox = nbh_3level_metabox(get_the_ID());
+  $metabox = nbh_2Level_metabox_by_ID(get_the_ID());
+  // $metabox = nbh_3level_metabox(get_the_ID());
   // print_X($X, __LINE__, $metabox);
   // $post_slug = get_post_field('post_name', get_post());
   // print_X($X, __LINE__, $post_slug);

@@ -9,14 +9,14 @@ if (is_single(get_the_ID())) {
   // print_X($X, __LINE__, 'The Neighborhood', $the_neighborhood);
   $qvar = get_query_var('name');
 } else {
-  $qvar = get_query_var('property-neighborhood');
+  $qvar = get_query_var('property-city');
 }
 $page_nbh = get_query_var('page1',1);
 $page_school = get_query_var('page2' ,1);
-// print_X($X, __LINE__, 'page community::', $page_nbh, 'page school::', $page_school, 'qvar::', $qvar);
+print_X($X, __LINE__, 'page community::', $page_nbh, 'page school::', $page_school, 'qvar::', $qvar);
 
 $post_type = get_query_var('post_type');
-// print_X($X, __LINE__, 'query var::', $qvar, 'post type::', $post_type, 'post ID::', get_the_ID());
+print_X($X, __LINE__, 'query var::', $qvar, 'post type::', $post_type, 'post ID::', get_the_ID());
 if(!$post_type){
   $post_type = get_post_type();
 }
@@ -34,7 +34,7 @@ $post_type_labels = get_post_type_labels(get_post_type_object($post_type));
 if ($qvar/* query var */) {
   // Sub Markets
   $terms = get_terms(array(
-      'taxonomy' => 'property-neighborhood',
+      'taxonomy' => 'property-city',
       'fields' => 'all', //'names',
       'hide_empty' => false,
       'slug' => $qvar,
@@ -42,12 +42,12 @@ if ($qvar/* query var */) {
 } else {
   // All market
   $terms = get_terms(array(
-      'taxonomy' => 'property-neighborhood',
+      'taxonomy' => 'property-city',
       'parent' => 0,
       'hide_empty' => false,
   ));
 }
-// print_X($X, __LINE__, $terms); //d//
+print_X($X, __LINE__, $terms); //d//
 
 ?>
 <?php 
@@ -63,7 +63,7 @@ foreach ($terms as $term) {
         'post_type' => $post_type,
         'tax_query' => array(
             array(
-                'taxonomy' => 'property-neighborhood',
+                'taxonomy' => 'property-city',
                 'field' => 'slug',
                 'terms' => $term->slug,
             ),

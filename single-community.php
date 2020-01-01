@@ -37,7 +37,9 @@ if (isset($_GET['view'])) {
   <div class="rh_page rh_page__listing_page rh_page__main" style="width: 70%">
 
     <?php
-    $communityID = get_query_var('communityID');
+    $X = set_debug(__FILE__);
+    $slug = get_query_var('name');
+    print_x($X, __LINE__, 'Post Slug::', $slug, 'Post ID::', get_the_ID(), 'Post Title::', get_the_title());
     // echo 'get_the_ID()' . get_the_ID(); //d//
     // echo 'communityID: ' . $communityID; //d//
     // require get_stylesheet_directory() . '/inc/generate-neighborhood-metabox.php';

@@ -8,8 +8,9 @@
   $X = set_debug(__FILE__);
   //get the neighborhood_code
   //All markets | City code | district code | Neighborhood Code
-  $qvar = get_query_var('qvar'); //get property-neighborhood slug
-  // print_X($X, __LINE__, 'get_the_ID::', get_the_ID(), get_the_title(), 'is_single::', is_single(get_the_ID()), '$qvar::', $qvar); //d//
+  // $qvar = get_query_var('qvar'); //get property-neighborhood slug
+  $qvar = get_query_var('property-city');
+  print_X($X, __LINE__, 'get_the_ID::', get_the_ID(), get_the_title(), 'is_single::', is_single(get_the_ID()), '$qvar::', $qvar); //d//
 
   if(is_single(get_the_ID())){
     $the_neighborhood = trim(get_the_ID());

@@ -40,12 +40,14 @@ if (isset($_GET['view'])) {
     
     <?php 
       $X = set_debug(__FILE__);
+      print_X1($X, __LINE__);
       //Get query var in order to filter the neighborhoods
       //entrance variable value for archive module
       //if it is null, means show all categories/taxonomies
       //if it is not null, means show specific categories/taxonomy
-      $qvar = trim(get_query_var('property-neighborhood')); //query var is passed from url rewriting 
-      // print_X($X, __LINE__, '$qvar::', $qvar, get_the_ID(), get_the_title()); //d//
+      $qvar_nbh = trim(get_query_var('property-neighborhood')); //query var is passed from url rewriting 
+      $qvar = trim(get_query_var('property-city'));
+      print_X($X, __LINE__, '$qvar::', $qvar, '$qvar_city::', $qvar_city, get_the_ID(), get_the_title()); //d//
       $page_nbh = get_query_var('page1',1);
       $page_school = get_query_var('page2', 1);
       $post_type_qvar = get_query_var('post_type');
@@ -54,7 +56,7 @@ if (isset($_GET['view'])) {
       <div >
       <!--
       // TODO: AJAX FILTER 
-      <form action="<?php echo site_url() ?>/wp-admin/admin-ajax.php" method="POST" id="filter">
+      <form action="<?php //echo site_url() ?>/wp-admin/admin-ajax.php" method="POST" id="filter">
         <?php
           // if( $terms = get_terms( array(
           //     'taxonomy' => 'property-neighborhood', // to make it simple I use default categories
@@ -82,26 +84,12 @@ if (isset($_GET['view'])) {
             echo do_shortcode("[wpdatatable id=9]"); //education 
             echo do_shortcode("[wpdatatable id=18]"); //immigration
           }else{
-            // print_X($X, __LINE__, 'Single City Markets Data');
-            //get the guid for demographics
-            $mysqli = new mysqli("localhost", "root", "root", "local");
-            $strSql = "SELECT GEO_UID, c.City_Code, c.City_Full_Name FROM pid_census_subdivision_bc
-                      INNER JOIN pid_cities c ON c.City_Code = pid_census_subdivision_bc.City_Code 
-                      WHERE GEO_Name_nom = '" . $qvar . "'" 
-                       ;
-            // print_X($X, __LINE__, $strSql);
-            $mysqli->real_query($strSql);
-            $res = $mysqli->use_result();
-            // print_X($X, __LINE__, $res);
-            while ($row = $res->fetch_assoc()){
-              // print_X($X, __LINE__, $row);
-              $GEO_UID = $row['GEO_UID'];
-              $City_Code = $row['City_Code'];
-              $City_Full_Name = $row['City_Full_Name'];
-            };
+            $City_Full_Name = "City of Surrey";
             ?>
             <h2 class="h2_title"> <?php echo $City_Full_Name ?> </h2>
             <?php
+            $City_Code = "F30A";
+            print_x($X, __LINE__, "[wpdatatable id=6 var1='" . $City_Code . "']");
             echo do_shortcode("[wpdatatable id=6 var1='" . $City_Code . "']"); //population
             echo do_shortcode("[wpdatatable id=7 var1='" . $City_Code . "']"); //education & income
             echo do_shortcode("[wpdatatable id=17 var1='" . $City_Code . "']"); //immigration & minority
@@ -109,6 +97,7 @@ if (isset($_GET['view'])) {
         ?>
         </div>
       </div>
+      
       <?php
       get_template_part('template-parts/content', 'x-postx');
       if($qvar == ''){
